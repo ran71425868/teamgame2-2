@@ -174,9 +174,6 @@
     <ClInclude Include="Source\Effect.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="SceneResult.h">
-      <Filter>Source</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui-docking\imgui.cpp">
@@ -312,9 +309,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Effect.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneResult.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
