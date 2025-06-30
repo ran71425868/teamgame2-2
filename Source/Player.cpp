@@ -11,7 +11,7 @@
 //初期化
 void Player::Initializa()
 {
-	model = new Model("Data/Model/Mr.Incredible/Mr.Incredible.mdl");
+	model = new Model("Data/Model/kagu/mana.mdl");
 
 	//モデルが大きいのでスケーリング
 	scale.x = scale.y = scale.z = 0.01f;
