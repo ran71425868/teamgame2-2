@@ -11,10 +11,10 @@
 //初期化
 void Player::Initializa()
 {
-	model = new Model("Data/Model/kagu/Tana.mdl");
+	model = new Model("Data/Model/kagu/Tana2.mdl");
 
 	//モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 50000.0f;
+	scale.x = scale.y = scale.z = 10.0f;
 
 	//ヒットエフェクト読み込み
 	hitEffect = new Effect("Data/Effect/Hit.efk");
