@@ -39,6 +39,9 @@ void Player::Update(float elapsedTime)
 	//移動入力処理
 	InputMove(elapsedTime);
 
+	//カメラの向きとプレイヤーの角度を同期
+	SyncPlayerAngleWithCamera();
+
 	//ジャンプ入力処理
 	InputJump();
 
@@ -127,6 +130,16 @@ DirectX::XMFLOAT3 Player::GetMoveVec() const
 	vec.y = 0.0f;
 
 	return vec;
+}
+
+// カメラの向きとプレイヤーの角度を同期
+void Player::SyncPlayerAngleWithCamera()
+{
+	Camera& camera = Camera::Instance();
+	const DirectX::XMFLOAT3& front = camera.GetFront();
+
+	// atan2で角度を求める（Y軸回転）
+	angle.y = atan2f(front.x, front.z);
 }
 
 //プレイヤーとエネミーの衝突処理

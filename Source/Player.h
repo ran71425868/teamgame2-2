@@ -49,6 +49,9 @@ private:
 	//移動入力処理
 	void InputMove(float elapsedTime);
 
+	// カメラの向きとプレイヤーの角度を同期
+	void SyncPlayerAngleWithCamera();
+
 	//プレイヤーとエネミーとの衝突処理
 	void CollisionPlayerVsEnemies();
 
