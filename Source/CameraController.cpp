@@ -10,6 +10,7 @@ void CameraController::Update(float elapsedTime)
 	case 0:
 		SetCursorVisibility(show_cursor);
 		CameraState++;
+		[[fallthrough]];
 	case 1:
 		// 'P' キー トグル処理（エッジ検出）
 		currentPKey = GetKeyState('P') & 0x8000;
