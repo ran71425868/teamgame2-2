@@ -1,11 +1,17 @@
 #include "System/Graphics.h"
 #include "SceneGame.h"
-//#include "SceneResult.h"
+#include "SceneResult.h"
 #include "Camera.h"
 #include "EnemyManager.h"
 #include "EnemySlime.h"
 #include "Player.h"
 #include "EffectManager.h"
+#include "SceneSelect.h"
+#include "System/Input.h"
+
+#include "SceneTitle.h"
+#include "SceneManager.h"
+#include "SceneLoading.h"
 
 // 初期化
 void SceneGame::Initialize()
@@ -99,6 +105,16 @@ void SceneGame::Update(float elapsedTime)
 	EnemyManager::Instance().Update(elapsedTime);
 	//エフェクトマネージャー更新処理
 	EffectManager::Instance().Update(elapsedTime);
+
+	GamePad& gamePad = Input::Instance().GetGamePad();
+	if (gamePad.GetButtonDown() & GamePad::BTN_A)
+	{
+		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
+	}
+
+	
+
+
 }
 
 // 描画処理
