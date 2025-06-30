@@ -8,7 +8,7 @@
 //‰Šú‰»
 void SceneSelect::Initialize()
 {
-	sprite = new Sprite("Data/Sprite/shikaku-illust21.png");
+	sprite = new Sprite("Data/Sprite/shikaku-illust3.png");
 }
 
 //I—¹‰»
@@ -58,7 +58,7 @@ void SceneSelect::Render()
 		float screenWidth = static_cast<float>(graphics.GetScreenWidth());
 		float screenHeight = static_cast<float>(graphics.GetScreenHeight());
 		sprite->Render(rc,
-			300, 500, 0, 100, 100,
+			300, 500, 0, 150, 100,
 			0,
 			1, 1, 1, 1);
 	}
