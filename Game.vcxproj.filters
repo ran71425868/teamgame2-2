@@ -174,8 +174,10 @@
     <ClInclude Include="Source\Effect.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneSelect.h" />
     <ClInclude Include="Source\SceneResult.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneSelect.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
