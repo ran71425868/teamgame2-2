@@ -416,6 +416,10 @@ void Player::DrawDebugGUI()
 			//ÉXÉPÅ[Éã
 			ImGui::InputFloat3("Scale", &scale.x);
 		}
+		if (ImGui::CollapsingHeader("Cursor", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::Text("[P] to move cursor in and out");
+		}
 	}
 	ImGui::End();
 }
