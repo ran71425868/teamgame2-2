@@ -7,6 +7,7 @@
 #include "ProjectileStraight.h"
 #include "ProjectileHoming.h"
 #include "System/Audio.h"
+#include "EnemySlime.h"
 
 //初期化
 void Player::Initializa()
@@ -14,7 +15,7 @@ void Player::Initializa()
 	model = new Model("Data/Model/kagu/Tana2.mdl");
 
 	//モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 10.0f;
+	scale.x = scale.y = scale.z = 0.5f;
 
 	//ヒットエフェクト読み込み
 	hitEffect = new Effect("Data/Effect/Hit.efk");
@@ -56,6 +57,9 @@ void Player::Update(float elapsedTime)
 
 	//プレイヤーと敵との衝突判定
 	CollisionPlayerVsEnemies();
+
+	// レイキャスト処理 (追加)
+	PerformRaycastToSlime();
 
 	//弾丸と敵の衝突処理
 	CollisionProjectilesVsEnemies();
@@ -370,6 +374,63 @@ void Player::InputProjectile()
 	}
 }
 
+// レイキャスト処理 (追加)
+void Player::PerformRaycastToSlime()
+{
+	using namespace DirectX;
+
+	// レイの始点をプレイヤー位置より少し上にする（例：1.5fだけ上に）
+	XMFLOAT3 rayOrigin = GetPosition();
+	
+	// レイの方向はカメラの前方向を使う
+	XMFLOAT3 rayDirection = Camera::Instance().GetFront();
+
+	// 正規化（念のため）
+	XMVECTOR dirVec = XMLoadFloat3(&rayDirection);
+	dirVec = XMVector3Normalize(dirVec);
+	XMStoreFloat3(&rayDirection, dirVec);
+
+	// （以下省略）レイキャストの処理はそのまま
+	DirectX::XMFLOAT3 closestHitPoint = { 0, 0, 0 };
+	float closestHitDistance = FLT_MAX;
+	bool anyHit = false;
+
+	EnemyManager& enemyManager = EnemyManager::Instance();
+	int enemyCount = enemyManager.GetEnemyCount();
+
+	for (int i = 0; i < enemyCount; i++)
+	{
+		Enemy* enemy = enemyManager.GetEnemy(i);
+		EnemySlime* slime = dynamic_cast<EnemySlime*>(enemy);
+		if (slime)
+		{
+			XMFLOAT3 slimePos = slime->GetPosition();
+			float slimeRadius = slime->GetRadius();
+			float slimeHeight = slime->GetHeight();
+
+			XMFLOAT3 currentHitPoint;
+			float currentHitDistance;
+
+			if (Collision::IntersectRayVsCylinder(
+				rayOrigin, rayDirection,
+				slimePos, slimeRadius, slimeHeight,
+				currentHitPoint, currentHitDistance))
+			{
+				if (currentHitDistance < closestHitDistance)
+				{
+					closestHitDistance = currentHitDistance;
+					closestHitPoint = currentHitPoint;
+					anyHit = true;
+				}
+			}
+		}
+	}
+
+	hasRayHit = anyHit;
+	rayHitPoint = closestHitPoint;
+}
+
+
 //描画処理
 void Player::Render(const RenderContext& rc, ModelRenderer* renderer)
 {
@@ -388,6 +449,34 @@ void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* render
 	//弾丸デバッグプリミティブ描画
 	projectileManager.RenderDebugPrimitive(rc, renderer);
 
+	// レイキャストの視覚化
+	{
+		using namespace DirectX;
+
+		XMFLOAT3 rayOrigin = GetPosition();
+
+		XMFLOAT3 rayDirection = Camera::Instance().GetFront();
+		XMVECTOR dirVec = XMLoadFloat3(&rayDirection);
+		dirVec = XMVector3Normalize(dirVec);
+		XMStoreFloat3(&rayDirection, dirVec);
+
+		float rayLength = 1000.0f;
+		XMFLOAT3 rayEnd = {
+			rayOrigin.x + rayDirection.x * rayLength,
+			rayOrigin.y + rayDirection.y * rayLength,
+			rayOrigin.z + rayDirection.z * rayLength
+		};
+
+		// レイ可視化（青）
+		renderer->RenderLine(rc, rayOrigin, rayEnd, { 1.0f, 1.0f, 1.0f, 1.0f });
+	}
+
+	// レイが当たった場所にデバッグ円を描画 (追加)
+	if (hasRayHit)
+	{
+		// 衝突点に赤い円を描画
+		renderer->RenderSphere(rc, rayHitPoint, 0.2f, {1.0f, 0.0f, 0.0f, 1.0f}); // 赤い円、半径0.2f
+	}
 }
 
 //デバッグ用GUI描画
@@ -419,6 +508,15 @@ void Player::DrawDebugGUI()
 		if (ImGui::CollapsingHeader("Cursor", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			ImGui::Text("[P] to move cursor in and out");
+		}
+		//レイキャスト結果 (追加)
+		if (ImGui::CollapsingHeader("Raycast Result", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::Checkbox("Has Hit", &hasRayHit);
+			if (hasRayHit)
+			{
+				ImGui::InputFloat3("Hit Point", &rayHitPoint.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
+			}
 		}
 	}
 	ImGui::End();

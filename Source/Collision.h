@@ -34,4 +34,15 @@ public:
 		float cylinderHeight,
 		DirectX::XMFLOAT3& outCylinderPosition
 	);
+
+	// ƒŒƒC‚Æ‰~’Œ‚ÌŒğ·”»’è (Y²‚É‰ˆ‚Á‚½‰~’Œ‚ğ‘z’è)
+	static bool IntersectRayVsCylinder(
+		const DirectX::XMFLOAT3& rayOrigin,
+		const DirectX::XMFLOAT3& rayDirection, // ‘z’è‚Æ‚µ‚Ä³‹K‰»Ï‚İ
+		const DirectX::XMFLOAT3& cylinderPosition,
+		float cylinderRadius,
+		float cylinderHeight,
+		DirectX::XMFLOAT3& outHitPoint,
+		float& outHitDistance
+	);
 };

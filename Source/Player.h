@@ -5,6 +5,7 @@
 #include "ProjectileManager.h"
 #include "Effect.h"
 #include "System/AudioSource.h"
+#include <DirectXMath.h>
 
 //プレイやー
 class Player : public Character
@@ -55,6 +56,9 @@ private:
 	//プレイヤーとエネミーとの衝突処理
 	void CollisionPlayerVsEnemies();
 
+	// レイキャスト処理 (追加)
+	void PerformRaycastToSlime();
+
 	//弾丸入力処理
 	void InputProjectile();
 
@@ -80,4 +84,8 @@ private:
 	Effect* hitEffect = nullptr;
 
 	AudioSource* hitSE = nullptr;
+
+	// レイキャスト結果を保持するメンバ変数 (追加)
+	bool hasRayHit = false;
+	DirectX::XMFLOAT3 rayHitPoint = { 0, 0, 0 };
 };
