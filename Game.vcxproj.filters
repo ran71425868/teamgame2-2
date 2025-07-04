@@ -180,6 +180,9 @@
     <ClInclude Include="Source\SceneSelect.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\SceneTutorial.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui-docking\imgui.cpp">
@@ -321,6 +324,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneResult.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneTutorial.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

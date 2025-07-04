@@ -2,6 +2,7 @@
 #include "SceneSelect.h"
 #include "System/Input.h"
 #include "SceneGame.h"
+#include "SceneTutorial.h"
 #include "SceneManager.h"
 #include "SceneLoading.h"
 
@@ -37,7 +38,7 @@ void SceneSelect::Update(float elapsedTime)
 	{
 		if (mouseCursor.GetButtonDown() & anyButton)
 		{
-			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
+			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTutorial));
 		}
 	}
 	
