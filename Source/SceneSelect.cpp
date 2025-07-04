@@ -8,7 +8,8 @@
 //èâä˙âª
 void SceneSelect::Initialize()
 {
-	sprite = new Sprite("Data/Sprite/shikaku-illust3.png");
+	sprite = new Sprite("Data/Sprite/pngimg.com - square_PNG94.png");
+
 }
 
 //èIóπâª
@@ -29,12 +30,17 @@ void SceneSelect::Update(float elapsedTime)
 	const MouseButton anyButton =
 		Mouse::BTN_LEFT;
 
+	DirectX::XMFLOAT2 left = { 640,360 };
+	DirectX::XMFLOAT2 right = { 740,460 };
 
-
-	if (mouseCursor.GetButtonDown()&anyButton)
+	if (left.x < mouseCursor.GetPositionX() && right.x > mouseCursor.GetPositionX()&&left.y<mouseCursor.GetPositionY()&&right.y>mouseCursor.GetPositionY())
 	{
-		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
+		if (mouseCursor.GetButtonDown() & anyButton)
+		{
+			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
+		}
 	}
+	
 }
 
 //ï`âÊèàóù
@@ -55,7 +61,7 @@ void SceneSelect::Render()
 		float screenWidth = static_cast<float>(graphics.GetScreenWidth());
 		float screenHeight = static_cast<float>(graphics.GetScreenHeight());
 		sprite->Render(rc,
-			300, 500, 0, 150, 100,
+			640, 360, 0, 100, 100,
 			0,
 			1, 1, 1, 1);
 	}
