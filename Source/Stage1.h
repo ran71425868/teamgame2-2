@@ -3,11 +3,11 @@
 #include "System/ModelRenderer.h"
 
 //ステージ
-class Stage
+class Stage1
 {
 public:
-	Stage();
-	~Stage();
+	Stage1();
+	~Stage1();
 
 	//更新処理
 	void Update(float elapsedTime);
@@ -16,6 +16,5 @@ public:
 	void Render(const RenderContext& rc, ModelRenderer* renderer);
 
 private:
-	Model* model = nullptr;
-	Model* model1= nullptr;
+	Model* model1 = nullptr;
 };

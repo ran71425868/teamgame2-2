@@ -1,8 +1,9 @@
 #include "System/Graphics.h"
-#include "SceneGame.h"
+#include "SceneTutorial.h"
 #include "SceneResult.h"
 #include "Camera.h"
 #include "EnemyManager.h"
+#include "Character.h"
 #include "EnemySlime.h"
 #include "Player.h"
 #include "EffectManager.h"
@@ -12,20 +13,14 @@
 #include "SceneManager.h"
 #include "SceneLoading.h"
 #include <imgui.h>
-/*#include <WICTextureLoader.h>*/ // DirectXTKの画像読み込み
 #include <wrl/client.h>
 using namespace DirectX;
 
-// クロスヘア用
-Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> crosshairSRV;
-float crosshairWidth = 0;
-float crosshairHeight = 0;
-
 // 初期化
-void SceneGame::Initialize()
+void SceneTutorial::Initialize()
 {
     // ステージ初期化
-    stage = new Stage();
+    stage = new Stage1();
 
     // プレイヤー初期化
     Player::Instance().Initializa();
@@ -48,20 +43,13 @@ void SceneGame::Initialize()
     cameraController = new CameraController;
 
     // エネミー初期化
-    EnemyManager& enemyManager = EnemyManager::Instance();
-    for (int i = 0; i < 2; ++i)
-    {
-        EnemySlime* slime = new EnemySlime();
-        slime->SetPosition(DirectX::XMFLOAT3(i * 2.0f, 0, 5));
-        slime->SetTerritory(slime->GetPosition(), 10.0f);
-        enemyManager.Register(slime);
-    }
+    
 }
 
 // 終了化
-void SceneGame::Finalize()
+void SceneTutorial::Finalize()
 {
-    EnemyManager::Instance().Clear();
+    
 
     if (cameraController != nullptr) {
         delete cameraController;
@@ -74,12 +62,10 @@ void SceneGame::Finalize()
         delete stage;
         stage = nullptr;
     }
-
-    crosshairSRV.Reset(); // 解放
 }
 
 // 更新処理
-void SceneGame::Update(float elapsedTime)
+void SceneTutorial::Update(float elapsedTime)
 {
     // カメラターゲット追従
     DirectX::XMFLOAT3 target = Player::Instance().GetPosition();
@@ -92,6 +78,8 @@ void SceneGame::Update(float elapsedTime)
     EnemyManager::Instance().Update(elapsedTime);
     EffectManager::Instance().Update(elapsedTime);
 
+    
+
     GamePad& gamePad = Input::Instance().GetGamePad();
     if (gamePad.GetButtonDown() & GamePad::BTN_A) {
         SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
@@ -99,7 +87,7 @@ void SceneGame::Update(float elapsedTime)
 }
 
 // 描画処理
-void SceneGame::Render()
+void SceneTutorial::Render()
 {
     Graphics& graphics = Graphics::Instance();
     ID3D11DeviceContext* dc = graphics.GetDeviceContext();
@@ -130,10 +118,14 @@ void SceneGame::Render()
         EnemyManager::Instance().RenderDebugPrimitive(rc, shapeRenderer);
     }
 
+    // 2Dスプライト描画（クロスヘア）
+    {
+        
+    }
 }
 
 // GUI描画
-void SceneGame::DrawGUI()
+void SceneTutorial::DrawGUI()
 {
     Player::Instance().DrawDebugGUI();
 }

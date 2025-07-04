@@ -12,10 +12,10 @@
 //初期化
 void Player::Initializa()
 {
-	model = new Model("Data/Model/kagu/Tana2.mdl");
+	model = new Model("Data/Model/Light/Light.mdl");
 
 	//モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.5f;
+	scale.x = scale.y = scale.z = 0.05f;
 
 	//ヒットエフェクト読み込み
 	hitEffect = new Effect("Data/Effect/Hit.efk");
@@ -381,6 +381,7 @@ void Player::PerformRaycastToSlime()
 
 	// レイの始点をプレイヤー位置より少し上にする（例：1.5fだけ上に）
 	XMFLOAT3 rayOrigin = GetPosition();
+	rayOrigin.y += 0.3f;
 	
 	// レイの方向はカメラの前方向を使う
 	XMFLOAT3 rayDirection = Camera::Instance().GetFront();
@@ -454,6 +455,7 @@ void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* render
 		using namespace DirectX;
 
 		XMFLOAT3 rayOrigin = GetPosition();
+		rayOrigin.y += 0.3f;
 
 		XMFLOAT3 rayDirection = Camera::Instance().GetFront();
 		XMVECTOR dirVec = XMLoadFloat3(&rayDirection);
