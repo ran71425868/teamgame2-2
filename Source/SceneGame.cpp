@@ -130,23 +130,6 @@ void SceneGame::Render()
         EnemyManager::Instance().RenderDebugPrimitive(rc, shapeRenderer);
     }
 
-    // 2Dスプライト描画（クロスヘア）
-    {
-        if (crosshairSRV) {
-            float screenWidth = graphics.GetScreenWidth();
-            float screenHeight = graphics.GetScreenHeight();
-
-            float x = (screenWidth - crosshairWidth) * 0.5f;
-            float y = (screenHeight - crosshairHeight) * 0.5f;
-
-            // ImGuiの代用：またはDrawSpriteがあればそれを使う
-            ImGui::GetBackgroundDrawList()->AddImage(
-                crosshairSRV.Get(),
-                ImVec2(x, y),
-                ImVec2(x + crosshairWidth, y + crosshairHeight)
-            );
-        }
-    }
 }
 
 // GUI描画
