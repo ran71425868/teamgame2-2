@@ -22,8 +22,8 @@ bool Collision::IntersectRayVsCylinder(
     float R = cylinderRadius;
     float H = cylinderHeight;
 
-    float halfH = H / 2.0f;
-    float cylinderMinY = cylinderPosition.y - halfH;
+    float halfH = H;
+    float cylinderMinY = cylinderPosition.y;
     float cylinderMaxY = cylinderPosition.y + halfH;
 
     float t_closest = FLT_MAX;
