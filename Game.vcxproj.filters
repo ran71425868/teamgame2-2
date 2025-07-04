@@ -183,6 +183,9 @@
     <ClInclude Include="Source\SceneTutorial.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Stage1.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui-docking\imgui.cpp">
@@ -327,6 +330,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneTutorial.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage1.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

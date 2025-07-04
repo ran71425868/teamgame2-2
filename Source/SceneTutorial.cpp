@@ -3,6 +3,7 @@
 #include "SceneResult.h"
 #include "Camera.h"
 #include "EnemyManager.h"
+#include "Character.h"
 #include "EnemySlime.h"
 #include "Player.h"
 #include "EffectManager.h"
@@ -19,7 +20,7 @@ using namespace DirectX;
 void SceneTutorial::Initialize()
 {
     // ステージ初期化
-    stage = new Stage();
+    stage = new Stage1();
 
     // プレイヤー初期化
     Player::Instance().Initializa();
@@ -42,20 +43,13 @@ void SceneTutorial::Initialize()
     cameraController = new CameraController;
 
     // エネミー初期化
-    EnemyManager& enemyManager = EnemyManager::Instance();
-    for (int i = 0; i < 2; ++i)
-    {
-        EnemySlime* slime = new EnemySlime();
-        slime->SetPosition(DirectX::XMFLOAT3(i * 2.0f, 0, 5));
-        slime->SetTerritory(slime->GetPosition(), 10.0f);
-        enemyManager.Register(slime);
-    }
+    
 }
 
 // 終了化
 void SceneTutorial::Finalize()
 {
-    EnemyManager::Instance().Clear();
+    
 
     if (cameraController != nullptr) {
         delete cameraController;
@@ -83,6 +77,8 @@ void SceneTutorial::Update(float elapsedTime)
     Player::Instance().Update(elapsedTime);
     EnemyManager::Instance().Update(elapsedTime);
     EffectManager::Instance().Update(elapsedTime);
+
+    
 
     GamePad& gamePad = Input::Instance().GetGamePad();
     if (gamePad.GetButtonDown() & GamePad::BTN_A) {

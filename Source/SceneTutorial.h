@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Stage.h"
+#include "Stage1.h"
 #include "CameraController.h"
 #include "Scene.h"
 
@@ -27,7 +27,7 @@ public:
 	void DrawGUI()override;
 
 private:
-	Stage* stage = nullptr;
+	Stage1* stage = nullptr;
 	CameraController* cameraController = nullptr;
 
 };

@@ -1,31 +1,31 @@
-#include "Stage.h"
+#include "Stage1.h"
 
 //コンストラクタ
-Stage::Stage()
+Stage1::Stage1()
 {
 	//ステージモデルを読み込み
-	model = new Model("Data/Model/Stage/ExampleStage.mdl");
+	
 	model1 = new Model("Data/Model/Stage/Tutorial.mdl");
 }
 
-Stage::~Stage()
+Stage1::~Stage1()
 {
 	//ステージモデルを破棄
-	delete model;
+	delete model1;
 }
 
 //更新処理
-void Stage::Update(float elapsedTime)
+void Stage1::Update(float elapsedTime)
 {
 
 }
 
 //描画処理
-void Stage::Render(const RenderContext& rc, ModelRenderer* renderer)
+void Stage1::Render(const RenderContext& rc, ModelRenderer* renderer)
 {
 	DirectX::XMFLOAT4X4 transform;
 	DirectX::XMStoreFloat4x4(&transform, DirectX::XMMatrixIdentity());
 
 	//レンダラにモデルを描画してもらう
-	renderer->Render(rc, transform, model, ShaderId::Lambert);
+	renderer->Render(rc, transform, model1, ShaderId::Lambert);
 }
