@@ -18,7 +18,7 @@ private:
 	DirectX::XMFLOAT3 angle = { 0,0,0 };//回転角度
 	DirectX::XMMATRIX Transform;
 	float rollSpeed = DirectX::XMConvertToRadians(90);//回転速度
-	float range = 0.5f;//距離
+	float range = 2.0f;//距離
 	float maxAngleX = DirectX::XMConvertToRadians(45);
 	float minAngleX = DirectX::XMConvertToRadians(-60);
 	int CameraState = 0;//ステート

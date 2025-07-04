@@ -123,7 +123,6 @@
     <ClInclude Include="Source\CameraController.h" />
     <ClInclude Include="Source\Character.h" />
     <ClInclude Include="Source\Collision.h" />
-    <ClInclude Include="Source\CrossHair.h" />
     <ClInclude Include="Source\Effect.h" />
     <ClInclude Include="Source\EffectManager.h" />
     <ClInclude Include="Source\Enemy.h" />
@@ -177,7 +176,6 @@
     <ClCompile Include="Source\CameraController.cpp" />
     <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
-    <ClCompile Include="Source\CrossHair.cpp" />
     <ClCompile Include="Source\Effect.cpp" />
     <ClCompile Include="Source\EffectManager.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
