@@ -12,7 +12,7 @@
 #include "SceneManager.h"
 #include "SceneLoading.h"
 #include <imgui.h>
-#include <WICTextureLoader.h> // DirectXTK‚Ì‰æ‘œ“Ç‚İ‚İ
+/*#include <WICTextureLoader.h>*/ // DirectXTK‚Ì‰æ‘œ“Ç‚İ‚İ
 #include <wrl/client.h>
 using namespace DirectX;
 
@@ -55,29 +55,6 @@ void SceneGame::Initialize()
         slime->SetPosition(DirectX::XMFLOAT3(i * 2.0f, 0, 5));
         slime->SetTerritory(slime->GetPosition(), 10.0f);
         enemyManager.Register(slime);
-    }
-
-    // ƒNƒƒXƒwƒA‰æ‘œ“Ç‚İ‚İ
-    {
-        ID3D11Device* device = graphics.GetDevice();
-        Microsoft::WRL::ComPtr<ID3D11Resource> resource;
-
-        HRESULT hr = CreateWICTextureFromFile(
-            device,
-            L"resources/crosshair.png",
-            resource.GetAddressOf(),
-            crosshairSRV.GetAddressOf()
-        );
-
-        if (SUCCEEDED(hr)) {
-            Microsoft::WRL::ComPtr<ID3D11Texture2D> tex;
-            if (SUCCEEDED(resource.As(&tex))) {
-                D3D11_TEXTURE2D_DESC desc;
-                tex->GetDesc(&desc);
-                crosshairWidth = static_cast<float>(desc.Width);
-                crosshairHeight = static_cast<float>(desc.Height);
-            }
-        }
     }
 }
 
