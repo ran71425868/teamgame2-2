@@ -88,8 +88,8 @@ protected:
 	virtual void OnDead() {}
 
 protected:
-	DirectX::XMFLOAT3  position = { 0,-2,0 };
-	DirectX::XMFLOAT3  angle = { 45,0,180 };
+	DirectX::XMFLOAT3  position = { 0,0,0 };
+	DirectX::XMFLOAT3  angle = { 0,0,0 };
 	DirectX::XMFLOAT3  scale = { 1,1,1 };
 	DirectX::XMFLOAT4X4  transform = {
 		1,0,0,0,
