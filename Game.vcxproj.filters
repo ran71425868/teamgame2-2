@@ -180,6 +180,9 @@
     <ClInclude Include="Source\SceneSelect.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\CrossHair.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui-docking\imgui.cpp">
@@ -323,6 +326,9 @@
     <ClCompile Include="Source\SceneResult.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CrossHair.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\Sprite.hlsli">
@@ -346,6 +352,7 @@
     <None Include="Shader\Scene.hlsli">
       <Filter>Shader</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\SpriteVS.hlsl">

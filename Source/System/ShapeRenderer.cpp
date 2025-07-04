@@ -1,6 +1,7 @@
 #include "Misc.h"
 #include "GpuResourceUtils.h"
 #include "ShapeRenderer.h"
+#include <algorithm>
 
 // コンストラクタ
 ShapeRenderer::ShapeRenderer(ID3D11Device* device)
@@ -43,6 +44,9 @@ ShapeRenderer::ShapeRenderer(ID3D11Device* device)
 
 	// 円柱メッシュ生成
 	CreateCylinderMesh(device, 1.0f, 1.0f, -0.5f, 1.0f, 32);
+
+	//線メッシュ生成
+	CreateLineMesh(device);
 }
 
 // 箱描画
@@ -138,6 +142,52 @@ void ShapeRenderer::RenderCapsule(
 		Render(rc, halfSphereMesh, world, color);
 	}
 }
+
+void ShapeRenderer::RenderLine(
+	const RenderContext& rc,
+	const DirectX::XMFLOAT3& start,
+	const DirectX::XMFLOAT3& end,
+	const DirectX::XMFLOAT4& color) const
+{
+	// 単位ベクトル（0,0,1）から (start→end) ベクトルへの変換を行う
+	DirectX::XMVECTOR dir = DirectX::XMVectorSubtract(
+		DirectX::XMLoadFloat3(&end),
+		DirectX::XMLoadFloat3(&start));
+	float length = DirectX::XMVectorGetX(DirectX::XMVector3Length(dir));
+
+	if (length < 1e-5f)
+		return;
+
+	// 単位方向ベクトル
+	DirectX::XMVECTOR direction = DirectX::XMVector3Normalize(dir);
+	DirectX::XMVECTOR defaultDir = DirectX::XMVectorSet(0, 0, 1, 0); // 初期線の方向
+
+	// 回転軸と角度を求める
+	DirectX::XMVECTOR axis = DirectX::XMVector3Cross(defaultDir, direction);
+	float dot = DirectX::XMVectorGetX(DirectX::XMVector3Dot(defaultDir, direction));
+	float angle = acosf(std::clamp(dot, -1.0f, 1.0f)); // 安全なacos
+
+	DirectX::XMMATRIX R;
+	if (DirectX::XMVectorGetX(DirectX::XMVector3LengthSq(axis)) < 1e-5f)
+	{
+		R = (dot > 0.0f) ? DirectX::XMMatrixIdentity() : DirectX::XMMatrixRotationY(DirectX::XM_PI);
+	}
+	else
+	{
+		R = DirectX::XMMatrixRotationAxis(axis, angle);
+	}
+
+	// スケーリングと移動
+	DirectX::XMMATRIX S = DirectX::XMMatrixScaling(1.0f, 1.0f, length);
+	DirectX::XMMATRIX T = DirectX::XMMatrixTranslationFromVector(DirectX::XMLoadFloat3(&start));
+	DirectX::XMMATRIX World = S * R * T;
+
+	DirectX::XMFLOAT4X4 transform;
+	DirectX::XMStoreFloat4x4(&transform, World);
+
+	Render(rc, lineMesh, transform, color);
+}
+
 
 // メッシュ生成
 void ShapeRenderer::CreateMesh(ID3D11Device* device, const std::vector<DirectX::XMFLOAT3>& vertices, Mesh& mesh)
@@ -368,6 +418,16 @@ void ShapeRenderer::CreateCylinderMesh(ID3D11Device* device, float radius1, floa
 
 	// メッシュ生成
 	CreateMesh(device, vertices, cylinderMesh);
+}
+
+void ShapeRenderer::CreateLineMesh(ID3D11Device* device)
+{
+	std::vector<DirectX::XMFLOAT3> vertices(2);
+	// 初期化時はダミー位置でOK（描画時にtransformで座標設定する）
+	vertices[0] = { 0, 0, 0 };
+	vertices[1] = { 0, 0, 1 };
+
+	CreateMesh(device, vertices, lineMesh);
 }
 
 // 描画実行

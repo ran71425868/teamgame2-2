@@ -1,4 +1,126 @@
 #include "Collision.h"
+#include <DirectXMath.h>
+#include <algorithm> // For std::min, std::max
+#include <limits>    // For FLT_MAX
+
+// レイと円柱の交差判定 (Y軸に沿った円柱を想定)
+bool Collision::IntersectRayVsCylinder(
+    const DirectX::XMFLOAT3& rayOrigin,
+    const DirectX::XMFLOAT3& rayDirection, // 想定として正規化済み
+    const DirectX::XMFLOAT3& cylinderPosition,
+    float cylinderRadius,
+    float cylinderHeight,
+    DirectX::XMFLOAT3& outHitPoint,
+    float& outHitDistance)
+{
+    using namespace DirectX;
+
+    XMVECTOR O = XMLoadFloat3(&rayOrigin);
+    XMVECTOR D = XMLoadFloat3(&rayDirection);
+    XMVECTOR C = XMLoadFloat3(&cylinderPosition);
+
+    float R = cylinderRadius;
+    float H = cylinderHeight;
+
+    float halfH = H / 2.0f;
+    float cylinderMinY = cylinderPosition.y - halfH;
+    float cylinderMaxY = cylinderPosition.y + halfH;
+
+    float t_closest = FLT_MAX;
+    bool hit_found = false;
+
+    // レイと円柱の側面との交差判定 (無限円柱)
+    XMVECTOR O_prime = XMVectorSubtract(O, C); // レイの原点を円柱の中心からの相対位置に
+    XMVECTOR D_xz = XMVectorSetY(D, 0.0f); // レイの方向ベクトルをXZ平面に投影
+    XMVECTOR O_prime_xz = XMVectorSetY(O_prime, 0.0f); // レイの相対原点をXZ平面に投影
+
+    float a = XMVectorGetX(XMVector3LengthSq(D_xz)); // D_x^2 + D_z^2
+    float b = 2.0f * XMVectorGetX(XMVector3Dot(O_prime_xz, D_xz)); // 2 * (O'_x * D_x + O'_z * D_z)
+    float c = XMVectorGetX(XMVector3LengthSq(O_prime_xz)) - (R * R); // O'_x^2 + O'_z^2 - R^2
+
+    // レイが円柱の中心軸に平行でない場合 (水平方向の動きがある場合)
+    if (a > FLT_EPSILON) // aが0に近い場合は、レイがほぼ垂直であることを意味する
+    {
+        float discriminant = b * b - 4 * a * c;
+        if (discriminant >= 0)
+        {
+            float sqrtDisc = sqrtf(discriminant);
+            float t0 = (-b - sqrtDisc) / (2.0f * a);
+            float t1 = (-b + sqrtDisc) / (2.0f * a);
+
+            // 小さい方のtからチェックし、Y範囲内にあるか確認
+            if (t0 > 0.0f)
+            {
+                XMVECTOR intersectPoint = XMVectorAdd(O, XMVectorScale(D, t0));
+                float hitY = XMVectorGetY(intersectPoint);
+                if (hitY >= cylinderMinY && hitY <= cylinderMaxY)
+                {
+                    t_closest = t0;
+                    hit_found = true;
+                }
+            }
+            if (t1 > 0.0f && t1 < t_closest) // t1がより近くで、かつ有効なY範囲内
+            {
+                XMVECTOR intersectPoint = XMVectorAdd(O, XMVectorScale(D, t1));
+                float hitY = XMVectorGetY(intersectPoint);
+                if (hitY >= cylinderMinY && hitY <= cylinderMaxY)
+                {
+                    t_closest = t1;
+                    hit_found = true;
+                }
+            }
+        }
+    }
+    // レイがほぼ垂直な場合は、側面衝突はキャップ衝突によって処理される
+
+    // レイと円柱のキャップ（蓋と底面）との交差判定
+    float Dy = XMVectorGetY(D);
+    if (fabs(Dy) > FLT_EPSILON) // レイがキャップ平面に平行でない場合
+    {
+        // 上面 (N = (0, 1, 0), P0 = (C.x, cylinderMaxY, C.z))
+        float t_cap_top = (cylinderMaxY - XMVectorGetY(O)) / Dy;
+        if (t_cap_top > 0.0f && t_cap_top < t_closest)
+        {
+            XMVECTOR intersectPoint = XMVectorAdd(O, XMVectorScale(D, t_cap_top));
+            XMVECTOR hitPointXZ = XMVectorSetY(intersectPoint, 0.0f); // Y成分を0にしてXZ平面上の位置として扱う
+            XMVECTOR cylinderCenterXZ = XMVectorSetY(C, 0.0f); // 同様に円柱の中心もXZ平面上の位置として扱う
+            float distSqToCenter = XMVectorGetX(XMVector3LengthSq(XMVectorSubtract(hitPointXZ, cylinderCenterXZ)));
+            if (distSqToCenter <= (R * R))
+            {
+                t_closest = t_cap_top;
+                hit_found = true;
+            }
+        }
+
+        // 底面 (N = (0, -1, 0), P0 = (C.x, cylinderMinY, C.z))
+        float t_cap_bottom = (cylinderMinY - XMVectorGetY(O)) / Dy;
+        if (t_cap_bottom > 0.0f && t_cap_bottom < t_closest)
+        {
+            XMVECTOR intersectPoint = XMVectorAdd(O, XMVectorScale(D, t_cap_bottom));
+            XMVECTOR hitPointXZ = XMVectorSetY(intersectPoint, 0.0f);
+            XMVECTOR cylinderCenterXZ = XMVectorSetY(C, 0.0f);
+            float distSqToCenter = XMVectorGetX(XMVector3LengthSq(XMVectorSubtract(hitPointXZ, cylinderCenterXZ)));
+            if (distSqToCenter <= (R * R))
+            {
+                t_closest = t_cap_bottom;
+                hit_found = true;
+            }
+        }
+    }
+    // レイがキャップ平面に平行な場合 (Dy == 0):
+    // この場合、キャップとの交差は発生しない。側面衝突のみ考慮すればよいが、
+    // それは既に上の quadratic で処理されている。
+
+    if (hit_found)
+    {
+        XMVECTOR finalHitPoint = XMVectorAdd(O, XMVectorScale(D, t_closest));
+        XMStoreFloat3(&outHitPoint, finalHitPoint);
+        outHitDistance = t_closest;
+        return true;
+    }
+
+    return false;
+}
 
 //球と球の交差判定
 bool Collision::IntersectSphereVsSphere(

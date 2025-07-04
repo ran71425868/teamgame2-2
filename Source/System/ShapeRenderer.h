@@ -43,6 +43,13 @@ public:
 		float height,
 		const DirectX::XMFLOAT4& color) const;
 
+	// ü•ª•`‰æ
+	void RenderLine(
+		const RenderContext& rc,
+		const DirectX::XMFLOAT3& start,
+		const DirectX::XMFLOAT3& end,
+		const DirectX::XMFLOAT4& color) const;
+
 private:
 	struct Mesh
 	{
@@ -73,11 +80,15 @@ private:
 	// ‰~’Œ
 	void CreateCylinderMesh(ID3D11Device* device, float radius1, float radius2, float start, float height, int subdivisions);
 
+	//ü
+	void CreateLineMesh(ID3D11Device* device);
+
 private:
 	Mesh										boxMesh;
 	Mesh										sphereMesh;
 	Mesh										halfSphereMesh;
 	Mesh										cylinderMesh;
+	Mesh										lineMesh;
 	Microsoft::WRL::ComPtr<ID3D11VertexShader>	vertexShader;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader>	pixelShader;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>	inputLayout;
