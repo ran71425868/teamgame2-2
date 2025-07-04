@@ -1,6 +1,7 @@
 #include "System/Input.h"
 #include "CameraController.h"
 #include "Camera.h"
+#include "Player.h"
 
 //更新処理
 void CameraController::Update(float elapsedTime) 
@@ -30,7 +31,7 @@ void CameraController::Update(float elapsedTime)
 			float ay = static_cast<float>(mousePos.y - centerY);
 
 			// 角度更新
-			angle.x += ay * sensitivity;
+			angle.x = Player::Instance().GetAngle().x;
 			angle.y += ax * sensitivity;
 
 			// X軸回転制限
@@ -88,4 +89,10 @@ void CameraController::SetCursorVisibility(bool visible)
 		ShowCursor(false);
 		--showCount;
 	}
+}
+
+void CameraController::Finalize()
+{
+	show_cursor = true;
+	SetCursorVisibility(show_cursor);
 }

@@ -63,6 +63,7 @@ void SceneGame::Finalize()
 {
     EnemyManager::Instance().Clear();
 
+    cameraController->Finalize();
     if (cameraController != nullptr) {
         delete cameraController;
         cameraController = nullptr;
@@ -86,6 +87,7 @@ void SceneGame::Update(float elapsedTime)
     target.y += 0.5f;
     cameraController->SetTarget(target);
     cameraController->Update(elapsedTime);
+
 
     stage->Update(elapsedTime);
     Player::Instance().Update(elapsedTime);
