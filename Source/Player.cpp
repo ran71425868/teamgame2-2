@@ -408,7 +408,7 @@ void Player::PerformRaycastToSlime()
 	XMStoreFloat3(&rayDirection, dirVec);
 
 	// 1バウンド目
-	bool hit1 = false;
+	hit1 = false;
 	XMFLOAT3 normal1;
 
 	if (RaycastToSlimes(rayOrigin, rayDirection, rayHitPoint, normal1))
@@ -420,16 +420,16 @@ void Player::PerformRaycastToSlime()
 		hasRayHit = false;
 
 		// ヒットしなかった場合はカメラの前方向に適当な長さだけ進んだ位置を代入
-		float fallbackLength = 1000.0f;
+		float rayLength = 1000.0f;
 		rayHitPoint = {
-			rayOrigin.x + rayDirection.x * fallbackLength,
-			rayOrigin.y + rayDirection.y * fallbackLength,
-			rayOrigin.z + rayDirection.z * fallbackLength
+			rayOrigin.x + rayDirection.x * rayLength,
+			rayOrigin.y + rayDirection.y * rayLength,
+			rayOrigin.z + rayDirection.z * rayLength
 		};
 	}
 
 	// 2バウンド目（反射）
-	bool hit2 = false;
+	hit2 = false;
 	hitPoint2;
 
 	if (hit1)
@@ -561,14 +561,16 @@ void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* render
 		// プレイヤーからの1本目（白）
 		renderer->RenderLine(rc, rayOrigin, rayHitPoint, { 1.0f, 1.0f, 1.0f, 1.0f });
 
-		// 反射レイ(2本目)（青など）
-		XMFLOAT3 reflectEnd = {
-			rayHitPoint.x + reflectedDir.x * 20.0f,
-			rayHitPoint.y + reflectedDir.y * 20.0f,
-			rayHitPoint.z + reflectedDir.z * 20.0f
-		};
-		renderer->RenderLine(rc, rayHitPoint, reflectEnd, { 0.0f, 1.0f, 0.0f, 1.0f });
-
+		if (hit1)
+		{
+			// 反射レイ(2本目)（青など）
+			XMFLOAT3 reflectEnd = {
+				rayHitPoint.x + reflectedDir.x * 20.0f,
+				rayHitPoint.y + reflectedDir.y * 20.0f,
+				rayHitPoint.z + reflectedDir.z * 20.0f
+			};
+			renderer->RenderLine(rc, rayHitPoint, reflectEnd, { 1.0f, 1.0f, 1.0f, 1.0f });
+		}
 	}
 
 	// レイが当たった場所にデバッグ円を描画 (追加)
@@ -580,7 +582,7 @@ void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* render
 	if (hasReflectHit)
 	{
 		// 衝突点に緑い円を描画
-		renderer->RenderSphere(rc, reflectedHitPoint, 0.2f, { 0.0f, 1.0f, 0.0f, 1.0f });
+		renderer->RenderSphere(rc, reflectedHitPoint, 0.2f, { 1.0f, 1.0f, 0.0f, 1.0f });
 	}
 }
 
@@ -621,6 +623,11 @@ void Player::DrawDebugGUI()
 			if (hasRayHit)
 			{
 				ImGui::InputFloat3("Hit Point", &rayHitPoint.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
+			}
+			ImGui::Checkbox("Has Reflect Hit", &hasReflectHit);
+			if (hasReflectHit)
+			{
+				ImGui::InputFloat3("Hit Point", &reflectedHitPoint.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
 			}
 		}
 	}

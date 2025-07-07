@@ -87,6 +87,8 @@ private:
 
 	DirectX::XMFLOAT3 hitPoint2;
 	DirectX::XMFLOAT3 reflectedDir;
+	bool hit1;
+	bool hit2;
 
 	ProjectileManager projectileManager;//íeä€ä«óù
 
