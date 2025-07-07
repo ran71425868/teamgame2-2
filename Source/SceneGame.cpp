@@ -88,6 +88,10 @@ void SceneGame::Update(float elapsedTime)
     cameraController->SetTarget(target);
     cameraController->Update(elapsedTime);
 
+    //カメラの角度をプレイヤーの角度と同期させる
+    DirectX::XMFLOAT3 angle = cameraController->GetAngle();
+    Player::Instance().SetAngle(angle);
+    Player::Instance().Update(elapsedTime);
 
     stage->Update(elapsedTime);
     Player::Instance().Update(elapsedTime);

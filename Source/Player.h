@@ -43,9 +43,15 @@ public:
 	//ジャンプ入力処理
 	void InputJump();
 
+	//プレイヤーの角度にセット
+	void SetAngle(const DirectX::XMFLOAT3 angle) { this->angle = angle; };
+
 private:
 	//スティック入力値から移動ベクトルを取得
 	DirectX::XMFLOAT3 GetMoveVec() const;
+
+	// ベクトルの反射
+	DirectX::XMFLOAT3 Reflect(const DirectX::XMFLOAT3& incident, const DirectX::XMFLOAT3& normal);
 
 	//移動入力処理
 	void InputMove(float elapsedTime);
@@ -79,6 +85,9 @@ private:
 	int jumpCount = 0;
 	int jumpLimit = 2;
 
+	DirectX::XMFLOAT3 hitPoint2;
+	DirectX::XMFLOAT3 reflectedDir;
+
 	ProjectileManager projectileManager;//弾丸管理
 
 	Effect* hitEffect = nullptr;
@@ -88,4 +97,20 @@ private:
 	// レイキャスト結果を保持するメンバ変数 (追加)
 	bool hasRayHit = false;
 	DirectX::XMFLOAT3 rayHitPoint = { 0, 0, 0 };
+
+	// レイキャスト結果を保持するメンバ変数(反射後)
+	bool hasReflectHit = false;
+	DirectX::XMFLOAT3 reflectedHitPoint = { 0, 0, 0 };
+
+	// Cylinderからの法線
+	DirectX::XMFLOAT3 ComputeCylinderNormal(
+		const DirectX::XMFLOAT3& hitPoint,
+		const DirectX::XMFLOAT3& cylinderCenter);
+
+	//スライムに対するレイキャストを共通化
+	bool Player::RaycastToSlimes(
+		const DirectX::XMFLOAT3& rayOrigin,
+		const DirectX::XMFLOAT3& rayDir,
+		DirectX::XMFLOAT3& outHitPoint,
+		DirectX::XMFLOAT3& outHitNormal);
 };

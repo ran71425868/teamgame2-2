@@ -11,6 +11,9 @@ public:
 	//ターゲット位置設定
 	void SetTarget(const DirectX::XMFLOAT3 target) { this->target = target; };
 
+	//カメラの角度取得
+	DirectX::XMFLOAT3 GetAngle() const { return angle; };
+
 	//カーソルの表示/非表示
 	void SetCursorVisibility(bool visible);
 
@@ -21,7 +24,7 @@ private:
 	DirectX::XMFLOAT3 angle = { 0,0,0 };//回転角度
 	DirectX::XMMATRIX Transform;
 	float rollSpeed = DirectX::XMConvertToRadians(90);//回転速度
-	float range = 0.1f;//距離
+	float range = 2.0f;//距離
 	float maxAngleX = DirectX::XMConvertToRadians(45);
 	float minAngleX = DirectX::XMConvertToRadians(-60);
 	int CameraState = 0;//ステート
