@@ -21,6 +21,7 @@ void SceneTutorial::Initialize()
 {
     // ステージ初期化
     stage = new Stage1();
+    prop = new Prop();
 
     // プレイヤー初期化
     Player::Instance().Initializa();
@@ -62,6 +63,11 @@ void SceneTutorial::Finalize()
         delete stage;
         stage = nullptr;
     }
+    if (prop != nullptr) {
+        delete prop;
+        prop = nullptr;
+    }
+
 }
 
 // 更新処理
@@ -73,12 +79,14 @@ void SceneTutorial::Update(float elapsedTime)
     cameraController->SetTarget(target);
     cameraController->Update(elapsedTime);
 
+    prop->Update(elapsedTime);
     stage->Update(elapsedTime);
+
     Player::Instance().Update(elapsedTime);
     EnemyManager::Instance().Update(elapsedTime);
     EffectManager::Instance().Update(elapsedTime);
 
-    
+    prop->Update(elapsedTime);
 
     GamePad& gamePad = Input::Instance().GetGamePad();
     if (gamePad.GetButtonDown() & GamePad::BTN_A) {
@@ -107,6 +115,7 @@ void SceneTutorial::Render()
     // 3D描画
     {
         stage->Render(rc, modelRenderer);
+        prop->Render(rc, modelRenderer);
         Player::Instance().Render(rc, modelRenderer);
         EnemyManager::Instance().Render(rc, modelRenderer);
         EffectManager::Instance().Render(rc.view, rc.projection);
