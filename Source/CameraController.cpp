@@ -89,3 +89,9 @@ void CameraController::SetCursorVisibility(bool visible)
 		--showCount;
 	}
 }
+
+void CameraController::Finalize()
+{
+	show_cursor = true;
+	SetCursorVisibility(show_cursor);
+}

@@ -11,8 +11,14 @@ public:
 	//ターゲット位置設定
 	void SetTarget(const DirectX::XMFLOAT3 target) { this->target = target; };
 
+	//カメラの角度取得
+	DirectX::XMFLOAT3 GetAngle() const { return angle; };
+
 	//カーソルの表示/非表示
 	void SetCursorVisibility(bool visible);
+
+	//終了処理
+	void Finalize();
 private:
 	DirectX::XMFLOAT3 target = { 0,0,0 };//注視点
 	DirectX::XMFLOAT3 angle = { 0,0,0 };//回転角度

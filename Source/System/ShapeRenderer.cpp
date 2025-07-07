@@ -143,6 +143,7 @@ void ShapeRenderer::RenderCapsule(
 	}
 }
 
+//ü•`‰æ
 void ShapeRenderer::RenderLine(
 	const RenderContext& rc,
 	const DirectX::XMFLOAT3& start,

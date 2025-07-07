@@ -3,6 +3,7 @@
 #include "Stage1.h"
 #include "CameraController.h"
 #include "Scene.h"
+#include "Prop.h"
 
 // ÉQÅ[ÉÄÉVÅ[Éì
 class SceneTutorial :public Scene
@@ -29,5 +30,5 @@ public:
 private:
 	Stage1* stage = nullptr;
 	CameraController* cameraController = nullptr;
-
+	Prop* prop = nullptr;
 };

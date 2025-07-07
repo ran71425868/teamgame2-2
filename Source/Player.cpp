@@ -15,7 +15,7 @@ void Player::Initializa()
 	model = new Model("Data/Model/Light/Light.mdl");
 
 	//モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.05f;
+	scale.x = scale.y = scale.z = 0.012f;
 
 	//ヒットエフェクト読み込み
 	hitEffect = new Effect("Data/Effect/Hit.efk");
@@ -141,10 +141,26 @@ void Player::SyncPlayerAngleWithCamera()
 {
 	Camera& camera = Camera::Instance();
 	const DirectX::XMFLOAT3& front = camera.GetFront();
+	const DirectX::XMFLOAT3& up = camera.GetUp();
+	const DirectX::XMFLOAT3& right = camera.GetRight();
 
 	// atan2で角度を求める（Y軸回転）
 	angle.y = atan2f(front.x, front.z);
+
 }
+
+// ベクトルの反射処理
+DirectX::XMFLOAT3 Player::Reflect(const DirectX::XMFLOAT3& incident, const DirectX::XMFLOAT3& normal)
+{
+	using namespace DirectX;
+	XMVECTOR i = XMLoadFloat3(&incident);
+	XMVECTOR n = XMLoadFloat3(&normal);
+	XMVECTOR r = XMVectorSubtract(i, XMVectorScale(n, 2.0f * XMVectorGetX(XMVector3Dot(i, n))));
+	XMFLOAT3 reflected;
+	XMStoreFloat3(&reflected, r);
+	return reflected;
+}
+
 
 //プレイヤーとエネミーの衝突処理
 void Player::CollisionPlayerVsEnemies()
@@ -391,46 +407,119 @@ void Player::PerformRaycastToSlime()
 	dirVec = XMVector3Normalize(dirVec);
 	XMStoreFloat3(&rayDirection, dirVec);
 
-	// （以下省略）レイキャストの処理はそのまま
-	DirectX::XMFLOAT3 closestHitPoint = { 0, 0, 0 };
-	float closestHitDistance = FLT_MAX;
-	bool anyHit = false;
+	// 1バウンド目
+	bool hit1 = false;
+	XMFLOAT3 normal1;
+
+	if (RaycastToSlimes(rayOrigin, rayDirection, rayHitPoint, normal1))
+	{
+		hit1 = true;
+	}
+	else
+	{
+		hasRayHit = false;
+
+		// ヒットしなかった場合はカメラの前方向に適当な長さだけ進んだ位置を代入
+		float fallbackLength = 1000.0f;
+		rayHitPoint = {
+			rayOrigin.x + rayDirection.x * fallbackLength,
+			rayOrigin.y + rayDirection.y * fallbackLength,
+			rayOrigin.z + rayDirection.z * fallbackLength
+		};
+	}
+
+	// 2バウンド目（反射）
+	bool hit2 = false;
+	hitPoint2;
+
+	if (hit1)
+	{
+		reflectedDir = Reflect(rayDirection, normal1);
+		XMFLOAT3 newOrigin = {
+			rayHitPoint.x + reflectedDir.x * 0.01f,
+			rayHitPoint.y + reflectedDir.y * 0.01f,
+			rayHitPoint.z + reflectedDir.z * 0.01f,
+		};
+
+		XMFLOAT3 dummyNormal;
+		if (RaycastToSlimes(newOrigin, reflectedDir, hitPoint2, dummyNormal))
+		{
+			hit2 = true;
+		}
+	}
+
+	// 保存
+	hasRayHit = hit1;
+	rayHitPoint = hit1 ? rayHitPoint : rayHitPoint;
+
+	hasReflectHit = hit2;
+	reflectedHitPoint = hit2 ? hitPoint2 : XMFLOAT3{ 0,0,0 };
+}
+
+// スライムに対するレイキャストを共通化
+bool Player::RaycastToSlimes(
+	const DirectX::XMFLOAT3& rayOrigin,
+	const DirectX::XMFLOAT3& rayDir,
+	DirectX::XMFLOAT3& outHitPoint,
+	DirectX::XMFLOAT3& outHitNormal)
+{
+	using namespace DirectX;
 
 	EnemyManager& enemyManager = EnemyManager::Instance();
 	int enemyCount = enemyManager.GetEnemyCount();
+
+	float closestDistance = FLT_MAX;
+	bool anyHit = false;
 
 	for (int i = 0; i < enemyCount; i++)
 	{
 		Enemy* enemy = enemyManager.GetEnemy(i);
 		EnemySlime* slime = dynamic_cast<EnemySlime*>(enemy);
-		if (slime)
+		if (!slime) continue;
+
+		XMFLOAT3 slimePos = slime->GetPosition();
+		float radius = slime->GetRadius();
+		float height = slime->GetHeight();
+
+		XMFLOAT3 hitPoint;
+		float hitDistance;
+
+		if (Collision::IntersectRayVsCylinder(
+			rayOrigin, rayDir,
+			slimePos, radius, height,
+			hitPoint, hitDistance))
 		{
-			XMFLOAT3 slimePos = slime->GetPosition();
-			float slimeRadius = slime->GetRadius();
-			float slimeHeight = slime->GetHeight();
-
-			XMFLOAT3 currentHitPoint;
-			float currentHitDistance;
-
-			if (Collision::IntersectRayVsCylinder(
-				rayOrigin, rayDirection,
-				slimePos, slimeRadius, slimeHeight,
-				currentHitPoint, currentHitDistance))
+			if (hitDistance < closestDistance)
 			{
-				if (currentHitDistance < closestHitDistance)
-				{
-					closestHitDistance = currentHitDistance;
-					closestHitPoint = currentHitPoint;
-					anyHit = true;
-				}
+				closestDistance = hitDistance;
+				outHitPoint = hitPoint;
+				outHitNormal = ComputeCylinderNormal(hitPoint, slimePos);
+				anyHit = true;
 			}
 		}
 	}
 
-	hasRayHit = anyHit;
-	rayHitPoint = closestHitPoint;
+	return anyHit;
 }
 
+// Cylinderからの法線をだす
+DirectX::XMFLOAT3 Player::ComputeCylinderNormal(
+	const DirectX::XMFLOAT3& hitPoint,
+	const DirectX::XMFLOAT3& cylinderCenter)
+{
+	using namespace DirectX;
+
+	XMFLOAT3 normalXZ = {
+		hitPoint.x - cylinderCenter.x,
+		0.0f,
+		hitPoint.z - cylinderCenter.z
+	};
+
+	XMVECTOR n = XMVector3Normalize(XMLoadFloat3(&normalXZ));
+	XMFLOAT3 out;
+	XMStoreFloat3(&out, n);
+	return out;
+}
 
 //描画処理
 void Player::Render(const RenderContext& rc, ModelRenderer* renderer)
@@ -469,8 +558,17 @@ void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* render
 			rayOrigin.z + rayDirection.z * rayLength
 		};
 
-		// レイ可視化（青）
-		renderer->RenderLine(rc, rayOrigin, rayEnd, { 1.0f, 1.0f, 1.0f, 1.0f });
+		// プレイヤーからの1本目（白）
+		renderer->RenderLine(rc, rayOrigin, rayHitPoint, { 1.0f, 1.0f, 1.0f, 1.0f });
+
+		// 反射レイ(2本目)（青など）
+		XMFLOAT3 reflectEnd = {
+			rayHitPoint.x + reflectedDir.x * 20.0f,
+			rayHitPoint.y + reflectedDir.y * 20.0f,
+			rayHitPoint.z + reflectedDir.z * 20.0f
+		};
+		renderer->RenderLine(rc, rayHitPoint, reflectEnd, { 0.0f, 1.0f, 0.0f, 1.0f });
+
 	}
 
 	// レイが当たった場所にデバッグ円を描画 (追加)
@@ -478,6 +576,11 @@ void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* render
 	{
 		// 衝突点に赤い円を描画
 		renderer->RenderSphere(rc, rayHitPoint, 0.2f, {1.0f, 0.0f, 0.0f, 1.0f}); // 赤い円、半径0.2f
+	}
+	if (hasReflectHit)
+	{
+		// 衝突点に緑い円を描画
+		renderer->RenderSphere(rc, reflectedHitPoint, 0.2f, { 0.0f, 1.0f, 0.0f, 1.0f });
 	}
 }
 
