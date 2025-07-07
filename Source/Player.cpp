@@ -141,10 +141,12 @@ void Player::SyncPlayerAngleWithCamera()
 {
 	Camera& camera = Camera::Instance();
 	const DirectX::XMFLOAT3& front = camera.GetFront();
+	const DirectX::XMFLOAT3& up = camera.GetUp();
+	const DirectX::XMFLOAT3& right = camera.GetRight();
 
 	// atan2で角度を求める（Y軸回転）
 	angle.y = atan2f(front.x, front.z);
-	angle.z = atan2f(front.x, front.z);
+
 }
 
 //プレイヤーとエネミーの衝突処理

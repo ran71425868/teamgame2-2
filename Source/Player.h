@@ -43,6 +43,9 @@ public:
 	//ジャンプ入力処理
 	void InputJump();
 
+	//プレイヤーの角度にセット
+	void SetAngle(const DirectX::XMFLOAT3 angle) { this->angle = angle; };
+
 private:
 	//スティック入力値から移動ベクトルを取得
 	DirectX::XMFLOAT3 GetMoveVec() const;
