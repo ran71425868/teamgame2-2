@@ -31,12 +31,14 @@ void SceneSelect::Update(float elapsedTime)
 	const MouseButton anyButton =
 		Mouse::BTN_LEFT;
 
+	//’·•ûŒ`‚Ì•`‰æˆÊ’u
 	DirectX::XMFLOAT2 stageleft = { 320,360 };
 	DirectX::XMFLOAT2 stageright = { 420,460 };
 
 	DirectX::XMFLOAT2 tutorialleft = { 960,360 };
 	DirectX::XMFLOAT2 tutorialright = { 1060,460 };
 
+	//ƒ{ƒ^ƒ“‚Ì•`‰æ‚ð‚µ‚Ä‚¢‚é‚Æ‚±‚É“–‚½‚è”»’è
 	if (stageleft.x < mouseCursor.GetPositionX() && stageright.x > mouseCursor.GetPositionX()&&stageleft.y<mouseCursor.GetPositionY()&&stageright.y>mouseCursor.GetPositionY())
 	{
 		if (mouseCursor.GetButtonDown() & anyButton)
