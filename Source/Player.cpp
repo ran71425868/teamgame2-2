@@ -15,7 +15,7 @@ void Player::Initializa()
 	model = new Model("Data/Model/Light/Light.mdl");
 
 	//モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.05f;
+	scale.x = scale.y = scale.z = 0.012f;
 
 	//ヒットエフェクト読み込み
 	hitEffect = new Effect("Data/Effect/Hit.efk");
@@ -144,6 +144,7 @@ void Player::SyncPlayerAngleWithCamera()
 
 	// atan2で角度を求める（Y軸回転）
 	angle.y = atan2f(front.x, front.z);
+	angle.z = atan2f(front.x, front.z);
 }
 
 //プレイヤーとエネミーの衝突処理
