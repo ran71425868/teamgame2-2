@@ -11,6 +11,7 @@ public:
 	void Render(const RenderContext& rc, ModelRenderer* renderer);
 	const DirectX::XMFLOAT3& GetScale() const { return scale; }
 	void SetScale(const DirectX::XMFLOAT3& scale) { this->scale = scale; }
+	void SetPosition(const DirectX::XMFLOAT3& position) { this->position = position; }
 	void UpdateTransform();
 private:
 	Model* model = nullptr;

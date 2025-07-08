@@ -14,6 +14,7 @@
 #include "SceneLoading.h"
 #include <imgui.h>
 #include <wrl/client.h>
+#include "PropManager.h"
 using namespace DirectX;
 
 // 初期化
@@ -21,7 +22,20 @@ void SceneTutorial::Initialize()
 {
     // ステージ初期化
     stage = new Stage1();
-    prop = new Prop();
+
+    Prop*prop = new Prop();
+    PropManager::Instance().Register(prop);
+
+    Prop* prop1 = new Prop();
+    prop1->SetPosition({ 5,5,5 });
+    PropManager::Instance().Register(prop1);
+
+   /* Prop* prop = new Prop();
+    PropManager::Instance().Register(prop);
+
+    Prop* prop = new Prop();
+    PropManager::Instance().Register(prop);*/
+
 
     // プレイヤー初期化
     Player::Instance().Initializa();
@@ -63,10 +77,8 @@ void SceneTutorial::Finalize()
         delete stage;
         stage = nullptr;
     }
-    if (prop != nullptr) {
-        delete prop;
-        prop = nullptr;
-    }
+
+    PropManager::Instance().Clear();
 
 }
 
@@ -79,14 +91,16 @@ void SceneTutorial::Update(float elapsedTime)
     cameraController->SetTarget(target);
     cameraController->Update(elapsedTime);
 
-    prop->Update(elapsedTime);
+   
+    PropManager::Instance().Update(elapsedTime);
+
     stage->Update(elapsedTime);
 
     Player::Instance().Update(elapsedTime);
     EnemyManager::Instance().Update(elapsedTime);
     EffectManager::Instance().Update(elapsedTime);
 
-    prop->Update(elapsedTime);
+    
 
     GamePad& gamePad = Input::Instance().GetGamePad();
     if (gamePad.GetButtonDown() & GamePad::BTN_A) {
@@ -115,7 +129,7 @@ void SceneTutorial::Render()
     // 3D描画
     {
         stage->Render(rc, modelRenderer);
-        prop->Render(rc, modelRenderer);
+        PropManager::Instance().Render(rc, modelRenderer);
         Player::Instance().Render(rc, modelRenderer);
         EnemyManager::Instance().Render(rc, modelRenderer);
         EffectManager::Instance().Render(rc.view, rc.projection);

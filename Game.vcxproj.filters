@@ -189,6 +189,9 @@
     <ClInclude Include="Source\Prop.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\PropManager.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui-docking\imgui.cpp">
@@ -339,6 +342,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Prop.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PropManager.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
