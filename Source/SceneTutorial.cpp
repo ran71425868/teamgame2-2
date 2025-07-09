@@ -65,7 +65,7 @@ void SceneTutorial::Initialize()
 void SceneTutorial::Finalize()
 {
     
-
+    cameraController->Finalize();
     if (cameraController != nullptr) {
         delete cameraController;
         cameraController = nullptr;
