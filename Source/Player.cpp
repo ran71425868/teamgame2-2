@@ -12,7 +12,7 @@
 //初期化
 void Player::Initializa()
 {
-	model = new Model("Data/Model/Light/Light.mdl");
+	model = new Model("Data/Model/Light/Light_head.mdl");
 
 	//モデルが大きいのでスケーリング
 	scale.x = scale.y = scale.z = 0.012f;
