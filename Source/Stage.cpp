@@ -12,6 +12,7 @@ Stage::~Stage()
 {
 	//ステージモデルを破棄
 	delete model;
+	delete model1;
 }
 
 //更新処理

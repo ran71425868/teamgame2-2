@@ -453,7 +453,7 @@ void Player::PerformRaycastToSlime()
 	rayHitPoint = hit1 ? rayHitPoint : rayHitPoint;
 
 	hasReflectHit = hit2;
-	reflectedHitPoint = hit2 ? hitPoint2 : XMFLOAT3{ 0,0,0 };
+	reflectedHitPoint = hit2 ? hitPoint2 : hitPoint2;
 }
 
 // スライムに対するレイキャストを共通化
@@ -564,12 +564,20 @@ void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* render
 		if (hit1)
 		{
 			// 反射レイ(2本目)（青など）
-			XMFLOAT3 reflectEnd = {
-				rayHitPoint.x + reflectedDir.x * 20.0f,
-				rayHitPoint.y + reflectedDir.y * 20.0f,
-				rayHitPoint.z + reflectedDir.z * 20.0f
-			};
-			renderer->RenderLine(rc, rayHitPoint, reflectEnd, { 1.0f, 1.0f, 1.0f, 1.0f });
+			if (hasReflectHit)
+			{
+				renderer->RenderLine(rc, rayHitPoint, reflectedHitPoint, { 1.0f, 1.0f, 1.0f, 1.0f });
+			}
+			else
+			{
+				XMFLOAT3 reflectEnd = {
+					rayHitPoint.x + reflectedDir.x * 20.0f,
+					rayHitPoint.y + reflectedDir.y * 20.0f,
+					rayHitPoint.z + reflectedDir.z * 20.0f
+				};
+				renderer->RenderLine(rc, rayHitPoint, reflectEnd, { 1.0f, 1.0f, 1.0f, 1.0f });
+
+			}
 		}
 	}
 
