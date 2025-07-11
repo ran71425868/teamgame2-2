@@ -25,8 +25,8 @@ private:
 	DirectX::XMMATRIX Transform;
 	float rollSpeed = DirectX::XMConvertToRadians(90);//回転速度
 	float range = 0.6f;//距離
-	float maxAngleX = DirectX::XMConvertToRadians(45);
-	float minAngleX = DirectX::XMConvertToRadians(-60);
+	float maxAngleX = DirectX::XMConvertToRadians(15);
+	float minAngleX = DirectX::XMConvertToRadians(-30);
 	int CameraState = 0;//ステート
 	float screenWidth = 1280;
 	float screenHeight = 720;

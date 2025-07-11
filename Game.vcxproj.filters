@@ -192,6 +192,12 @@
     <ClInclude Include="Source\PropManager.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Clone.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mirror.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui-docking\imgui.cpp">
@@ -345,6 +351,12 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\PropManager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Clone.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mirror.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

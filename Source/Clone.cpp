@@ -1,30 +1,30 @@
-#include "Prop.h"
+#include "Clone.h"
 
-Prop::Prop()
+Clone::Clone()
 {
-	model=new Model("Data/Model/kagu/ki.mdl");
-	
+	model = new Model("Data/Model/Light/Light.mdl");
+
 	scale.x = scale.y = scale.z = 0.05f;
 	position.x = 10.0f;
 	position.y = 0.0f;
 	position.z = 10.0f;
 }
 
-Prop::~Prop()
+Clone::~Clone()
 {
 	delete model;
-	
+
 }
-void Prop::Render(const RenderContext& rc, ModelRenderer* renderer)
+void Clone::Render(const RenderContext& rc, ModelRenderer* renderer)
 {
 	//DirectX::XMFLOAT4X4 transform;
 	//DirectX::XMStoreFloat4x4(&transform, DirectX::XMMatrixIdentity());
 
 	//レンダラにモデルを描画してもらう
 	renderer->Render(rc, transform, model, ShaderId::Lambert);
-	
+
 }
-void Prop::UpdateTransform()
+void Clone::UpdateTransform()
 {
 	//スケール行列を作成
 	DirectX::XMMATRIX S = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
@@ -37,10 +37,10 @@ void Prop::UpdateTransform()
 	//計算したワールド行列を取り出す
 	DirectX::XMStoreFloat4x4(&transform, W);
 }
-void Prop::Update(float elapsedTime)
+void Clone::Update(float elapsedTime)
 {
 	UpdateTransform();
 
 	model->UpdateTransform();
-	
+
 }

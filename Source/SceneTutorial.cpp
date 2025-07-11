@@ -30,12 +30,13 @@ void SceneTutorial::Initialize()
     prop1->SetPosition({ 5,5,5 });
     PropManager::Instance().Register(prop1);
 
-   /* Prop* prop = new Prop();
-    PropManager::Instance().Register(prop);
+    Clone* clone = new Clone();
+    clone->SetPosition({ 5,0,5 });
+    PropManager::Instance().RegisterC(clone);
 
-    Prop* prop = new Prop();
-    PropManager::Instance().Register(prop);*/
-
+    Mirror* mirror = new Mirror();
+    mirror->SetPosition({ -5,0,-5 });
+    PropManager::Instance().RegisterM(mirror);
 
     // プレイヤー初期化
     Player::Instance().Initializa();
@@ -91,6 +92,11 @@ void SceneTutorial::Update(float elapsedTime)
     cameraController->SetTarget(target);
     cameraController->Update(elapsedTime);
 
+    //カメラの角度をプレイヤーの角度と同期させる
+    DirectX::XMFLOAT3 angle = cameraController->GetAngle();
+    Player::Instance().SetAngle(angle);
+    Player::Instance().Update(elapsedTime);
+
    
     PropManager::Instance().Update(elapsedTime);
 
@@ -130,6 +136,7 @@ void SceneTutorial::Render()
     {
         stage->Render(rc, modelRenderer);
         PropManager::Instance().Render(rc, modelRenderer);
+        
         Player::Instance().Render(rc, modelRenderer);
         EnemyManager::Instance().Render(rc, modelRenderer);
         EffectManager::Instance().Render(rc.view, rc.projection);

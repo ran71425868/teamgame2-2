@@ -1,11 +1,11 @@
 #pragma once
 #include "System/ModelRenderer.h"
 
-class Prop
+class Clone
 {
 public:
-	Prop();
-	~Prop();
+	Clone();
+	~Clone();
 
 	void Update(float elapsedTime);
 	void Render(const RenderContext& rc, ModelRenderer* renderer);
@@ -15,8 +15,6 @@ public:
 	void UpdateTransform();
 private:
 	Model* model = nullptr;
-	Model* modelh = nullptr;
-	Model* modelb = nullptr;
 protected:
 	DirectX::XMFLOAT3  position = { 0,0,0 };
 	DirectX::XMFLOAT3  angle = { 0,0,0 };
