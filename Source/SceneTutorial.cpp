@@ -30,9 +30,13 @@ void SceneTutorial::Initialize()
     prop1->SetPosition({ 5,5,5 });
     PropManager::Instance().Register(prop1);
 
-    /*Clone* clone = new Clone();
-    clone->SetPosition({ 5,5,5 });
-    PropManager::Instance().RegisterC(clone);*/
+    Clone* clone = new Clone();
+    clone->SetPosition({ 5,0,5 });
+    PropManager::Instance().RegisterC(clone);
+
+    Mirror* mirror = new Mirror();
+    mirror->SetPosition({ -5,0,-5 });
+    PropManager::Instance().RegisterM(mirror);
 
     // ƒvƒŒƒCƒ„[‰Šú‰»
     Player::Instance().Initializa();

@@ -131,6 +131,7 @@
     <ClInclude Include="Source\EnemySlime.h" />
     <ClInclude Include="Source\Framework.h" />
     <ClInclude Include="Source\MathUtils.h" />
+    <ClInclude Include="Source\Mirror.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\Projectile.h" />
     <ClInclude Include="Source\ProjectileHoming.h" />
@@ -190,6 +191,7 @@
     <ClCompile Include="Source\Framework.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MathUtils.cpp" />
+    <ClCompile Include="Source\Mirror.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\Projectile.cpp" />
     <ClCompile Include="Source\ProjectileHoming.cpp" />
