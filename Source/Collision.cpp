@@ -122,6 +122,63 @@ bool Collision::IntersectRayVsCylinder(
     return false;
 }
 
+bool Collision::IntersectRayVsBox(
+    const DirectX::XMFLOAT3& rayOrigin,
+    const DirectX::XMFLOAT3& rayDirection,
+    const DirectX::XMFLOAT3& boxCenter,
+    const DirectX::XMFLOAT3& boxSize,
+    float& outTMin,
+    DirectX::XMFLOAT3& outHitPoint
+)
+{
+    using namespace DirectX;
+
+    XMVECTOR origin = XMLoadFloat3(&rayOrigin);
+    XMVECTOR dir = XMVector3Normalize(XMLoadFloat3(&rayDirection)); // îOÇÃÇΩÇﬂê≥ãKâª
+
+    XMVECTOR center = XMLoadFloat3(&boxCenter);
+    XMVECTOR size = XMLoadFloat3(&boxSize);
+    XMVECTOR halfSize = XMVectorScale(size, 0.5f);
+
+    XMVECTOR boxMin = XMVectorSubtract(center, halfSize);
+    XMVECTOR boxMax = XMVectorAdd(center, halfSize);
+
+    float tMin = 0.0f;
+    float tMax = FLT_MAX;
+
+    for (int i = 0; i < 3; ++i) {
+        float rayOrig = XMVectorGetByIndex(origin, i);
+        float rayDir = XMVectorGetByIndex(dir, i);
+        float bMin = XMVectorGetByIndex(boxMin, i);
+        float bMax = XMVectorGetByIndex(boxMax, i);
+
+        if (fabs(rayDir) < 1e-6f) {
+            if (rayOrig < bMin || rayOrig > bMax)
+                return false;
+        }
+        else {
+            float t1 = (bMin - rayOrig) / rayDir;
+            float t2 = (bMax - rayOrig) / rayDir;
+            if (t1 > t2) std::swap(t1, t2);
+
+            tMin = std::max(tMin, t1);
+            tMax = std::min(tMax, t2);
+
+            if (tMin > tMax)
+                return false;
+        }
+    }
+
+    outTMin = tMin;
+
+    // ÉqÉbÉgà íuÇåvéZ: P = O + t * D
+    XMVECTOR hitPos = XMVectorAdd(origin, XMVectorScale(dir, tMin));
+    XMStoreFloat3(&outHitPoint, hitPos);
+
+    return true;
+}
+
+
 //ãÖÇ∆ãÖÇÃåç∑îªíË
 bool Collision::IntersectSphereVsSphere(
 	const DirectX::XMFLOAT3& positionA,

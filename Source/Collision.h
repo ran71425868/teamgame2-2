@@ -45,4 +45,14 @@ public:
 		DirectX::XMFLOAT3& outHitPoint,
 		float& outHitDistance
 	);
+
+	// レイと直方体の交差判定（交点と距離も出力）
+	static bool IntersectRayVsBox(
+		const DirectX::XMFLOAT3& rayOrigin,
+		const DirectX::XMFLOAT3& rayDirection,
+		const DirectX::XMFLOAT3& boxCenter,
+		const DirectX::XMFLOAT3& boxSize,
+		float& outTMin,
+		DirectX::XMFLOAT3& outHitPoint  // ← 追加：ヒットした座標
+	);
 };
