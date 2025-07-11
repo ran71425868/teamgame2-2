@@ -97,6 +97,10 @@ protected:
 		0,0,1,0,
 		0,0,0,1
 	};
+	DirectX::XMFLOAT4X4 local_transform = {};
+	DirectX::XMFLOAT4X4 parent_transform = {};
+	//モデル用オフセット
+	DirectX::XMFLOAT3 model_offset = { 0, 0.5f, 0.2f };
 
 	float radius = 0.5f;
 	float gravity = -30.0f;

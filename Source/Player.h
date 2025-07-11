@@ -31,6 +31,9 @@ public:
 	//更新処理
 	void Update(float elapsedTime);
 
+	//プレイヤー用行列計算
+	void ModelUpdateTransform();
+
 	//描画処理
 	void Render(const RenderContext& rc, ModelRenderer* renderer);
 
@@ -78,6 +81,7 @@ protected:
 
 private:
 	Model* model = nullptr;
+	Model* model1 = nullptr;
 	float moveSpeed = 5.0f;
 	float turnSpeed = DirectX::XMConvertToRadians(720);
 	float jumpSpeed = 12.0f;

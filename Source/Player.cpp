@@ -13,9 +13,10 @@
 void Player::Initializa()
 {
 	model = new Model("Data/Model/Light/Light_head.mdl");
+	model1 = new Model("Data/Model/Light/Light_body.mdl");
 
 	//モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.012f;
+	scale.x = scale.y = scale.z = 0.015f;
 
 	//ヒットエフェクト読み込み
 	hitEffect = new Effect("Data/Effect/Hit.efk");
@@ -30,6 +31,8 @@ void Player::Finalize()
 	delete hitSE;
 
 	delete model;
+
+	delete model1;
 
 	delete hitEffect;
 }
@@ -65,10 +68,47 @@ void Player::Update(float elapsedTime)
 	CollisionProjectilesVsEnemies();
 
 	//オブジェクト行列を更新
-	UpdateTransform();
+	ModelUpdateTransform();
 
 	//モデル行列更新
 	model->UpdateTransform();
+	model1->UpdateTransform();
+}
+
+//プレイヤー用の行列計算
+void Player::ModelUpdateTransform()
+{
+	//オブジェクト行列を更新
+	auto prev_scale = scale;
+	auto prev_position = position;
+	auto prev_angle = angle;
+	scale = { 1, 1, 1 };
+	angle = { prev_angle.x, 0, prev_angle.z };
+	position = {0, 18, -3};
+	UpdateTransform();
+	local_transform = transform;
+
+	angle = { 0, prev_angle.y , 0 };
+	scale = prev_scale;
+	position = prev_position;
+	UpdateTransform();
+	parent_transform = transform;
+	angle = prev_angle;
+	scale = prev_scale;
+	position = prev_position;
+
+	auto LocalTransform = DirectX::XMLoadFloat4x4(&local_transform);
+	auto ParentTransform = DirectX::XMLoadFloat4x4(&parent_transform);
+	DirectX::XMStoreFloat4x4(&local_transform, LocalTransform * ParentTransform);
+
+	{
+		using namespace DirectX;
+
+		XMMATRIX parent = XMLoadFloat4x4(&parent_transform);
+		XMMATRIX offset = XMMatrixTranslation(0.0f, 0.0f, -11.0f);
+		parent = offset * parent;
+		XMStoreFloat4x4(&parent_transform, parent);
+	}
 }
 
 //移動入力処理
@@ -397,7 +437,7 @@ void Player::PerformRaycastToSlime()
 
 	// レイの始点をプレイヤー位置より少し上にする（例：1.5fだけ上に）
 	XMFLOAT3 rayOrigin = GetPosition();
-	rayOrigin.y += 0.3f;
+	rayOrigin.y += 0.2f;
 	
 	// レイの方向はカメラの前方向を使う
 	XMFLOAT3 rayDirection = Camera::Instance().GetFront();
@@ -524,7 +564,8 @@ DirectX::XMFLOAT3 Player::ComputeCylinderNormal(
 //描画処理
 void Player::Render(const RenderContext& rc, ModelRenderer* renderer)
 {
-	renderer->Render(rc, transform, model, ShaderId::Lambert);
+	renderer->Render(rc, local_transform, model, ShaderId::Lambert);
+	renderer->Render(rc, parent_transform, model1, ShaderId::Lambert);
 
 	//弾丸描画処理
 	projectileManager.Render(rc, renderer);
@@ -544,7 +585,7 @@ void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* render
 		using namespace DirectX;
 
 		XMFLOAT3 rayOrigin = GetPosition();
-		rayOrigin.y += 0.3f;
+		rayOrigin.y += 0.2f;
 
 		XMFLOAT3 rayDirection = Camera::Instance().GetFront();
 		XMVECTOR dirVec = XMLoadFloat3(&rayDirection);
