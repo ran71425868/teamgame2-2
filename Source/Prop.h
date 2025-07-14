@@ -2,7 +2,7 @@
 #include "System/ModelRenderer.h"
 #include "Character.h"
 
-class Prop :Character
+class Prop :public Character
 {
 public:
 	Prop();

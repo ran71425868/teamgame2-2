@@ -27,7 +27,6 @@ public:
 	int GetCloneCount() const { return static_cast<int>(clones.size()); }
 	int GetMirrorCount() const { return static_cast<int>(mirrors.size()); }
 	int GetFanCount() const { return static_cast<int>(fans.size()); }
-	int GetFanCount() const { return static_cast<int>(fans.size()); }
 	int GetPanelCount() const { return static_cast<int>(panels.size()); }
 
 	//エネミー取得

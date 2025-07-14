@@ -2,7 +2,8 @@
 
 Fan::Fan()
 {
-	model = new Model("Data/Model/gimmick/Kagami1.mdl");
+	model = new Model("Data/Model/gimmick/Fan_b.mdl");
+	model1 = new Model("Data/Model/gimmick/Fan_h.mdl");
 
 	scale.x = scale.y = scale.z = 0.05f;
 	position.x = 10.0f;
@@ -14,6 +15,7 @@ Fan::Fan()
 Fan::~Fan()
 {
 	delete model;
+	delete model1;
 
 }
 void Fan::Render(const RenderContext& rc, ModelRenderer* renderer)
@@ -23,6 +25,7 @@ void Fan::Render(const RenderContext& rc, ModelRenderer* renderer)
 
 	//ƒŒƒ“ƒ_ƒ‰‚Éƒ‚ƒfƒ‹‚ð•`‰æ‚µ‚Ä‚à‚ç‚¤
 	renderer->Render(rc, transform, model, ShaderId::Lambert);
+	renderer->Render(rc, transform, model1, ShaderId::Lambert);
 
 }
 void Fan::UpdateTransform()
@@ -43,5 +46,6 @@ void Fan::Update(float elapsedTime)
 	UpdateTransform();
 
 	model->UpdateTransform();
+	model1->UpdateTransform();
 
 }
