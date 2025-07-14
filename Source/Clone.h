@@ -1,7 +1,8 @@
 #pragma once
-#include "System/ModelRenderer.h"
+#include "System/ModelRenderer.h"]
+#include "Prop.h"
 
-class Clone
+class Clone: public Prop
 {
 public:
 	Clone();

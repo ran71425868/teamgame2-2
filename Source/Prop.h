@@ -1,7 +1,8 @@
 #pragma once
 #include "System/ModelRenderer.h"
+#include "Character.h"
 
-class Prop
+class Prop :Character
 {
 public:
 	Prop();
