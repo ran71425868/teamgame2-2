@@ -15,6 +15,7 @@ public:
 	void UpdateTransform();
 private:
 	Model* model = nullptr;
+	Model* model1 = nullptr;
 protected:
 	DirectX::XMFLOAT3  position = { 0,0,0 };
 	DirectX::XMFLOAT3  angle = { 0,0,0 };
