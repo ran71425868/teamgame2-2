@@ -10,6 +10,7 @@
 #include "EnemySlime.h"
 
 
+
 //初期化
 void Player::Initializa()
 {
@@ -334,20 +335,20 @@ void Player::OnLanding()
 //ジャンプ入力処理
 void Player::InputJump() 
 {
-	GamePad& gamePad = Input::Instance().GetGamePad();
-	if (gamePad.GetButtonDown() & GamePad::BTN_A)
-	{
-		//ジャンプ回数制限(現在のジャンプ回数がジャンプの最大数より小さければ)
-		//現在のジャンプ回数を増加させ
-		if (jumpCount < jumpLimit) 
-		{
-			jumpCount++;
-			//ジャンプ
-			Jump(jumpSpeed);
+	//GamePad& gamePad = Input::Instance().GetGamePad();
+	//if (gamePad.GetButtonDown() & GamePad::BTN_A)
+	//{
+	//	//ジャンプ回数制限(現在のジャンプ回数がジャンプの最大数より小さければ)
+	//	//現在のジャンプ回数を増加させ
+	//	if (jumpCount < jumpLimit) 
+	//	{
+	//		jumpCount++;
+	//		//ジャンプ
+	//		Jump(jumpSpeed);
 
-		}
+	//	}
 
-	}
+	//}
 
 }
 
