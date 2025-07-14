@@ -1,12 +1,11 @@
 #pragma once
 #include "System/ModelRenderer.h"
-#include "Character.h"
 
-class Prop :public Character
+class Panel
 {
 public:
-	Prop();
-	~Prop();
+	Panel();
+	~Panel();
 
 	void Update(float elapsedTime);
 	void Render(const RenderContext& rc, ModelRenderer* renderer);
@@ -16,8 +15,6 @@ public:
 	void UpdateTransform();
 private:
 	Model* model = nullptr;
-	Model* modelh = nullptr;
-	Model* modelb = nullptr;
 protected:
 	DirectX::XMFLOAT3  position = { 0,0,0 };
 	DirectX::XMFLOAT3  angle = { 0,0,0 };

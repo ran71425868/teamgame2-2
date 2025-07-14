@@ -38,6 +38,11 @@ void SceneTutorial::Initialize()
     mirror->SetPosition({ -5,0,-5 });
     PropManager::Instance().RegisterM(mirror);
 
+    
+    Fan* fan = new Fan();
+    fan->SetPosition({ -10,0,-10 });
+    PropManager::Instance().RegisterF(fan);
+
     // ƒvƒŒƒCƒ„[‰Šú‰»
     Player::Instance().Initializa();
 

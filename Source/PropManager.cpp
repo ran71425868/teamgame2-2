@@ -21,6 +21,18 @@ void PropManager::RemoveM(Mirror* mirror)
 	removes2.insert(mirror);
 
 }
+void PropManager::RemoveF(Fan* fan)
+{
+	//破棄リストに追加
+	removes3.insert(fan);
+
+}
+void PropManager::RemoveP(Panel* panel)
+{
+	//破棄リストに追加
+	removes4.insert(panel);
+
+}
 //更新処理
 void PropManager::Update(float elapsedTime)
 {
@@ -35,6 +47,14 @@ void PropManager::Update(float elapsedTime)
 	for (Mirror* mirror : mirrors)
 	{
 		mirror->Update(elapsedTime);
+	}
+	for (Fan* fan : fans)
+	{
+		fan->Update(elapsedTime);
+	}
+	for (Panel* panel : panels)
+	{
+		panel->Update(elapsedTime);
 	}
 
 	//破棄処理
@@ -91,10 +111,46 @@ void PropManager::Update(float elapsedTime)
 		//弾丸の破棄処理
 		delete mirror;
 	}
+	for (Fan* fan : removes3)
+	{
+		//std::vectorから要素を削除する場合はイテレーターで削除しなければならない
+		std::vector<Fan*>::iterator it = std::find(
+			fans.begin(), //ここから
+			fans.end(), //ここまでの中から
+			fan//こいつがあるかどうかチェック
+		);
+
+		if (it != fans.end())
+		{
+			fans.erase(it);
+		}
+
+		//弾丸の破棄処理
+		delete fan;
+	}
+	for (Panel* panel : removes4)
+	{
+		//std::vectorから要素を削除する場合はイテレーターで削除しなければならない
+		std::vector<Panel*>::iterator it = std::find(
+			panels.begin(), //ここから
+			panels.end(), //ここまでの中から
+			panel//こいつがあるかどうかチェック
+		);
+
+		if (it != panels.end())
+		{
+			panels.erase(it);
+		}
+
+		//弾丸の破棄処理
+		delete panel;
+	}
 	//破棄リストをクリア
 	removes.clear();
 	removes1.clear();
 	removes2.clear();
+	removes3.clear();
+	removes4.clear();
 
 	
 }
@@ -114,6 +170,14 @@ void PropManager::Render(const RenderContext& rc, ModelRenderer* renderer)
 	{
 		mirror->Render(rc, renderer);
 	}
+	for (Fan* fan : fans)
+	{
+		fan->Render(rc, renderer);
+	}
+	for (Panel* panel : panels)
+	{
+		panel->Render(rc, renderer);
+	}
 }
 
 //エネミー登録
@@ -128,6 +192,14 @@ void PropManager::RegisterC(Clone*clone)
 void PropManager::RegisterM(Mirror* mirror)
 {
 	mirrors.emplace_back(mirror);
+}
+void PropManager::RegisterF(Fan* fan)
+{
+	fans.emplace_back(fan);
+}
+void PropManager::RegisterP(Panel* panel)
+{
+	panels.emplace_back(panel);
 }
 
 
@@ -149,6 +221,16 @@ void PropManager::Clear()
 		delete mirror;
 	}
 	mirrors.clear();
+	for (Fan* fan : fans)
+	{
+		delete fan;
+	}
+	fans.clear();
+	for (Panel* panel : panels)
+	{
+		delete panel;
+	}
+	panels.clear();
 }
 
 
