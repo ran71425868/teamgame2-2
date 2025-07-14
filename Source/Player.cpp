@@ -1,4 +1,4 @@
-#include "PLayer.h"
+#include "Player.h"
 #include "System/Input.h"
 #include <imgui.h>
 #include "Camera.h"
@@ -8,6 +8,8 @@
 #include "ProjectileHoming.h"
 #include "System/Audio.h"
 #include "EnemySlime.h"
+
+
 
 //初期化
 void Player::Initializa()
@@ -333,20 +335,20 @@ void Player::OnLanding()
 //ジャンプ入力処理
 void Player::InputJump() 
 {
-	GamePad& gamePad = Input::Instance().GetGamePad();
-	if (gamePad.GetButtonDown() & GamePad::BTN_A)
-	{
-		//ジャンプ回数制限(現在のジャンプ回数がジャンプの最大数より小さければ)
-		//現在のジャンプ回数を増加させ
-		if (jumpCount < jumpLimit) 
-		{
-			jumpCount++;
-			//ジャンプ
-			Jump(jumpSpeed);
+	//GamePad& gamePad = Input::Instance().GetGamePad();
+	//if (gamePad.GetButtonDown() & GamePad::BTN_A)
+	//{
+	//	//ジャンプ回数制限(現在のジャンプ回数がジャンプの最大数より小さければ)
+	//	//現在のジャンプ回数を増加させ
+	//	if (jumpCount < jumpLimit) 
+	//	{
+	//		jumpCount++;
+	//		//ジャンプ
+	//		Jump(jumpSpeed);
 
-		}
+	//	}
 
-	}
+	//}
 
 }
 
@@ -466,6 +468,38 @@ void Player::PerformRaycastToSlime()
 			rayOrigin.y + rayDirection.y * rayLength,
 			rayOrigin.z + rayDirection.z * rayLength
 		};
+	}
+
+	if (hit1)
+	{
+		Mouse& mouseCursor = Input::Instance().GetMouse();
+
+		//playerの位置を保存
+		XMFLOAT3 playerPos = Player::Instance().GetPosition();
+
+		EnemyManager& enemyManager = EnemyManager::Instance();
+
+		Enemy* enemy = enemyManager.GetEnemy(0);
+		EnemySlime* slime = dynamic_cast<EnemySlime*>(enemy);
+		XMFLOAT3 slimePos = slime->GetPosition();
+
+		if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
+		{
+			Player::Instance().SetPosition(slimePos);
+			enemy->SetPosition(playerPos);
+
+		}
+
+		/*Enemy* enemy = enemyManager.GetEnemy(1);
+		EnemySlime* slime = dynamic_cast<EnemySlime*>(enemy);
+		XMFLOAT3 slimePos = slime->GetPosition();
+
+		if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
+		{
+			Player::Instance().SetPosition(slimePos);
+			enemy->SetPosition(playerPos);
+
+		}*/
 	}
 
 	// 2バウンド目（反射）
