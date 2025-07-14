@@ -198,6 +198,12 @@
     <ClInclude Include="Source\Mirror.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Fan.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Panel.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui-docking\imgui.cpp">
@@ -357,6 +363,12 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Mirror.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Fan.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Panel.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
