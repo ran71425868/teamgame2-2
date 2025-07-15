@@ -11,6 +11,7 @@
 #include <PropManager.h>
 #include "ItemManager.h"
 #include "Light.h"
+#include "Mirror.h"
 
 
 
@@ -548,6 +549,7 @@ void Player::PerformRaycastToLight()
 
 	// 1バウンド目
 	hit1 = false;
+	hit3 = false;
 	XMFLOAT3 normal1;
 	int hitCloneIndex = -1;
 
@@ -555,6 +557,14 @@ void Player::PerformRaycastToLight()
 	if (RaycastToLights(rayOrigin, rayDirection, rayHitPoint, normal1, hitCloneIndex))
 	{
 		hit1 = true;
+		hasRayHit = hit1;
+		rayHitPoint = hit1 ? rayHitPoint : rayHitPoint;
+	}
+	else if (RaycastToMirrors(rayOrigin, rayDirection, rayHitPoint, normal1, hitCloneIndex))
+	{
+		hit3 = true;
+		hasRayHit = hit3;
+		rayHitPoint = hit3 ? rayHitPoint : rayHitPoint;
 	}
 	else
 	{
@@ -581,6 +591,7 @@ void Player::PerformRaycastToLight()
 		Item* item = itemManager.GetItem(hitCloneIndex);
 		Light* light = dynamic_cast<Light*>(item);
 		XMFLOAT3 lightPos = light->GetPosition();
+		
 
 		if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
 		{
@@ -591,6 +602,14 @@ void Player::PerformRaycastToLight()
 
 	}
 
+	if (hit3)
+	{
+		ItemManager& itemManager = ItemManager::Instance();
+
+		Item* item = itemManager.GetItem(hitCloneIndex);
+		Mirror* mirror = dynamic_cast<Mirror*>(item);
+	}
+	
 	// 2バウンド目（反射）
 	hit2 = false;
 	hitPoint2;
@@ -610,10 +629,21 @@ void Player::PerformRaycastToLight()
 			hit2 = true;
 		}
 	}
+	else if (hit3)
+	{
+		reflectedDir = Reflect(rayDirection, normal1);
+		XMFLOAT3 newOrigin = {
+			rayHitPoint.x + reflectedDir.x * 0.01f,
+			rayHitPoint.y + reflectedDir.y * 0.01f,
+			rayHitPoint.z + reflectedDir.z * 0.01f,
+		};
 
-	// 保存
-	hasRayHit = hit1;
-	rayHitPoint = hit1 ? rayHitPoint : rayHitPoint;
+		XMFLOAT3 dummyNormal;
+		if (RaycastToLights(newOrigin, reflectedDir, hitPoint2, dummyNormal, hitCloneIndex))
+		{
+			hit2 = true;
+		}
+	}
 
 	hasReflectHit = hit2;
 	reflectedHitPoint = hit2 ? hitPoint2 : hitPoint2;
@@ -688,11 +718,11 @@ bool Player::RaycastToLights(
 		Item* item = itemManager.GetItem(i);
 		Light* light = dynamic_cast<Light*>(item);
 		if (!light) continue;
-
+		
 		XMFLOAT3 clonePos = light->GetPosition();
 		float radius = light->GetRadius();
 		float height = light->GetHeight();
-
+	
 		XMFLOAT3 hitPoint;
 		float hitDistance;
 
@@ -710,11 +740,58 @@ bool Player::RaycastToLights(
 				lightHitIndex = i;
 			}
 		}
+
 	}
 
 	return anyHit;
 }
+bool Player::RaycastToMirrors(
+	const DirectX::XMFLOAT3& rayOrigin,
+	const DirectX::XMFLOAT3& rayDir,
+	DirectX::XMFLOAT3& outHitPoint,
+	DirectX::XMFLOAT3& outHitNormal,
+	int& lightHitIndex)
+{
+	using namespace DirectX;
 
+	ItemManager& itemManager = ItemManager::Instance();
+	int itemCount = itemManager.GetItemCount();
+
+	float closestDistance = FLT_MAX;
+	bool anyHit = false;
+
+	for (int i = 0; i < itemCount; i++)
+	{
+		Item* item = itemManager.GetItem(i);
+
+		Mirror* mirror = dynamic_cast<Mirror*>(item);
+		if (!mirror) continue;
+
+		XMFLOAT3 mirrorPos = mirror->GetPosition();
+		float mirror_radius = mirror->GetRadius();
+		float mirror_height = mirror->GetHeight();
+
+		XMFLOAT3 hitPoint;
+		float hitDistance;
+
+		if (Collision::IntersectRayVsCylinder(
+			rayOrigin, rayDir,
+			mirrorPos, mirror_radius, mirror_height,
+			hitPoint, hitDistance))
+		{
+			if (hitDistance < closestDistance)
+			{
+				closestDistance = hitDistance;
+				outHitPoint = hitPoint;
+				outHitNormal = ComputeCylinderNormal(hitPoint, mirrorPos);
+				anyHit = true;
+				lightHitIndex = i;
+			}
+		}
+	}
+
+	return anyHit;
+}
 // Cylinderからの法線をだす
 DirectX::XMFLOAT3 Player::ComputeCylinderNormal(
 	const DirectX::XMFLOAT3& hitPoint,
@@ -776,6 +853,24 @@ void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* render
 		renderer->RenderLine(rc, rayOrigin, rayHitPoint, { 1.0f, 1.0f, 1.0f, 1.0f });
 
 		if (hit1)
+		{
+			// 反射レイ(2本目)（青など）
+			if (hasReflectHit)
+			{
+				renderer->RenderLine(rc, rayHitPoint, reflectedHitPoint, { 1.0f, 1.0f, 1.0f, 1.0f });
+			}
+			else
+			{
+				XMFLOAT3 reflectEnd = {
+					rayHitPoint.x + reflectedDir.x * 20.0f,
+					rayHitPoint.y + reflectedDir.y * 20.0f,
+					rayHitPoint.z + reflectedDir.z * 20.0f
+				};
+				renderer->RenderLine(rc, rayHitPoint, reflectEnd, { 1.0f, 1.0f, 1.0f, 1.0f });
+
+			}
+		}
+		if (hit3)
 		{
 			// 反射レイ(2本目)（青など）
 			if (hasReflectHit)

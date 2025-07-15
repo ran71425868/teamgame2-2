@@ -7,7 +7,7 @@ Light::Light()
 	model = new Model("Data/Model/Light/Light.mdl");
 
 	//モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.01f;
+	scale.x = scale.y = scale.z = 0.05f;
 
 	//幅、高さ設定
 	radius = 0.5f;

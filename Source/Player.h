@@ -95,6 +95,7 @@ private:
 	DirectX::XMFLOAT3 reflectedDir;
 	bool hit1;
 	bool hit2;
+	bool hit3;
 
 	ProjectileManager projectileManager;//弾丸管理
 
@@ -123,7 +124,16 @@ private:
 		DirectX::XMFLOAT3& outHitNormal,
 		int& enemyHitIndex);
 
+	//ライトに対するレイキャスト
 	bool Player::RaycastToLights(
+		const DirectX::XMFLOAT3& rayOrigin,
+		const DirectX::XMFLOAT3& rayDir,
+		DirectX::XMFLOAT3& outHitPoint,
+		DirectX::XMFLOAT3& outHitNormal,
+		int& lightHitIndex);
+
+	//ミラーに対するレイキャスト
+	bool Player::RaycastToMirrors(
 		const DirectX::XMFLOAT3& rayOrigin,
 		const DirectX::XMFLOAT3& rayDir,
 		DirectX::XMFLOAT3& outHitPoint,

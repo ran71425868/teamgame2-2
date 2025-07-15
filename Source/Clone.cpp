@@ -4,7 +4,7 @@ Clone::Clone()
 {
 	model = new Model("Data/Model/Light/Light.mdl");
 
-	scale.x = scale.y = scale.z = 0.05f;
+	scale.x = scale.y = scale.z = 1.0f;
 	position.x = 10.0f;
 	position.y = 0.0f;
 	position.z = 10.0f;

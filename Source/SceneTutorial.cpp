@@ -17,6 +17,7 @@
 #include "PropManager.h"
 #include "ItemManager.h"
 #include "Light.h"
+#include "Mirror.h"
 using namespace DirectX;
 
 // èâä˙âª
@@ -36,9 +37,6 @@ void SceneTutorial::Initialize()
     clone->SetPosition({ 5,0,5 });
     PropManager::Instance().RegisterC(clone);*/
 
-    Mirror* mirror = new Mirror();
-    mirror->SetPosition({ -5,0,-5 });
-    PropManager::Instance().RegisterM(mirror);
 
     
     Fan* fan = new Fan();
@@ -73,6 +71,15 @@ void SceneTutorial::Initialize()
         light->SetPosition(DirectX::XMFLOAT3(i * 2.0f, 0, 5));
         itemManager.Register(light);
     }
+    for (float i = 0; i < 2; ++i)
+    {
+        Mirror* mirror = new Mirror();
+        mirror->SetPosition({i*5,0,5});
+        itemManager.Register(mirror);
+    }
+
+    
+
 }
 
 // èIóπâª
