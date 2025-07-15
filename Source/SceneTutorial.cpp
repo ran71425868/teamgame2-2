@@ -45,6 +45,7 @@ void SceneTutorial::Initialize()
 
     // プレイヤー初期化
     Player::Instance().Initializa();
+    Player::Instance().SetPosition({3,10,3});
 
     // カメラ初期設定
     Graphics& graphics = Graphics::Instance();
