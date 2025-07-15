@@ -204,6 +204,15 @@
     <ClInclude Include="Source\Panel.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Item.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ItemManager.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Light.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui-docking\imgui.cpp">
@@ -369,6 +378,15 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Panel.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Item.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ItemManager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Light.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

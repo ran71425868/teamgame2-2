@@ -15,6 +15,8 @@
 #include <imgui.h>
 #include <wrl/client.h>
 #include "PropManager.h"
+#include "ItemManager.h"
+#include "Light.h"
 using namespace DirectX;
 
 // 初期化
@@ -30,9 +32,9 @@ void SceneTutorial::Initialize()
     prop1->SetPosition({ 5,5,5 });
     PropManager::Instance().Register(prop1);
 
-    Clone* clone = new Clone();
+   /* Clone* clone = new Clone();
     clone->SetPosition({ 5,0,5 });
-    PropManager::Instance().RegisterC(clone);
+    PropManager::Instance().RegisterC(clone);*/
 
     Mirror* mirror = new Mirror();
     mirror->SetPosition({ -5,0,-5 });
@@ -64,12 +66,19 @@ void SceneTutorial::Initialize()
     cameraController = new CameraController;
 
     // エネミー初期化
-    
+    ItemManager& itemManager = ItemManager::Instance();
+    for (int i = 0; i < 2; ++i)
+    {
+        Light* light = new Light();
+        light->SetPosition(DirectX::XMFLOAT3(i * 2.0f, 0, 5));
+        itemManager.Register(light);
+    }
 }
 
 // 終了化
 void SceneTutorial::Finalize()
 {
+    ItemManager::Instance().Clear();
     
     cameraController->Finalize();
     if (cameraController != nullptr) {
@@ -108,7 +117,7 @@ void SceneTutorial::Update(float elapsedTime)
     stage->Update(elapsedTime);
 
     Player::Instance().Update(elapsedTime);
-    EnemyManager::Instance().Update(elapsedTime);
+    ItemManager::Instance().Update(elapsedTime);
     EffectManager::Instance().Update(elapsedTime);
 
     
@@ -143,14 +152,14 @@ void SceneTutorial::Render()
         PropManager::Instance().Render(rc, modelRenderer);
         
         Player::Instance().Render(rc, modelRenderer);
-        EnemyManager::Instance().Render(rc, modelRenderer);
+        ItemManager::Instance().Render(rc, modelRenderer);
         EffectManager::Instance().Render(rc.view, rc.projection);
     }
 
     // デバッグ描画
     {
         Player::Instance().RenderDebugPrimitive(rc, shapeRenderer);
-        EnemyManager::Instance().RenderDebugPrimitive(rc, shapeRenderer);
+        ItemManager::Instance().RenderDebugPrimitive(rc, shapeRenderer);
     }
 
     // 2Dスプライト描画（クロスヘア）

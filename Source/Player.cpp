@@ -9,6 +9,8 @@
 #include "System/Audio.h"
 #include "EnemySlime.h"
 #include <PropManager.h>
+#include "ItemManager.h"
+#include "Light.h"
 
 
 
@@ -68,7 +70,7 @@ void Player::Update(float elapsedTime)
 	PerformRaycastToSlime();
 
 	// レイキャスト処理 (clone)
-	//PerformRaycastToLight();
+	PerformRaycastToLight();
 
 	//弾丸と敵の衝突処理
 	CollisionProjectilesVsEnemies();
@@ -528,95 +530,94 @@ void Player::PerformRaycastToSlime()
 }
 
  //レイキャスト処理 (追加)
-//void Player::PerformRaycastToLight()
-//{
-//	using namespace DirectX;
-//
-//	// レイの始点をプレイヤー位置より少し上にする（例：1.5fだけ上に）
-//	XMFLOAT3 rayOrigin = GetPosition();
-//	rayOrigin.y += 0.2f;
-//
-//	// レイの方向はカメラの前方向を使う
-//	XMFLOAT3 rayDirection = Camera::Instance().GetFront();
-//
-//	// 正規化（念のため）
-//	XMVECTOR dirVec = XMLoadFloat3(&rayDirection);
-//	dirVec = XMVector3Normalize(dirVec);
-//	XMStoreFloat3(&rayDirection, dirVec);
-//
-//	// 1バウンド目
-//	hit1 = false;
-//	XMFLOAT3 normal1;
-//	int hitCloneIndex = -1;
-//
-//	//PropとRaycast
-//	if (RaycastToLights(rayOrigin, rayDirection, rayHitPoint, normal1, hitCloneIndex))
-//	{
-//		hit1 = true;
-//	}
-//	else
-//	{
-//		hasRayHit = false;
-//
-//		// ヒットしなかった場合はカメラの前方向に適当な長さだけ進んだ位置を代入
-//		float rayLength = 1000.0f;
-//		rayHitPoint = {
-//			rayOrigin.x + rayDirection.x * rayLength,
-//			rayOrigin.y + rayDirection.y * rayLength,
-//			rayOrigin.z + rayDirection.z * rayLength
-//		};
-//	}
-//
-//
-//	if (hit1)
-//	{
-//		Mouse& mouseCursor = Input::Instance().GetMouse();
-//
-//		//playerの位置を保存
-//		XMFLOAT3 playerPos = Player::Instance().GetPosition();
-//
-//		PropManager& propManager = PropManager::Instance();
-//
-//		Clone* CLONE = propManager.GetClone(hitCloneIndex);
-//		Clone* clone = dynamic_cast<Clone*>(CLONE);
-//		XMFLOAT3 clonePos = clone->GetPosition();
-//
-//		if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
-//		{
-//			Player::Instance().SetPosition(clonePos);
-//			clone->SetPosition(playerPos);
-//
-//		}
-//
-//	}
-//
-//	// 2バウンド目（反射）
-//	hit2 = false;
-//	hitPoint2;
-//
-//	if (hit1)
-//	{
-//		reflectedDir = Reflect(rayDirection, normal1);
-//		XMFLOAT3 newOrigin = {
-//			rayHitPoint.x + reflectedDir.x * 0.01f,
-//			rayHitPoint.y + reflectedDir.y * 0.01f,
-//			rayHitPoint.z + reflectedDir.z * 0.01f,
-//		};
-//
-//		XMFLOAT3 dummyNormal;
-//		if (RaycastToLights(newOrigin, reflectedDir, hitPoint2, dummyNormal, hitCloneIndex))
-//		{
-//			hit2 = true;
-//		}
-//	}
-//
-//	// 保存
-//	hasRayHit = hit1;
-//	rayHitPoint = hit1 ? rayHitPoint : rayHitPoint;
-//
-//	hasReflectHit = hit2;
-//	reflectedHitPoint = hit2 ? hitPoint2 : hitPoint2;
-//}
+void Player::PerformRaycastToLight()
+{
+	using namespace DirectX;
+
+	// レイの始点をプレイヤー位置より少し上にする（例：1.5fだけ上に）
+	XMFLOAT3 rayOrigin = GetPosition();
+	rayOrigin.y += 0.2f;
+
+	// レイの方向はカメラの前方向を使う
+	XMFLOAT3 rayDirection = Camera::Instance().GetFront();
+
+	// 正規化（念のため）
+	XMVECTOR dirVec = XMLoadFloat3(&rayDirection);
+	dirVec = XMVector3Normalize(dirVec);
+	XMStoreFloat3(&rayDirection, dirVec);
+
+	// 1バウンド目
+	hit1 = false;
+	XMFLOAT3 normal1;
+	int hitCloneIndex = -1;
+
+	//PropとRaycast
+	if (RaycastToLights(rayOrigin, rayDirection, rayHitPoint, normal1, hitCloneIndex))
+	{
+		hit1 = true;
+	}
+	else
+	{
+		hasRayHit = false;
+
+		// ヒットしなかった場合はカメラの前方向に適当な長さだけ進んだ位置を代入
+		float rayLength = 1000.0f;
+		rayHitPoint = {
+			rayOrigin.x + rayDirection.x * rayLength,
+			rayOrigin.y + rayDirection.y * rayLength,
+			rayOrigin.z + rayDirection.z * rayLength
+		};
+	}
+
+	if (hit1)
+	{
+		Mouse& mouseCursor = Input::Instance().GetMouse();
+
+		//playerの位置を保存
+		XMFLOAT3 playerPos = Player::Instance().GetPosition();
+
+		ItemManager& itemManager = ItemManager::Instance();
+
+		Item* item = itemManager.GetItem(hitCloneIndex);
+		Light* light = dynamic_cast<Light*>(item);
+		XMFLOAT3 lightPos = light->GetPosition();
+
+		if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
+		{
+			Player::Instance().SetPosition(lightPos);
+			light->SetPosition(playerPos);
+
+		}
+
+	}
+
+	// 2バウンド目（反射）
+	hit2 = false;
+	hitPoint2;
+
+	if (hit1)
+	{
+		reflectedDir = Reflect(rayDirection, normal1);
+		XMFLOAT3 newOrigin = {
+			rayHitPoint.x + reflectedDir.x * 0.01f,
+			rayHitPoint.y + reflectedDir.y * 0.01f,
+			rayHitPoint.z + reflectedDir.z * 0.01f,
+		};
+
+		XMFLOAT3 dummyNormal;
+		if (RaycastToLights(newOrigin, reflectedDir, hitPoint2, dummyNormal, hitCloneIndex))
+		{
+			hit2 = true;
+		}
+	}
+
+	// 保存
+	hasRayHit = hit1;
+	rayHitPoint = hit1 ? rayHitPoint : rayHitPoint;
+
+	hasReflectHit = hit2;
+	reflectedHitPoint = hit2 ? hitPoint2 : hitPoint2;
+}
 
 // スライムに対するレイキャストを共通化
 bool Player::RaycastToSlimes(
@@ -667,52 +668,52 @@ bool Player::RaycastToSlimes(
 }
 
 //lightに対するレイキャストを共通化
-//bool Player::RaycastToLights(
-//	const DirectX::XMFLOAT3& rayOrigin,
-//	const DirectX::XMFLOAT3& rayDir,
-//	DirectX::XMFLOAT3& outHitPoint,
-//	DirectX::XMFLOAT3& outHitNormal,
-//	int& lightHitIndex)
-//{
-//	using namespace DirectX;
-//
-//	PropManager& propManager = PropManager::Instance();
-//	int cloneCount = propManager.GetCloneCount();
-//
-//	float closestDistance = FLT_MAX;
-//	bool anyHit = false;
-//
-//	for (int i = 0; i < cloneCount; i++)
-//	{
-//		Clone* CLONE = propManager.GetClone(i);
-//		Clone* clone = dynamic_cast<Clone*>(CLONE);
-//		if (!clone) continue;
-//
-//		XMFLOAT3 clonePos = clone->GetPosition();
-//		float radius = clone->GetRadius();
-//		float height = clone->GetHeight();
-//
-//		XMFLOAT3 hitPoint;
-//		float hitDistance;
-//
-//		if (Collision::IntersectRayVsCylinder(
-//			rayOrigin, rayDir,
-//			clonePos, radius, height,
-//			hitPoint, hitDistance))
-//		{
-//			if (hitDistance < closestDistance)
-//			{
-//				closestDistance = hitDistance;
-//				outHitPoint = hitPoint;
-//				outHitNormal = ComputeCylinderNormal(hitPoint, clonePos);
-//				anyHit = true;
-//				lightHitIndex = i;
-//			}
-//		}
-//	}
-//
-//	return anyHit;
-//}
+bool Player::RaycastToLights(
+	const DirectX::XMFLOAT3& rayOrigin,
+	const DirectX::XMFLOAT3& rayDir,
+	DirectX::XMFLOAT3& outHitPoint,
+	DirectX::XMFLOAT3& outHitNormal,
+	int& lightHitIndex)
+{
+	using namespace DirectX;
+
+	ItemManager& itemManager = ItemManager::Instance();
+	int itemCount = itemManager.GetItemCount();
+
+	float closestDistance = FLT_MAX;
+	bool anyHit = false;
+
+	for (int i = 0; i < itemCount; i++)
+	{
+		Item* item = itemManager.GetItem(i);
+		Light* light = dynamic_cast<Light*>(item);
+		if (!light) continue;
+
+		XMFLOAT3 clonePos = light->GetPosition();
+		float radius = light->GetRadius();
+		float height = light->GetHeight();
+
+		XMFLOAT3 hitPoint;
+		float hitDistance;
+
+		if (Collision::IntersectRayVsCylinder(
+			rayOrigin, rayDir,
+			clonePos, radius, height,
+			hitPoint, hitDistance))
+		{
+			if (hitDistance < closestDistance)
+			{
+				closestDistance = hitDistance;
+				outHitPoint = hitPoint;
+				outHitNormal = ComputeCylinderNormal(hitPoint, clonePos);
+				anyHit = true;
+				lightHitIndex = i;
+			}
+		}
+	}
+
+	return anyHit;
+}
 
 // Cylinderからの法線をだす
 DirectX::XMFLOAT3 Player::ComputeCylinderNormal(

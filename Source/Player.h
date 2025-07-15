@@ -68,7 +68,7 @@ private:
 	// レイキャスト処理 (追加)
 	void PerformRaycastToSlime();
 
-	//void PerformRaycastToLight();
+	void PerformRaycastToLight();
 
 	//弾丸入力処理
 	void InputProjectile();
@@ -123,10 +123,10 @@ private:
 		DirectX::XMFLOAT3& outHitNormal,
 		int& enemyHitIndex);
 
-	/*bool Player::RaycastToLights(
+	bool Player::RaycastToLights(
 		const DirectX::XMFLOAT3& rayOrigin,
 		const DirectX::XMFLOAT3& rayDir,
 		DirectX::XMFLOAT3& outHitPoint,
 		DirectX::XMFLOAT3& outHitNormal,
-		int& lightHitIndex);*/
+		int& lightHitIndex);
 };

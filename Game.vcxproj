@@ -131,6 +131,9 @@
     <ClInclude Include="Source\EnemySlime.h" />
     <ClInclude Include="Source\Fan.h" />
     <ClInclude Include="Source\Framework.h" />
+    <ClInclude Include="Source\Item.h" />
+    <ClInclude Include="Source\ItemManager.h" />
+    <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\MathUtils.h" />
     <ClInclude Include="Source\Mirror.h" />
     <ClInclude Include="Source\Panel.h" />
@@ -192,6 +195,9 @@
     <ClCompile Include="Source\EnemySlime.cpp" />
     <ClCompile Include="Source\Fan.cpp" />
     <ClCompile Include="Source\Framework.cpp" />
+    <ClCompile Include="Source\Item.cpp" />
+    <ClCompile Include="Source\ItemManager.cpp" />
+    <ClCompile Include="Source\Light.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MathUtils.cpp" />
     <ClCompile Include="Source\Mirror.cpp" />
