@@ -26,26 +26,33 @@ void SceneTutorial::Initialize()
     // ステージ初期化
     stage = new Stage1();
 
-    Prop*prop = new Prop();
-    PropManager::Instance().Register(prop);
+    
 
     Prop* prop1 = new Prop();
-    prop1->SetPosition({ 5,5,5 });
+    prop1->SetPosition({ 0,1,12 });
     PropManager::Instance().Register(prop1);
 
-   /* Clone* clone = new Clone();
-    clone->SetPosition({ 5,0,5 });
-    PropManager::Instance().RegisterC(clone);*/
+    Prop* prop2 = new Prop();
+    prop2->SetPosition({ 0,1,5 });
+    PropManager::Instance().Register(prop2);
+
+    Prop* prop3 = new Prop();
+    prop3->SetPosition({ 0,1,-2 });
+    PropManager::Instance().Register(prop3);
+
+    Prop* prop4 = new Prop();
+    prop4->SetPosition({ 0,1,-9 });
+    PropManager::Instance().Register(prop4);
+
+    
 
 
     
-    Fan* fan = new Fan();
-    fan->SetPosition({ -10,0,-10 });
-    PropManager::Instance().RegisterF(fan);
+    
 
     // プレイヤー初期化
     Player::Instance().Initializa();
-    Player::Instance().SetPosition({3,10,3});
+    Player::Instance().SetPosition({-15,5,-3});
 
     // カメラ初期設定
     Graphics& graphics = Graphics::Instance();
@@ -66,19 +73,19 @@ void SceneTutorial::Initialize()
 
     // エネミー初期化
     ItemManager& itemManager = ItemManager::Instance();
-    for (int i = 0; i < 2; ++i)
-    {
+    
         Light* light = new Light();
-        light->SetPosition(DirectX::XMFLOAT3(i * 2.0f, 0, 5));
+        light->SetPosition(DirectX::XMFLOAT3(0, 3, -9));
         itemManager.Register(light);
-    }
-    for (float i = 0; i < 2; ++i)
-    {
+    
+    
         Mirror* mirror = new Mirror();
-        mirror->SetPosition({i*5,0,5});
+        mirror->SetPosition({0,3,5});
         itemManager.Register(mirror);
-    }
-
+    
+    Fan* fan = new Fan();
+    fan->SetPosition({ -10,0,-10 });
+    itemManager.Register(fan);
     
 
 }
