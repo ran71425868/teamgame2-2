@@ -44,11 +44,6 @@ void SceneTutorial::Initialize()
     prop4->SetPosition({ 0,1,-9 });
     PropManager::Instance().Register(prop4);
 
-    
-
-
-    
-    
 
     // ƒvƒŒƒCƒ„[‰Šú‰»
     Player::Instance().Initializa();

@@ -550,22 +550,32 @@ void Player::PerformRaycastToLight()
 	// 1バウンド目
 	hit1 = false;
 	hit3 = false;
+	hitFan = false;
 	XMFLOAT3 normal1;
 	int hitCloneIndex = -1;
 
-	//PropとRaycast
+	//ライトとRaycast
 	if (RaycastToLights(rayOrigin, rayDirection, rayHitPoint, normal1, hitCloneIndex))
 	{
 		hit1 = true;
 		hasRayHit = hit1;
 		rayHitPoint = hit1 ? rayHitPoint : rayHitPoint;
 	}
+	//ミラーとRaycast
 	else if (RaycastToMirrors(rayOrigin, rayDirection, rayHitPoint, normal1, hitCloneIndex))
 	{
 		hit3 = true;
 		hasRayHit = hit3;
 		rayHitPoint = hit3 ? rayHitPoint : rayHitPoint;
 	}
+	//扇風機とRaycast
+	else if (RaycastToFans(rayOrigin, rayDirection, rayHitPoint, normal1, hitCloneIndex))
+	{
+		hitFan = true;
+		hasRayHit = hitFan;
+		rayHitPoint = hitFan ? rayHitPoint : rayHitPoint;
+	}
+	//ヒットしない
 	else
 	{
 		hasRayHit = false;
@@ -579,6 +589,7 @@ void Player::PerformRaycastToLight()
 		};
 	}
 
+	//ライトに対しての処理
 	if (hit1)
 	{
 		Mouse& mouseCursor = Input::Instance().GetMouse();
@@ -590,18 +601,19 @@ void Player::PerformRaycastToLight()
 
 		Item* item = itemManager.GetItem(hitCloneIndex);
 		Light* light = dynamic_cast<Light*>(item);
+		//lightの位置を保存
 		XMFLOAT3 lightPos = light->GetPosition();
 		
-
 		if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
 		{
+			//入れ替え
 			Player::Instance().SetPosition(lightPos);
 			light->SetPosition(playerPos);
 
 		}
 
 	}
-
+	//ミラーに対しての処理
 	if (hit3)
 	{
 		ItemManager& itemManager = ItemManager::Instance();
@@ -609,11 +621,29 @@ void Player::PerformRaycastToLight()
 		Item* item = itemManager.GetItem(hitCloneIndex);
 		Mirror* mirror = dynamic_cast<Mirror*>(item);
 	}
+	//扇風機に対しての処理
+	if (hitFan)
+	{
+		//Mouse& mouseCursor = Input::Instance().GetMouse();
+
+		ItemManager& itemManager = ItemManager::Instance();
+
+		Item* item = itemManager.GetItem(hitCloneIndex);
+		Fan* fan = dynamic_cast<Fan*>(item);
+		
+		//if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
+		//{
+		//	//ドアが開く処理
+
+		//}
+	}
+
 	
 	// 2バウンド目（反射）
 	hit2 = false;
 	hitPoint2;
 
+	//ライトに対しての処理
 	if (hit1)
 	{
 		reflectedDir = Reflect(rayDirection, normal1);
@@ -629,6 +659,7 @@ void Player::PerformRaycastToLight()
 			hit2 = true;
 		}
 	}
+	//ミラーに対しての処理
 	else if (hit3)
 	{
 		reflectedDir = Reflect(rayDirection, normal1);
@@ -792,6 +823,54 @@ bool Player::RaycastToMirrors(
 
 	return anyHit;
 }
+bool Player::RaycastToFans(
+	const DirectX::XMFLOAT3& rayOrigin, 
+	const DirectX::XMFLOAT3& rayDir,
+	DirectX::XMFLOAT3& outHitPoint, 
+	DirectX::XMFLOAT3& outHitNormal, 
+	int& lightHitIndex)
+{
+	using namespace DirectX;
+
+	ItemManager& itemManager = ItemManager::Instance();
+	int itemCount = itemManager.GetItemCount();
+
+	float closestDistance = FLT_MAX;
+	bool anyHit = false;
+
+	for (int i = 0; i < itemCount; i++)
+	{
+		Item* item = itemManager.GetItem(i);
+
+		Fan* fan = dynamic_cast<Fan*>(item);
+		if (!fan) continue;
+
+		XMFLOAT3 fanPos = fan->GetPosition();
+		float fan_radius = fan->GetRadius();
+		float fan_height = fan->GetHeight();
+
+		XMFLOAT3 hitPoint;
+		float hitDistance;
+
+		if (Collision::IntersectRayVsCylinder(
+			rayOrigin, rayDir,
+			fanPos, fan_radius, fan_height,
+			hitPoint, hitDistance))
+		{
+			if (hitDistance < closestDistance)
+			{
+				closestDistance = hitDistance;
+				outHitPoint = hitPoint;
+				outHitNormal = ComputeCylinderNormal(hitPoint, fanPos);
+				anyHit = true;
+				lightHitIndex = i;
+			}
+		}
+	}
+
+	return anyHit;
+}
+
 // Cylinderからの法線をだす
 DirectX::XMFLOAT3 Player::ComputeCylinderNormal(
 	const DirectX::XMFLOAT3& hitPoint,
