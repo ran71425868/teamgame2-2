@@ -124,6 +124,7 @@
     <ClInclude Include="Source\Character.h" />
     <ClInclude Include="Source\Clone.h" />
     <ClInclude Include="Source\Collision.h" />
+    <ClInclude Include="Source\Door.h" />
     <ClInclude Include="Source\Effect.h" />
     <ClInclude Include="Source\EffectManager.h" />
     <ClInclude Include="Source\Enemy.h" />
@@ -188,6 +189,7 @@
     <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\Clone.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
+    <ClCompile Include="Source\Door.cpp" />
     <ClCompile Include="Source\Effect.cpp" />
     <ClCompile Include="Source\EffectManager.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
