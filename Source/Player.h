@@ -96,6 +96,7 @@ private:
 	bool hit1;
 	bool hit2;
 	bool hit3;
+	bool hitFan;
 
 	ProjectileManager projectileManager;//弾丸管理
 
@@ -134,6 +135,14 @@ private:
 
 	//ミラーに対するレイキャスト
 	bool Player::RaycastToMirrors(
+		const DirectX::XMFLOAT3& rayOrigin,
+		const DirectX::XMFLOAT3& rayDir,
+		DirectX::XMFLOAT3& outHitPoint,
+		DirectX::XMFLOAT3& outHitNormal,
+		int& lightHitIndex);
+
+	//扇風機に対するレイキャスト
+	bool Player::RaycastToFans(
 		const DirectX::XMFLOAT3& rayOrigin,
 		const DirectX::XMFLOAT3& rayDir,
 		DirectX::XMFLOAT3& outHitPoint,

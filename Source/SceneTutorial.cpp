@@ -18,6 +18,8 @@
 #include "ItemManager.h"
 #include "Light.h"
 #include "Mirror.h"
+#include "Fan.h"
+#include "Door.h"
 using namespace DirectX;
 
 // 初期化
@@ -44,6 +46,10 @@ void SceneTutorial::Initialize()
     prop4->SetPosition({ 0,1,-9 });
     PropManager::Instance().Register(prop4);
 
+    Prop* prop5 = new Prop();
+    prop5->SetPosition({ -15,2,-3 });
+    PropManager::Instance().Register(prop5);
+
     
 
 
@@ -52,7 +58,7 @@ void SceneTutorial::Initialize()
 
     // プレイヤー初期化
     Player::Instance().Initializa();
-    Player::Instance().SetPosition({-15,5,-3});
+    Player::Instance().SetPosition({-15,3.9,-3});
 
     // カメラ初期設定
     Graphics& graphics = Graphics::Instance();
@@ -74,19 +80,24 @@ void SceneTutorial::Initialize()
     // エネミー初期化
     ItemManager& itemManager = ItemManager::Instance();
     
-        Light* light = new Light();
-        light->SetPosition(DirectX::XMFLOAT3(0, 3, -2));
-        itemManager.Register(light);
+    Light* light = new Light();
+    light->SetPosition(DirectX::XMFLOAT3(0, 2.9, -2));
+    itemManager.Register(light);
     
     
-        Mirror* mirror = new Mirror();
-        mirror->SetPosition({0,3,5});
-        itemManager.Register(mirror);
+    Mirror* mirror = new Mirror();
+    mirror->SetPosition({0,2.9,5});
+    itemManager.Register(mirror);
     
     Fan* fan = new Fan();
-    fan->SetPosition({ 0,3,-9 });
+    fan->SetPosition({ 0,2.9,-9 });
     fan->SetAngle({ 0,-80,0 });
     itemManager.Register(fan);
+
+    Door* door = new Door();
+    door->SetPosition({ 9,0,-4 });
+    
+    itemManager.Register(door);
     
 
 }
