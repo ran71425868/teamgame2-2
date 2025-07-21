@@ -3,7 +3,6 @@
 #include "SceneResult.h"
 #include "Camera.h"
 #include "EnemyManager.h"
-#include "EnemySlime.h"
 #include "Player.h"
 #include "EffectManager.h"
 #include "SceneSelect.h"
@@ -12,6 +11,13 @@
 #include "SceneManager.h"
 #include "SceneLoading.h"
 #include <imgui.h>
+#include "PropManager.h"
+#include "ItemManager.h"
+#include "Light.h"
+#include "Mirror.h"
+#include "Fan.h"
+#include "Door.h"
+#include "Panel.h"
 /*#include <WICTextureLoader.h>*/ // DirectXTKの画像読み込み
 #include <wrl/client.h>
 using namespace DirectX;
@@ -21,12 +27,18 @@ using namespace DirectX;
 // 初期化
 void SceneGame::Initialize()
 {
+
+    Prop* prop5 = new Prop();
+    prop5->SetPosition({ -15,2,-3 });
+    PropManager::Instance().Register(prop5);
+
     // ステージ初期化
     stage = new Stage();
 
     // プレイヤー初期化
     Player::Instance().Initializa();
-
+    Player::Instance().SetPosition({5,3,7 });
+    /*-17,4.0f,0*/
     // カメラ初期設定
     Graphics& graphics = Graphics::Instance();
     Camera& camera = Camera::Instance();
@@ -44,6 +56,25 @@ void SceneGame::Initialize()
 
     cameraController = new CameraController;
 
+    ItemManager& itemManager = ItemManager::Instance();
+
+    Fan* fan = new Fan();
+    fan->SetPosition({ 0,2.9,-9 });
+    fan->SetAngle({ 0,-80,0 });
+    itemManager.Register(fan);
+
+    Door* door = new Door();
+    door->SetPosition({ 9,0,-4 });
+    itemManager.Register(door);
+
+    /*Panel* panel = new Panel();
+    panel->SetPosition({ 5,3,7 });
+    itemManager.Register(panel);*/
+
+    Panel* panel2 = new Panel();
+    panel2->SetPosition({ 5,4,-2 });
+    panel2->SetAngle({ 0,-80,0 });
+    itemManager.Register(panel2);
 }
 
 // 終了化
@@ -64,7 +95,8 @@ void SceneGame::Finalize()
         stage = nullptr;
     }
 
-    
+    PropManager::Instance().Clear();
+    ItemManager::Instance().Clear();
 }
 
 // 更新処理
@@ -84,6 +116,7 @@ void SceneGame::Update(float elapsedTime)
     stage->Update(elapsedTime);
     Player::Instance().Update(elapsedTime);
     EnemyManager::Instance().Update(elapsedTime);
+    ItemManager::Instance().Update(elapsedTime);
     EffectManager::Instance().Update(elapsedTime);
 
     GamePad& gamePad = Input::Instance().GetGamePad();
@@ -114,6 +147,7 @@ void SceneGame::Render()
     {
         stage->Render(rc, modelRenderer);
         Player::Instance().Render(rc, modelRenderer);
+        ItemManager::Instance().Render(rc, modelRenderer);
         EffectManager::Instance().Render(rc.view, rc.projection);
     }
 

@@ -4,8 +4,6 @@
 #include "Camera.h"
 #include "EnemyManager.h"
 #include "Collision.h"
-#include "ProjectileStraight.h"
-#include "ProjectileHoming.h"
 #include "System/Audio.h"
 #include "EnemySlime.h"
 #include <PropManager.h>
@@ -24,7 +22,7 @@ void Player::Initializa()
 	//モデルが大きいのでスケーリング
 	scale.x = scale.y = scale.z = 0.015f;
 
-	//ヒットエフェクト読み込み
+	//ヒットエフェクト読み込みimakara
 	hitEffect = new Effect("Data/Effect/Hit.efk");
 
 	//ヒットSEの読み込み
@@ -52,11 +50,6 @@ void Player::Update(float elapsedTime)
 	//カメラの向きとプレイヤーの角度を同期
 	SyncPlayerAngleWithCamera();
 
-	//ジャンプ入力処理
-	InputJump();
-
-	//弾丸入力処理
-	InputProjectile();
 
 	//速力処理更新
 	UpdateVelocity(elapsedTime);
@@ -331,113 +324,7 @@ void Player::CollisionProjectilesVsEnemies()
 
 }
 
-//着地した時に呼ばれる
-void Player::OnLanding()
-{
-	//現在のジャンプ回数をリセット
-	jumpCount = 0;
-}
 
-
-//ジャンプ入力処理
-void Player::InputJump() 
-{
-	//GamePad& gamePad = Input::Instance().GetGamePad();
-	//if (gamePad.GetButtonDown() & GamePad::BTN_A)
-	//{
-	//	//ジャンプ回数制限(現在のジャンプ回数がジャンプの最大数より小さければ)
-	//	//現在のジャンプ回数を増加させ
-	//	if (jumpCount < jumpLimit) 
-	//	{
-	//		jumpCount++;
-	//		//ジャンプ
-	//		Jump(jumpSpeed);
-
-	//	}
-
-	//}
-
-}
-
-//弾丸入力処理
-void Player::InputProjectile()
-{
-	GamePad& gamePad = Input::Instance().GetGamePad();
-
-	//直進弾丸発射
-	if (gamePad.GetButtonDown() & GamePad::BTN_X)
-	{
-		//前方向
-		DirectX::XMFLOAT3 dir;
-		dir.x = sinf(angle.y);//前方向(sinとangleで計算)
-		dir.y = 0.0f;
-		dir.z = cosf(angle.y);//前方向(cosとangleで計算)
-
-		//発射位置(プレイヤーの腰あたり,yがheightの半分)
-		DirectX::XMFLOAT3 pos;
-		pos.x = position.x;
-		pos.y = position.y + height * 0.5f;
-		pos.z = position.z;
-
-		//発射
-		ProjectileStraight* projectile = new ProjectileStraight(&projectileManager);
-		projectile->Launch(dir, pos);
-		//projectileManager.Register(projectile);
-	}
-
-	//追尾処理
-	if (gamePad.GetButtonDown() & GamePad::BTN_Y)
-	{
-		//前方向
-		DirectX::XMFLOAT3 dir;
-		dir.x = sinf(angle.y);
-		dir.y = 0.0f;
-		dir.z = cosf(angle.y);
-
-		//発射位置(プレイヤーの腰あたり,yがheightの半分)
-		DirectX::XMFLOAT3 pos;
-		pos.x = position.x;
-		pos.y = position.y + height * 0.5f;
-		pos.z = position.z;
-
-		//ターゲット(デフォルトではプレイヤーの前方)
-		DirectX::XMFLOAT3 target;
-		target.x = pos.x + dir.x * 1000.0f;
-		target.y = pos.y + dir.y * 1000.0f;
-		target.z = pos.z + dir.z * 1000.0f;
-
-		//一番近くの敵をターゲットにする
-		float dist = FLT_MAX;
-		EnemyManager& enemyManager = EnemyManager::Instance();
-		int enemyCount = enemyManager.GetEnemyCount();
-		for (int i = 0; i < enemyCount; i++)
-		{
-			//敵との距離判定
-			Enemy* enemy = EnemyManager::Instance().GetEnemy(i);
-			DirectX::XMVECTOR P = DirectX::XMLoadFloat3(&position);//プレイヤーの位置
-			DirectX::XMVECTOR E = DirectX::XMLoadFloat3(&enemy->GetPosition());//敵の位置
-			DirectX::XMVECTOR V = DirectX::XMVectorSubtract(P, E);//敵への方向ベクトル-プレイヤーの位置
-			DirectX::XMVECTOR D = DirectX::XMVector3LengthSq(V);//敵への方向ベクトルの長さ
-
-			float d;//今回の距離(球から敵までの距離)
-			DirectX::XMStoreFloat(&d, D);
-			
-			//今回の敵の方がプレイヤーに近いからどうかチェック
-			if (d < dist)
-			{
-				//近かったらtargetに設定
-				dist = d;
-				target = enemy->GetPosition();
-				target.y += enemy->GetHeight()*0.5f;
-			}
-		}
-
-		//発射
-		ProjectileHoming* projectile = new ProjectileHoming(&projectileManager);
-		projectile->Launch(dir, pos, target);
-
-	}
-}
 
 // レイキャスト処理 (追加)
 void Player::PerformRaycastToSlime()

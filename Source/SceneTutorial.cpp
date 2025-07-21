@@ -4,7 +4,6 @@
 #include "Camera.h"
 #include "EnemyManager.h"
 #include "Character.h"
-#include "EnemySlime.h"
 #include "Player.h"
 #include "EffectManager.h"
 #include "SceneSelect.h"
@@ -20,6 +19,7 @@
 #include "Mirror.h"
 #include "Fan.h"
 #include "Door.h"
+#include "Panel.h"
 using namespace DirectX;
 
 // 初期化
@@ -31,7 +31,7 @@ void SceneTutorial::Initialize()
     
 
     Prop* prop1 = new Prop();
-    prop1->SetPosition({ 0,1,12 });
+    prop1->SetPosition({ -9,1,7 });
     PropManager::Instance().Register(prop1);
 
     Prop* prop2 = new Prop();
@@ -49,12 +49,6 @@ void SceneTutorial::Initialize()
     Prop* prop5 = new Prop();
     prop5->SetPosition({ -15,2,-3 });
     PropManager::Instance().Register(prop5);
-
-    
-
-
-    
-    
 
     // プレイヤー初期化
     Player::Instance().Initializa();
@@ -96,8 +90,11 @@ void SceneTutorial::Initialize()
 
     Door* door = new Door();
     door->SetPosition({ 9,0,-4 });
-    
     itemManager.Register(door);
+
+    Panel* panel = new Panel();
+    panel->SetPosition({ -9,3,7 });
+    itemManager.Register(panel);
     
 
 }
@@ -105,7 +102,6 @@ void SceneTutorial::Initialize()
 // 終了化
 void SceneTutorial::Finalize()
 {
-    ItemManager::Instance().Clear();
     
     cameraController->Finalize();
     if (cameraController != nullptr) {
@@ -121,6 +117,7 @@ void SceneTutorial::Finalize()
     }
 
     PropManager::Instance().Clear();
+    ItemManager::Instance().Clear();
 
 }
 
@@ -136,15 +133,12 @@ void SceneTutorial::Update(float elapsedTime)
     //カメラの角度をプレイヤーの角度と同期させる
     DirectX::XMFLOAT3 angle = cameraController->GetAngle();
     Player::Instance().SetAngle(angle);
-    Player::Instance().Update(elapsedTime);
-
-   
-    PropManager::Instance().Update(elapsedTime);
 
     stage->Update(elapsedTime);
 
     Player::Instance().Update(elapsedTime);
     ItemManager::Instance().Update(elapsedTime);
+    PropManager::Instance().Update(elapsedTime);
     EffectManager::Instance().Update(elapsedTime);
 
     
@@ -189,10 +183,6 @@ void SceneTutorial::Render()
         ItemManager::Instance().RenderDebugPrimitive(rc, shapeRenderer);
     }
 
-    // 2Dスプライト描画（クロスヘア）
-    {
-        
-    }
 }
 
 // GUI描画
