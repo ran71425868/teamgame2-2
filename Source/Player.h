@@ -84,6 +84,8 @@ private:
 	int jumpCount = 0;
 	int jumpLimit = 2;
 
+
+
 	DirectX::XMFLOAT3 hitPoint2;
 	DirectX::XMFLOAT3 reflectedDir;
 	bool hit1;

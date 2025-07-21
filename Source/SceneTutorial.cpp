@@ -25,6 +25,7 @@ using namespace DirectX;
 // 初期化
 void SceneTutorial::Initialize()
 {
+
     // ステージ初期化
     stage = new Stage1();
 
@@ -88,7 +89,11 @@ void SceneTutorial::Initialize()
     fan->SetAngle({ 0,-80,0 });
     itemManager.Register(fan);
 
+
+    //Door* door = new Door(EItemType::Door, 0);
     Door* door = new Door();
+    door->itemType = EItemType::Door;
+    door->uniqueId = 0;
     door->SetPosition({ 9,0,-4 });
     itemManager.Register(door);
 
