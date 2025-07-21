@@ -18,10 +18,7 @@
 
 using namespace DirectX;
 
-// クロスヘア用
-Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> crosshairSRV;
-float crosshairWidth = 0;
-float crosshairHeight = 0;
+
 
 // 初期化
 void SceneGame::Initialize()
@@ -50,15 +47,6 @@ void SceneGame::Initialize()
     cameraController = new CameraController;
     isPaused = false; // ポーズ状態をfalseで初期化
 
-    // エネミー初期化
-    EnemyManager& enemyManager = EnemyManager::Instance();
-    for (int i = 0; i < 2; ++i)
-    {
-        EnemySlime* slime = new EnemySlime();
-        slime->SetPosition(DirectX::XMFLOAT3(i * 2.0f, 0, 5));
-        slime->SetTerritory(slime->GetPosition(), 10.0f);
-        enemyManager.Register(slime);
-    }
 }
 
 // 終了化
@@ -79,7 +67,7 @@ void SceneGame::Finalize()
         stage = nullptr;
     }
 
-    crosshairSRV.Reset(); // 解放
+    
 }
 
 // 更新処理
@@ -137,14 +125,12 @@ void SceneGame::Render()
     {
         stage->Render(rc, modelRenderer);
         Player::Instance().Render(rc, modelRenderer);
-        EnemyManager::Instance().Render(rc, modelRenderer);
         EffectManager::Instance().Render(rc.view, rc.projection);
     }
 
     // デバッグ描画
     {
         Player::Instance().RenderDebugPrimitive(rc, shapeRenderer);
-        EnemyManager::Instance().RenderDebugPrimitive(rc, shapeRenderer);
     }
 
 }

@@ -51,7 +51,7 @@ public:
 
 private:
 	//垂直速力更新処理
-	void UpdateVerticalVelocity(float elapsedTime);
+	//void UpdateVerticalVelocity(float elapsedTime);
 
 	//垂直移動更新処理
 	void UpdateVerticalMove(float elapsedTime);

@@ -123,7 +123,7 @@ void Character::Jump(float speed)
 void Character::UpdateVelocity(float elapsedTime)
 {
 	//垂直速力更新処理
-	UpdateVerticalVelocity(elapsedTime);
+	//UpdateVerticalVelocity(elapsedTime);
 
 	//水平速力更新処理
 	UpdateHorizontalVelocity(elapsedTime);
@@ -137,11 +137,11 @@ void Character::UpdateVelocity(float elapsedTime)
 }
 
 //垂直速力更新処理
-void Character::UpdateVerticalVelocity(float elapsedTime)
-{
-	//重力処理
-	velocity.y += gravity * elapsedTime;
-}
+//void Character::UpdateVerticalVelocity(float elapsedTime)
+//{
+//	//重力処理
+//	velocity.y += gravity * elapsedTime;
+//}
 
 //垂直移動更新処理
 void Character::UpdateVerticalMove(float elapsedTime)

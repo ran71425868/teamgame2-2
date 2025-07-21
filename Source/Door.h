@@ -4,11 +4,11 @@
 #include "Item.h"
 
 //ライト
-class Fan :public Item
+class Door :public Item
 {
 public:
-	Fan();
-	~Fan() override;
+	Door();
+	~Door() override;
 
 	//更新処理
 	void Update(float elapsedTime)override;
@@ -21,6 +21,5 @@ public:
 
 private:
 	Model* model = nullptr;
-	Model* model1 = nullptr;
 
 };

@@ -4,17 +4,16 @@
 Stage::Stage()
 {
 	//ステージモデルを読み込み
-	model = new Model("Data/Model/Stage/ExampleStage.mdl");
-	model1 = new Model("Data/Model/Stage/Tutorial.mdl");
+	model = new Model("Data/Model/Stage/Stage1.mdl");
+	
 }
 
 Stage::~Stage()
 {
 	//ステージモデルを破棄
 	delete model;
-	delete model1;
-}
 
+}
 //更新処理
 void Stage::Update(float elapsedTime)
 {
