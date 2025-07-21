@@ -10,6 +10,7 @@
 #include "ItemManager.h"
 #include "Light.h"
 #include "Mirror.h"
+#include "Door.h"
 
 
 
@@ -511,18 +512,34 @@ void Player::PerformRaycastToLight()
 	//扇風機に対しての処理
 	if (hitFan)
 	{
-		//Mouse& mouseCursor = Input::Instance().GetMouse();
+		Mouse& mouseCursor = Input::Instance().GetMouse();
 
 		ItemManager& itemManager = ItemManager::Instance();
 
 		Item* item = itemManager.GetItem(hitCloneIndex);
 		Fan* fan = dynamic_cast<Fan*>(item);
 		
-		//if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
-		//{
-		//	//ドアが開く処理
+		// ファンの前方方向からレイキャスト出す
 
-		//}
+		// ヒットしたアイテムをドアに変換する
+
+		// 変換してドアだったら
+			// 左クリックして回転させる
+
+
+#if true
+		if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
+		{
+			ItemManager& itemManager = ItemManager::Instance();
+
+			//Item* item = itemManager.GetItem(hitCloneIndex);
+			//Door* door = dynamic_cast<Door*>(item);
+
+			Door* door = itemManager.GetDoor(0);
+			if (door != nullptr)
+				door->SetAngle({ 0,-90,0 });
+		}
+#endif
 	}
 
 	
