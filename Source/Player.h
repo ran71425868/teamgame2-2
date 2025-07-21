@@ -43,9 +43,6 @@ public:
 	//デバッグ用GUI描画
 	void DrawDebugGUI();
 
-	//ジャンプ入力処理
-	void InputJump();
-
 	//プレイヤーの角度にセット
 	void SetAngle(const DirectX::XMFLOAT3 angle) { this->angle = angle; };
 
@@ -70,15 +67,11 @@ private:
 
 	void PerformRaycastToLight();
 
-	//弾丸入力処理
-	void InputProjectile();
 
 	//弾丸と敵の衝突判定
 	void CollisionProjectilesVsEnemies();
 
-protected:
-	//着地した時に呼ばれる
-	void OnLanding() override;
+
 
 
 private:

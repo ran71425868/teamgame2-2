@@ -1,28 +1,25 @@
 #pragma once
-#include "System/ModelRenderer.h"
 
-class Panel
+#include "System/Model.h"
+#include "Item.h"
+
+//ライト
+class Panel :public Item
 {
 public:
 	Panel();
-	~Panel();
+	~Panel() override;
 
-	void Update(float elapsedTime);
-	void Render(const RenderContext& rc, ModelRenderer* renderer);
-	const DirectX::XMFLOAT3& GetScale() const { return scale; }
-	void SetScale(const DirectX::XMFLOAT3& scale) { this->scale = scale; }
-	void SetPosition(const DirectX::XMFLOAT3& position) { this->position = position; }
-	void UpdateTransform();
+	//更新処理
+	void Update(float elapsedTime)override;
+
+	//描画処理
+	void Render(const RenderContext& rc, ModelRenderer* renderer)override;
+
+	//デバッグプリミティブ描画
+	void RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer)override;
+
 private:
 	Model* model = nullptr;
-protected:
-	DirectX::XMFLOAT3  position = { 0,0,0 };
-	DirectX::XMFLOAT3  angle = { 0,0,0 };
-	DirectX::XMFLOAT3  scale = { 1,1,1 };
-	DirectX::XMFLOAT4X4  transform = {
-		1,0,0,0,
-		0,1,0,0,
-		0,0,1,0,
-		0,0,0,1
-	};
+
 };

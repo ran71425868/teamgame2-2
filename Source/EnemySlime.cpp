@@ -1,7 +1,7 @@
 #include "EnemySlime.h"
 #include "MathUtils.h"
 #include "Player.h"
-#include "ProjectileStraight.h"
+
 
 //コンストラクタ
 EnemySlime::EnemySlime()
@@ -250,9 +250,7 @@ void EnemySlime::UpdateAttackState(float elapsedTime)
 		pos.y = position.y + height * 0.5f;
 		pos.z = position.z;
 
-		//発射
-		ProjectileStraight* projectile = new ProjectileStraight(&projectileManager);
-		projectile->Launch(dir, pos);
+
 
 		stateTimer = 2.0f;
 	}
