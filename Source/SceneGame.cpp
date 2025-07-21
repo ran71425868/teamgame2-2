@@ -14,6 +14,8 @@
 #include <imgui.h>
 /*#include <WICTextureLoader.h>*/ // DirectXTKの画像読み込み
 #include <wrl/client.h>
+#include <DirectXTex.h>
+
 using namespace DirectX;
 
 // クロスヘア用
@@ -25,7 +27,7 @@ float crosshairHeight = 0;
 void SceneGame::Initialize()
 {
     // ステージ初期化
-    stage = new Stage();
+    stage = new Stage(); 
 
     // プレイヤー初期化
     Player::Instance().Initializa();
@@ -46,6 +48,7 @@ void SceneGame::Initialize()
     );
 
     cameraController = new CameraController;
+    isPaused = false; // ポーズ状態をfalseで初期化
 
     // エネミー初期化
     EnemyManager& enemyManager = EnemyManager::Instance();
@@ -82,23 +85,31 @@ void SceneGame::Finalize()
 // 更新処理
 void SceneGame::Update(float elapsedTime)
 {
-    // カメラターゲット追従
-    DirectX::XMFLOAT3 target = Player::Instance().GetPosition();
-    target.y += 0.5f;
-    cameraController->SetTarget(target);
-    cameraController->Update(elapsedTime);
-
-    //カメラの角度をプレイヤーの角度と同期させる
-    DirectX::XMFLOAT3 angle = cameraController->GetAngle();
-    Player::Instance().SetAngle(angle);
-    Player::Instance().Update(elapsedTime);
-
-    stage->Update(elapsedTime);
-    Player::Instance().Update(elapsedTime);
-    EnemyManager::Instance().Update(elapsedTime);
-    EffectManager::Instance().Update(elapsedTime);
-
     GamePad& gamePad = Input::Instance().GetGamePad();
+
+    // (例: Startボタンまたは'P'キーでポーズ状態を切り替える)
+    if ((gamePad.GetButtonDown() & GamePad::BTN_UP)){
+        isPaused = !isPaused;
+    }
+
+    if (!isPaused) { // ポーズ中でない場合のみゲーム要素を更新
+        // カメラターゲット追従
+        DirectX::XMFLOAT3 target = Player::Instance().GetPosition();
+        target.y += 0.5f;
+        cameraController->SetTarget(target);
+        cameraController->Update(elapsedTime);
+
+        //カメラの角度をプレイヤーの角度と同期させる
+        DirectX::XMFLOAT3 angle = cameraController->GetAngle();
+        Player::Instance().SetAngle(angle);
+        Player::Instance().Update(elapsedTime);
+
+        stage->Update(elapsedTime);
+        Player::Instance().Update(elapsedTime);
+        EnemyManager::Instance().Update(elapsedTime);
+        EffectManager::Instance().Update(elapsedTime);
+    }
+
     if (gamePad.GetButtonDown() & GamePad::BTN_A) {
         SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
     }
@@ -142,4 +153,19 @@ void SceneGame::Render()
 void SceneGame::DrawGUI()
 {
     Player::Instance().DrawDebugGUI();
+
+    if (isPaused) {
+        // ポーズメニューGUIの描画
+        ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+        ImGui::Begin("Pause Menu", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+        ImGui::Text("Game Paused");
+        if (ImGui::Button("Resume")) {
+            isPaused = false;
+        }
+        if (ImGui::Button("Return to Title")) {
+            SceneManager::Instance().ChangeScene(new SceneTitle()); // SceneTitleが存在すると仮定
+        }
+        // 必要に応じてメニューオプションを追加 (例: オプション, 終了)
+        ImGui::End();
+    }
 }

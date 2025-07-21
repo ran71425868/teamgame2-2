@@ -71,12 +71,15 @@ void SceneTutorial::Initialize()
         light->SetPosition(DirectX::XMFLOAT3(i * 2.0f, 0, 5));
         itemManager.Register(light);
     }
-    for (float i = 0; i < 2; ++i)
-    {
-        Mirror* mirror = new Mirror();
-        mirror->SetPosition({i*5,0,5});
-        itemManager.Register(mirror);
-    }
+    
+    Mirror* mirror = new Mirror();
+    mirror->SetPosition({5,0,3});
+    itemManager.Register(mirror);
+    
+    Panel* panel = new Panel();
+    panel->SetPosition({-5,3,3});
+    itemManager.Register(panel);
+    
 
     
 

@@ -31,5 +31,5 @@ private:
 	Stage* stage = nullptr;
 	//Player* player = nullptr;
 	CameraController* cameraController = nullptr;
-
+	bool isPaused = false; // ポーズ状態を追跡するブール値を追加
 };

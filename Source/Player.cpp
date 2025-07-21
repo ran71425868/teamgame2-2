@@ -643,7 +643,29 @@ void Player::PerformRaycastToLight()
 		{
 			hit2 = true;
 		}
+		if (hit2)
+		{
+			Mouse& mouseCursor = Input::Instance().GetMouse();
+
+			//player‚ÌˆÊ’u‚ð•Û‘¶
+			XMFLOAT3 playerPos = Player::Instance().GetPosition();
+
+			ItemManager& itemManager = ItemManager::Instance();
+
+			Item* item = itemManager.GetItem(hitCloneIndex);
+			Light* light = dynamic_cast<Light*>(item);
+			XMFLOAT3 lightPos = light->GetPosition();
+
+
+			if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
+			{
+				Player::Instance().SetPosition(lightPos);
+				light->SetPosition(playerPos);
+
+			}
+		}
 	}
+
 
 	hasReflectHit = hit2;
 	reflectedHitPoint = hit2 ? hitPoint2 : hitPoint2;
