@@ -21,7 +21,7 @@ void Player::Initializa()
 	model1 = new Model("Data/Model/Light/Light_body.mdl");
 
 	//モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.015f;
+	scale.x = scale.y = scale.z = 0.025f;
 
 	//ヒットエフェクト読み込みimakara
 	hitEffect = new Effect("Data/Effect/Hit.efk");
@@ -50,7 +50,6 @@ void Player::Update(float elapsedTime)
 
 	//カメラの向きとプレイヤーの角度を同期
 	SyncPlayerAngleWithCamera();
-
 
 	//速力処理更新
 	UpdateVelocity(elapsedTime);
@@ -87,7 +86,7 @@ void Player::ModelUpdateTransform()
 	auto prev_angle = angle;
 	scale = { 1, 1, 1 };
 	angle = { prev_angle.x, 0, prev_angle.z };
-	position = {0, 18, -3};
+	position = {0, 3, -3};
 	UpdateTransform();
 	local_transform = transform;
 
@@ -577,6 +576,25 @@ void Player::PerformRaycastToLight()
 		if (RaycastToLights(newOrigin, reflectedDir, hitPoint2, dummyNormal, hitCloneIndex))
 		{
 			hit2 = true;
+			Mouse& mouseCursor = Input::Instance().GetMouse();
+
+			//playerの位置を保存
+			XMFLOAT3 playerPos = Player::Instance().GetPosition();
+
+			ItemManager& itemManager = ItemManager::Instance();
+
+			Item* item = itemManager.GetItem(hitCloneIndex);
+			Light* light = dynamic_cast<Light*>(item);
+			//lightの位置を保存
+			XMFLOAT3 lightPos = light->GetPosition();
+
+			if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
+			{
+				//入れ替え
+				Player::Instance().SetPosition(lightPos);
+				light->SetPosition(playerPos);
+
+			}
 		}
 	}
 
