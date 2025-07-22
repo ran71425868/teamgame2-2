@@ -4,9 +4,9 @@
 //コンストラクタ
 Panel::Panel()
 {
-	model = new Model("Data/Model/gimmick/Kagami1.mdl");
+	model = new Model("Data/Model/gimmick/Panel.mdl");
 
-	scale.x = scale.y = scale.z = 0.05f;
+	scale.x = scale.y = scale.z = 0.5f;
 	position.x = 10.0f;
 	position.y = 0.0f;
 	position.z = 10.0f;

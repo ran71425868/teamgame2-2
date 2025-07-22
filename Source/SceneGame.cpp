@@ -37,8 +37,8 @@ void SceneGame::Initialize()
 
     // プレイヤー初期化
     Player::Instance().Initializa();
-    Player::Instance().SetPosition({5,3,7 });
-    /*-17,4.0f,0*/
+    Player::Instance().SetPosition({ -17,4.0f,0 });
+    
     // カメラ初期設定
     Graphics& graphics = Graphics::Instance();
     Camera& camera = Camera::Instance();
@@ -58,8 +58,9 @@ void SceneGame::Initialize()
 
     ItemManager& itemManager = ItemManager::Instance();
 
+
     Fan* fan = new Fan();
-    fan->SetPosition({ 0,2.9,-9 });
+    fan->SetPosition({ 0,0,-7 });
     fan->SetAngle({ 0,-80,0 });
     itemManager.Register(fan);
 
@@ -67,13 +68,14 @@ void SceneGame::Initialize()
     door->SetPosition({ 9,0,-4 });
     itemManager.Register(door);
 
-    /*Panel* panel = new Panel();
-    panel->SetPosition({ 5,3,7 });
-    itemManager.Register(panel);*/
+    Panel* panel = new Panel();
+    panel->SetPosition({29,4,-8 });
+    panel->SetAngle({ 0,-1.48,0});
+    itemManager.Register(panel);
 
     Panel* panel2 = new Panel();
-    panel2->SetPosition({ 5,4,-2 });
-    panel2->SetAngle({ 0,-80,0 });
+    panel2->SetPosition({ 1,4,-2 });
+    panel2->SetAngle({ 0,-90,0 });
     itemManager.Register(panel2);
 }
 

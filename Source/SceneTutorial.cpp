@@ -53,7 +53,7 @@ void SceneTutorial::Initialize()
 
     // プレイヤー初期化
     Player::Instance().Initializa();
-    Player::Instance().SetPosition({-15,3.9,-3});
+    Player::Instance().SetPosition({-15,3.9,-10});
 
     // カメラ初期設定
     Graphics& graphics = Graphics::Instance();
