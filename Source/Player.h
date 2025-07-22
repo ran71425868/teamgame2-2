@@ -43,9 +43,6 @@ public:
 	//デバッグ用GUI描画
 	void DrawDebugGUI();
 
-	//ジャンプ入力処理
-	void InputJump();
-
 	//プレイヤーの角度にセット
 	void SetAngle(const DirectX::XMFLOAT3 angle) { this->angle = angle; };
 
@@ -70,15 +67,11 @@ private:
 
 	void PerformRaycastToLight();
 
-	//弾丸入力処理
-	void InputProjectile();
 
 	//弾丸と敵の衝突判定
 	void CollisionProjectilesVsEnemies();
 
-protected:
-	//着地した時に呼ばれる
-	void OnLanding() override;
+
 
 
 private:
@@ -91,11 +84,14 @@ private:
 	int jumpCount = 0;
 	int jumpLimit = 2;
 
+
+
 	DirectX::XMFLOAT3 hitPoint2;
 	DirectX::XMFLOAT3 reflectedDir;
 	bool hit1;
 	bool hit2;
 	bool hit3;
+	bool hitFan;
 
 	ProjectileManager projectileManager;//弾丸管理
 
@@ -134,6 +130,14 @@ private:
 
 	//ミラーに対するレイキャスト
 	bool Player::RaycastToMirrors(
+		const DirectX::XMFLOAT3& rayOrigin,
+		const DirectX::XMFLOAT3& rayDir,
+		DirectX::XMFLOAT3& outHitPoint,
+		DirectX::XMFLOAT3& outHitNormal,
+		int& lightHitIndex);
+
+	//扇風機に対するレイキャスト
+	bool Player::RaycastToFans(
 		const DirectX::XMFLOAT3& rayOrigin,
 		const DirectX::XMFLOAT3& rayDir,
 		DirectX::XMFLOAT3& outHitPoint,

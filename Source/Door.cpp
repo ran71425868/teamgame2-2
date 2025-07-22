@@ -1,14 +1,13 @@
-#include "Fan.h"
+#include "Door.h"
 
 
 //コンストラクタ
-Fan::Fan()
+Door::Door()
 {
-	model = new Model("Data/Model/gimmick/Fan_b.mdl");
-	model1 = new Model("Data/Model/gimmick/Fan_h.mdl");
+	model = new Model("Data/Model/Door/door.mdl");
 
 	//モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.05f;
+	scale.x = scale.y = scale.z = 1.0f;
 
 	//幅、高さ設定
 	radius = 0.5f;
@@ -17,14 +16,13 @@ Fan::Fan()
 }
 
 //デストラクタ
-Fan::~Fan()
+Door::~Door()
 {
 	delete model;
-	delete model1;
 }
 
 //更新処理
-void Fan::Update(float elapsedTime)
+void Door::Update(float elapsedTime)
 {
 
 	//オブジェクト行列を更新
@@ -35,14 +33,14 @@ void Fan::Update(float elapsedTime)
 }
 
 //描画処理
-void Fan::Render(const RenderContext& rc, ModelRenderer* renderer)
+void Door::Render(const RenderContext& rc, ModelRenderer* renderer)
 {
 	renderer->Render(rc, transform, model, ShaderId::Lambert);
 
 }
 
 //デバッグプリミティブ描画
-void Fan::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer)
+void Door::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer)
 {
 	//基底クラスのデバッグプリミティブ描画
 	Item::RenderDebugPrimitive(rc, renderer);

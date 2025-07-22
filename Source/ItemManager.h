@@ -4,6 +4,8 @@
 #include "Item.h"
 #include <set>
 
+#include "Door.h"
+
 //エネミーマネージャー
 class ItemManager
 {
@@ -23,6 +25,17 @@ public:
 
 	//エネミー取得
 	Item* GetItem(int index) { return items.at(index); }
+
+	Door* GetDoor(int uniqueId) {
+
+		for (auto& item : items) {
+			if (item->itemType == EItemType::Door)
+				if (item->uniqueId == uniqueId)
+					return static_cast<Door*>(item);
+		}
+		return nullptr;
+	}
+
 
 	//エネミー削除
 	void Remove(Item* item);

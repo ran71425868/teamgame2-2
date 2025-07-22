@@ -4,11 +4,11 @@
 #include "Item.h"
 
 //ライト
-class Panel :public Item
+class Door :public Item
 {
 public:
-	Panel();
-	~Panel() override;
+	Door();
+	~Door() override;
 
 	//更新処理
 	void Update(float elapsedTime)override;

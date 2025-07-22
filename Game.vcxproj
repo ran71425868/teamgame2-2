@@ -122,8 +122,8 @@
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\CameraController.h" />
     <ClInclude Include="Source\Character.h" />
-    <ClInclude Include="Source\Clone.h" />
     <ClInclude Include="Source\Collision.h" />
+    <ClInclude Include="Source\Door.h" />
     <ClInclude Include="Source\Effect.h" />
     <ClInclude Include="Source\EffectManager.h" />
     <ClInclude Include="Source\Enemy.h" />
@@ -139,9 +139,7 @@
     <ClInclude Include="Source\Panel.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\Projectile.h" />
-    <ClInclude Include="Source\ProjectileHoming.h" />
     <ClInclude Include="Source\ProjectileManager.h" />
-    <ClInclude Include="Source\ProjectileStraight.h" />
     <ClInclude Include="Source\Prop.h" />
     <ClInclude Include="Source\PropManager.h" />
     <ClInclude Include="Source\Scene.h" />
@@ -186,8 +184,8 @@
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\CameraController.cpp" />
     <ClCompile Include="Source\Character.cpp" />
-    <ClCompile Include="Source\Clone.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
+    <ClCompile Include="Source\Door.cpp" />
     <ClCompile Include="Source\Effect.cpp" />
     <ClCompile Include="Source\EffectManager.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
@@ -204,9 +202,7 @@
     <ClCompile Include="Source\Panel.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\Projectile.cpp" />
-    <ClCompile Include="Source\ProjectileHoming.cpp" />
     <ClCompile Include="Source\ProjectileManager.cpp" />
-    <ClCompile Include="Source\ProjectileStraight.cpp" />
     <ClCompile Include="Source\Prop.cpp" />
     <ClCompile Include="Source\PropManager.cpp" />
     <ClCompile Include="Source\SceneGame.cpp" />

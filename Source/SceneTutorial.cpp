@@ -4,7 +4,6 @@
 #include "Camera.h"
 #include "EnemyManager.h"
 #include "Character.h"
-#include "EnemySlime.h"
 #include "Player.h"
 #include "EffectManager.h"
 #include "SceneSelect.h"
@@ -18,34 +17,43 @@
 #include "ItemManager.h"
 #include "Light.h"
 #include "Mirror.h"
+#include "Fan.h"
+#include "Door.h"
+#include "Panel.h"
 using namespace DirectX;
 
 // 初期化
 void SceneTutorial::Initialize()
 {
+
     // ステージ初期化
     stage = new Stage1();
 
-    Prop*prop = new Prop();
-    PropManager::Instance().Register(prop);
+    
 
     Prop* prop1 = new Prop();
-    prop1->SetPosition({ 5,5,5 });
+    prop1->SetPosition({ -9,1,7 });
     PropManager::Instance().Register(prop1);
 
-   /* Clone* clone = new Clone();
-    clone->SetPosition({ 5,0,5 });
-    PropManager::Instance().RegisterC(clone);*/
+    Prop* prop2 = new Prop();
+    prop2->SetPosition({ 0,1,5 });
+    PropManager::Instance().Register(prop2);
 
+    Prop* prop3 = new Prop();
+    prop3->SetPosition({ 0,1,-2 });
+    PropManager::Instance().Register(prop3);
 
-    
-    Fan* fan = new Fan();
-    fan->SetPosition({ -10,0,-10 });
-    PropManager::Instance().RegisterF(fan);
+    Prop* prop4 = new Prop();
+    prop4->SetPosition({ 0,1,-9 });
+    PropManager::Instance().Register(prop4);
+
+    Prop* prop5 = new Prop();
+    prop5->SetPosition({ -15,2,-3 });
+    PropManager::Instance().Register(prop5);
 
     // プレイヤー初期化
     Player::Instance().Initializa();
-    Player::Instance().SetPosition({3,10,3});
+    Player::Instance().SetPosition({-15,3.9,-10});
 
     // カメラ初期設定
     Graphics& graphics = Graphics::Instance();
@@ -66,19 +74,32 @@ void SceneTutorial::Initialize()
 
     // エネミー初期化
     ItemManager& itemManager = ItemManager::Instance();
-    for (int i = 0; i < 2; ++i)
-    {
-        Light* light = new Light();
-        light->SetPosition(DirectX::XMFLOAT3(i * 2.0f, 0, 5));
-        itemManager.Register(light);
-    }
-    for (float i = 0; i < 2; ++i)
-    {
-        Mirror* mirror = new Mirror();
-        mirror->SetPosition({i*5,0,5});
-        itemManager.Register(mirror);
-    }
+    
+    Light* light = new Light();
+    light->SetPosition(DirectX::XMFLOAT3(0, 2.9, -2));
+    itemManager.Register(light);
+    
+    
+    Mirror* mirror = new Mirror();
+    mirror->SetPosition({0,2.9,5});
+    itemManager.Register(mirror);
+    
+    Fan* fan = new Fan();
+    fan->SetPosition({ 0,2.9,-9 });
+    fan->SetAngle({ 0,-80,0 });
+    itemManager.Register(fan);
 
+
+    //Door* door = new Door(EItemType::Door, 0);
+    Door* door = new Door();
+    door->itemType = EItemType::Door;
+    door->uniqueId = 0;
+    door->SetPosition({ 9,0,-4.5 });
+    itemManager.Register(door);
+
+    Panel* panel = new Panel();
+    panel->SetPosition({ -9,3,7 });
+    itemManager.Register(panel);
     
 
 }
@@ -86,7 +107,6 @@ void SceneTutorial::Initialize()
 // 終了化
 void SceneTutorial::Finalize()
 {
-    ItemManager::Instance().Clear();
     
     cameraController->Finalize();
     if (cameraController != nullptr) {
@@ -102,6 +122,7 @@ void SceneTutorial::Finalize()
     }
 
     PropManager::Instance().Clear();
+    ItemManager::Instance().Clear();
 
 }
 
@@ -117,15 +138,12 @@ void SceneTutorial::Update(float elapsedTime)
     //カメラの角度をプレイヤーの角度と同期させる
     DirectX::XMFLOAT3 angle = cameraController->GetAngle();
     Player::Instance().SetAngle(angle);
-    Player::Instance().Update(elapsedTime);
-
-   
-    PropManager::Instance().Update(elapsedTime);
 
     stage->Update(elapsedTime);
 
     Player::Instance().Update(elapsedTime);
     ItemManager::Instance().Update(elapsedTime);
+    PropManager::Instance().Update(elapsedTime);
     EffectManager::Instance().Update(elapsedTime);
 
     
@@ -170,10 +188,6 @@ void SceneTutorial::Render()
         ItemManager::Instance().RenderDebugPrimitive(rc, shapeRenderer);
     }
 
-    // 2Dスプライト描画（クロスヘア）
-    {
-        
-    }
 }
 
 // GUI描画

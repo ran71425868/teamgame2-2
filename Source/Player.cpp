@@ -4,14 +4,13 @@
 #include "Camera.h"
 #include "EnemyManager.h"
 #include "Collision.h"
-#include "ProjectileStraight.h"
-#include "ProjectileHoming.h"
 #include "System/Audio.h"
 #include "EnemySlime.h"
 #include <PropManager.h>
 #include "ItemManager.h"
 #include "Light.h"
 #include "Mirror.h"
+#include "Door.h"
 
 
 
@@ -24,7 +23,7 @@ void Player::Initializa()
 	//モデルが大きいのでスケーリング
 	scale.x = scale.y = scale.z = 0.015f;
 
-	//ヒットエフェクト読み込み
+	//ヒットエフェクト読み込みimakara
 	hitEffect = new Effect("Data/Effect/Hit.efk");
 
 	//ヒットSEの読み込み
@@ -52,11 +51,6 @@ void Player::Update(float elapsedTime)
 	//カメラの向きとプレイヤーの角度を同期
 	SyncPlayerAngleWithCamera();
 
-	//ジャンプ入力処理
-	InputJump();
-
-	//弾丸入力処理
-	InputProjectile();
 
 	//速力処理更新
 	UpdateVelocity(elapsedTime);
@@ -331,113 +325,7 @@ void Player::CollisionProjectilesVsEnemies()
 
 }
 
-//着地した時に呼ばれる
-void Player::OnLanding()
-{
-	//現在のジャンプ回数をリセット
-	jumpCount = 0;
-}
 
-
-//ジャンプ入力処理
-void Player::InputJump() 
-{
-	//GamePad& gamePad = Input::Instance().GetGamePad();
-	//if (gamePad.GetButtonDown() & GamePad::BTN_A)
-	//{
-	//	//ジャンプ回数制限(現在のジャンプ回数がジャンプの最大数より小さければ)
-	//	//現在のジャンプ回数を増加させ
-	//	if (jumpCount < jumpLimit) 
-	//	{
-	//		jumpCount++;
-	//		//ジャンプ
-	//		Jump(jumpSpeed);
-
-	//	}
-
-	//}
-
-}
-
-//弾丸入力処理
-void Player::InputProjectile()
-{
-	GamePad& gamePad = Input::Instance().GetGamePad();
-
-	//直進弾丸発射
-	if (gamePad.GetButtonDown() & GamePad::BTN_X)
-	{
-		//前方向
-		DirectX::XMFLOAT3 dir;
-		dir.x = sinf(angle.y);//前方向(sinとangleで計算)
-		dir.y = 0.0f;
-		dir.z = cosf(angle.y);//前方向(cosとangleで計算)
-
-		//発射位置(プレイヤーの腰あたり,yがheightの半分)
-		DirectX::XMFLOAT3 pos;
-		pos.x = position.x;
-		pos.y = position.y + height * 0.5f;
-		pos.z = position.z;
-
-		//発射
-		ProjectileStraight* projectile = new ProjectileStraight(&projectileManager);
-		projectile->Launch(dir, pos);
-		//projectileManager.Register(projectile);
-	}
-
-	//追尾処理
-	if (gamePad.GetButtonDown() & GamePad::BTN_Y)
-	{
-		//前方向
-		DirectX::XMFLOAT3 dir;
-		dir.x = sinf(angle.y);
-		dir.y = 0.0f;
-		dir.z = cosf(angle.y);
-
-		//発射位置(プレイヤーの腰あたり,yがheightの半分)
-		DirectX::XMFLOAT3 pos;
-		pos.x = position.x;
-		pos.y = position.y + height * 0.5f;
-		pos.z = position.z;
-
-		//ターゲット(デフォルトではプレイヤーの前方)
-		DirectX::XMFLOAT3 target;
-		target.x = pos.x + dir.x * 1000.0f;
-		target.y = pos.y + dir.y * 1000.0f;
-		target.z = pos.z + dir.z * 1000.0f;
-
-		//一番近くの敵をターゲットにする
-		float dist = FLT_MAX;
-		EnemyManager& enemyManager = EnemyManager::Instance();
-		int enemyCount = enemyManager.GetEnemyCount();
-		for (int i = 0; i < enemyCount; i++)
-		{
-			//敵との距離判定
-			Enemy* enemy = EnemyManager::Instance().GetEnemy(i);
-			DirectX::XMVECTOR P = DirectX::XMLoadFloat3(&position);//プレイヤーの位置
-			DirectX::XMVECTOR E = DirectX::XMLoadFloat3(&enemy->GetPosition());//敵の位置
-			DirectX::XMVECTOR V = DirectX::XMVectorSubtract(P, E);//敵への方向ベクトル-プレイヤーの位置
-			DirectX::XMVECTOR D = DirectX::XMVector3LengthSq(V);//敵への方向ベクトルの長さ
-
-			float d;//今回の距離(球から敵までの距離)
-			DirectX::XMStoreFloat(&d, D);
-			
-			//今回の敵の方がプレイヤーに近いからどうかチェック
-			if (d < dist)
-			{
-				//近かったらtargetに設定
-				dist = d;
-				target = enemy->GetPosition();
-				target.y += enemy->GetHeight()*0.5f;
-			}
-		}
-
-		//発射
-		ProjectileHoming* projectile = new ProjectileHoming(&projectileManager);
-		projectile->Launch(dir, pos, target);
-
-	}
-}
 
 // レイキャスト処理 (追加)
 void Player::PerformRaycastToSlime()
@@ -550,22 +438,32 @@ void Player::PerformRaycastToLight()
 	// 1バウンド目
 	hit1 = false;
 	hit3 = false;
+	hitFan = false;
 	XMFLOAT3 normal1;
 	int hitCloneIndex = -1;
 
-	//PropとRaycast
+	//ライトとRaycast
 	if (RaycastToLights(rayOrigin, rayDirection, rayHitPoint, normal1, hitCloneIndex))
 	{
 		hit1 = true;
 		hasRayHit = hit1;
 		rayHitPoint = hit1 ? rayHitPoint : rayHitPoint;
 	}
+	//ミラーとRaycast
 	else if (RaycastToMirrors(rayOrigin, rayDirection, rayHitPoint, normal1, hitCloneIndex))
 	{
 		hit3 = true;
 		hasRayHit = hit3;
 		rayHitPoint = hit3 ? rayHitPoint : rayHitPoint;
 	}
+	//扇風機とRaycast
+	else if (RaycastToFans(rayOrigin, rayDirection, rayHitPoint, normal1, hitCloneIndex))
+	{
+		hitFan = true;
+		hasRayHit = hitFan;
+		rayHitPoint = hitFan ? rayHitPoint : rayHitPoint;
+	}
+	//ヒットしない
 	else
 	{
 		hasRayHit = false;
@@ -579,6 +477,7 @@ void Player::PerformRaycastToLight()
 		};
 	}
 
+	//ライトに対しての処理
 	if (hit1)
 	{
 		Mouse& mouseCursor = Input::Instance().GetMouse();
@@ -590,18 +489,19 @@ void Player::PerformRaycastToLight()
 
 		Item* item = itemManager.GetItem(hitCloneIndex);
 		Light* light = dynamic_cast<Light*>(item);
+		//lightの位置を保存
 		XMFLOAT3 lightPos = light->GetPosition();
 		
-
 		if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
 		{
+			//入れ替え
 			Player::Instance().SetPosition(lightPos);
 			light->SetPosition(playerPos);
 
 		}
 
 	}
-
+	//ミラーに対しての処理
 	if (hit3)
 	{
 		ItemManager& itemManager = ItemManager::Instance();
@@ -609,11 +509,49 @@ void Player::PerformRaycastToLight()
 		Item* item = itemManager.GetItem(hitCloneIndex);
 		Mirror* mirror = dynamic_cast<Mirror*>(item);
 	}
+	//扇風機に対しての処理
+	if (hitFan)
+	{
+		Mouse& mouseCursor = Input::Instance().GetMouse();
+
+		ItemManager& itemManager = ItemManager::Instance();
+
+		Item* item = itemManager.GetItem(hitCloneIndex);
+		Fan* fan = dynamic_cast<Fan*>(item);
+		
+		// ファンの前方方向からレイキャスト出す
+
+		// ヒットしたアイテムをドアに変換する
+
+		// 変換してドアだったら
+			// 左クリックして回転させる
+
+
+#if true
+		if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
+		{
+			ItemManager& itemManager = ItemManager::Instance();
+
+			//Item* item = itemManager.GetItem(hitCloneIndex);
+			//Door* door = dynamic_cast<Door*>(item);
+
+			Door* door = itemManager.GetDoor(0);
+			if (door != nullptr)
+				door->SetAngle({ 0,60,0 });
+
+			door = itemManager.GetDoor(1);
+			if (door != nullptr)
+				door->SetAngle({ 0,60,0 });
+		}
+#endif
+	}
+
 	
 	// 2バウンド目（反射）
 	hit2 = false;
 	hitPoint2;
 
+	//ライトに対しての処理
 	if (hit1)
 	{
 		reflectedDir = Reflect(rayDirection, normal1);
@@ -629,6 +567,7 @@ void Player::PerformRaycastToLight()
 			hit2 = true;
 		}
 	}
+	//ミラーに対しての処理
 	else if (hit3)
 	{
 		reflectedDir = Reflect(rayDirection, normal1);
@@ -792,6 +731,54 @@ bool Player::RaycastToMirrors(
 
 	return anyHit;
 }
+bool Player::RaycastToFans(
+	const DirectX::XMFLOAT3& rayOrigin, 
+	const DirectX::XMFLOAT3& rayDir,
+	DirectX::XMFLOAT3& outHitPoint, 
+	DirectX::XMFLOAT3& outHitNormal, 
+	int& lightHitIndex)
+{
+	using namespace DirectX;
+
+	ItemManager& itemManager = ItemManager::Instance();
+	int itemCount = itemManager.GetItemCount();
+
+	float closestDistance = FLT_MAX;
+	bool anyHit = false;
+
+	for (int i = 0; i < itemCount; i++)
+	{
+		Item* item = itemManager.GetItem(i);
+
+		Fan* fan = dynamic_cast<Fan*>(item);
+		if (!fan) continue;
+
+		XMFLOAT3 fanPos = fan->GetPosition();
+		float fan_radius = fan->GetRadius();
+		float fan_height = fan->GetHeight();
+
+		XMFLOAT3 hitPoint;
+		float hitDistance;
+
+		if (Collision::IntersectRayVsCylinder(
+			rayOrigin, rayDir,
+			fanPos, fan_radius, fan_height,
+			hitPoint, hitDistance))
+		{
+			if (hitDistance < closestDistance)
+			{
+				closestDistance = hitDistance;
+				outHitPoint = hitPoint;
+				outHitNormal = ComputeCylinderNormal(hitPoint, fanPos);
+				anyHit = true;
+				lightHitIndex = i;
+			}
+		}
+	}
+
+	return anyHit;
+}
+
 // Cylinderからの法線をだす
 DirectX::XMFLOAT3 Player::ComputeCylinderNormal(
 	const DirectX::XMFLOAT3& hitPoint,

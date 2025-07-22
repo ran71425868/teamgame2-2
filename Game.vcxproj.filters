@@ -147,12 +147,6 @@
     <ClInclude Include="Source\ProjectileManager.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ProjectileStraight.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ProjectileHoming.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Scene.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -192,9 +186,6 @@
     <ClInclude Include="Source\PropManager.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Clone.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Mirror.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -211,6 +202,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\Light.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Door.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
@@ -323,12 +317,6 @@
     <ClCompile Include="Source\ProjectileManager.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ProjectileStraight.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ProjectileHoming.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Enemy.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -368,9 +356,6 @@
     <ClCompile Include="Source\PropManager.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Clone.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Mirror.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -387,6 +372,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Light.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Door.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
