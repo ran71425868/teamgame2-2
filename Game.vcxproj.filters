@@ -129,15 +129,6 @@
     <ClInclude Include="Source\CameraController.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\EnemyManager.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Enemy.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\EnemySlime.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Collision.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -205,6 +196,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\Door.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ClearPanel.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
@@ -302,12 +296,6 @@
     <ClCompile Include="Source\CameraController.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\EnemyManager.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\EnemySlime.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Collision.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -315,9 +303,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ProjectileManager.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneTitle.cpp">
@@ -375,6 +360,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Door.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ClearPanel.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

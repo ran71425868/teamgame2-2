@@ -2,7 +2,6 @@
 #include "SceneGame.h"
 #include "SceneResult.h"
 #include "Camera.h"
-#include "EnemyManager.h"
 #include "Player.h"
 #include "EffectManager.h"
 #include "SceneSelect.h"
@@ -65,6 +64,8 @@ void SceneGame::Initialize()
     itemManager.Register(fan);
 
     Door* door = new Door();
+    door->itemType = EItemType::Door;
+    door->uniqueId = 1;
     door->SetPosition({ 9,0,-4 });
     itemManager.Register(door);
 
@@ -82,7 +83,6 @@ void SceneGame::Initialize()
 // I—¹‰»
 void SceneGame::Finalize()
 {
-    EnemyManager::Instance().Clear();
 
     cameraController->Finalize();
     if (cameraController != nullptr) {
@@ -117,7 +117,6 @@ void SceneGame::Update(float elapsedTime)
 
     stage->Update(elapsedTime);
     Player::Instance().Update(elapsedTime);
-    EnemyManager::Instance().Update(elapsedTime);
     ItemManager::Instance().Update(elapsedTime);
     EffectManager::Instance().Update(elapsedTime);
 
