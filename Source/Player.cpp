@@ -537,7 +537,11 @@ void Player::PerformRaycastToLight()
 
 			Door* door = itemManager.GetDoor(0);
 			if (door != nullptr)
-				door->SetAngle({ 0,-90,0 });
+				door->SetAngle({ 0,60,0 });
+
+			door = itemManager.GetDoor(1);
+			if (door != nullptr)
+				door->SetAngle({ 0,60,0 });
 		}
 #endif
 	}

@@ -65,6 +65,8 @@ void SceneGame::Initialize()
     itemManager.Register(fan);
 
     Door* door = new Door();
+    door->itemType = EItemType::Door;
+    door->uniqueId = 1;
     door->SetPosition({ 9,0,-4 });
     itemManager.Register(door);
 

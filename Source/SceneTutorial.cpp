@@ -94,7 +94,7 @@ void SceneTutorial::Initialize()
     Door* door = new Door();
     door->itemType = EItemType::Door;
     door->uniqueId = 0;
-    door->SetPosition({ 9,0,-4 });
+    door->SetPosition({ 9,0,-4.5 });
     itemManager.Register(door);
 
     Panel* panel = new Panel();
