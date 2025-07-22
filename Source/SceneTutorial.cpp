@@ -2,7 +2,6 @@
 #include "SceneTutorial.h"
 #include "SceneResult.h"
 #include "Camera.h"
-#include "EnemyManager.h"
 #include "Character.h"
 #include "Player.h"
 #include "EffectManager.h"
@@ -94,11 +93,12 @@ void SceneTutorial::Initialize()
     Door* door = new Door();
     door->itemType = EItemType::Door;
     door->uniqueId = 0;
-    door->SetPosition({ 9,0,-4 });
+    door->SetPosition({ 9,0,-4.5 });
     itemManager.Register(door);
 
     Panel* panel = new Panel();
     panel->SetPosition({ -9,3,7 });
+    panel->SetAngle({ 0,-2.2f,0 });
     itemManager.Register(panel);
     
 

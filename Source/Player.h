@@ -59,17 +59,9 @@ private:
 	// カメラの向きとプレイヤーの角度を同期
 	void SyncPlayerAngleWithCamera();
 
-	//プレイヤーとエネミーとの衝突処理
-	void CollisionPlayerVsEnemies();
-
-	// レイキャスト処理 (追加)
-	void PerformRaycastToSlime();
 
 	void PerformRaycastToLight();
 
-
-	//弾丸と敵の衝突判定
-	void CollisionProjectilesVsEnemies();
 
 
 
@@ -112,13 +104,7 @@ private:
 		const DirectX::XMFLOAT3& hitPoint,
 		const DirectX::XMFLOAT3& cylinderCenter);
 
-	//スライムに対するレイキャストを共通化
-	bool Player::RaycastToSlimes(
-		const DirectX::XMFLOAT3& rayOrigin,
-		const DirectX::XMFLOAT3& rayDir,
-		DirectX::XMFLOAT3& outHitPoint,
-		DirectX::XMFLOAT3& outHitNormal,
-		int& enemyHitIndex);
+
 
 	//ライトに対するレイキャスト
 	bool Player::RaycastToLights(

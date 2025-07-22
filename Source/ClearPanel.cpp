@@ -1,10 +1,10 @@
-#include "Panel.h"
+#include "ClearPanel.h"
 
 
 //コンストラクタ
-Panel::Panel()
+ClearPanel::ClearPanel()
 {
-	model = new Model("Data/Model/gimmick/Panel.mdl");
+	model = new Model("Data/Model/gimmick/Kagami1.mdl");
 
 	scale.x = scale.y = scale.z = 0.5f;
 	position.x = 10.0f;
@@ -13,13 +13,13 @@ Panel::Panel()
 }
 
 //デストラクタ
-Panel::~Panel()
+ClearPanel::~ClearPanel()
 {
 	delete model;
 }
 
 //更新処理
-void Panel::Update(float elapsedTime)
+void ClearPanel::Update(float elapsedTime)
 {
 
 	//オブジェクト行列を更新
@@ -30,14 +30,14 @@ void Panel::Update(float elapsedTime)
 }
 
 //描画処理
-void Panel::Render(const RenderContext& rc, ModelRenderer* renderer)
+void ClearPanel::Render(const RenderContext& rc, ModelRenderer* renderer)
 {
 	renderer->Render(rc, transform, model, ShaderId::Lambert);
 
 }
 
 //デバッグプリミティブ描画
-void Panel::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer)
+void ClearPanel::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer)
 {
 	//基底クラスのデバッグプリミティブ描画
 	Item::RenderDebugPrimitive(rc, renderer);
