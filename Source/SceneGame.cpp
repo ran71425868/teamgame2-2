@@ -2,7 +2,6 @@
 #include "SceneGame.h"
 #include "SceneResult.h"
 #include "Camera.h"
-#include "EnemyManager.h"
 #include "Player.h"
 #include "EffectManager.h"
 #include "SceneSelect.h"
@@ -84,7 +83,6 @@ void SceneGame::Initialize()
 // I—¹‰»
 void SceneGame::Finalize()
 {
-    EnemyManager::Instance().Clear();
 
     cameraController->Finalize();
     if (cameraController != nullptr) {
@@ -119,7 +117,6 @@ void SceneGame::Update(float elapsedTime)
 
     stage->Update(elapsedTime);
     Player::Instance().Update(elapsedTime);
-    EnemyManager::Instance().Update(elapsedTime);
     ItemManager::Instance().Update(elapsedTime);
     EffectManager::Instance().Update(elapsedTime);
 

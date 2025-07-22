@@ -2,7 +2,6 @@
 #include "SceneTutorial.h"
 #include "SceneResult.h"
 #include "Camera.h"
-#include "EnemyManager.h"
 #include "Character.h"
 #include "Player.h"
 #include "EffectManager.h"
@@ -53,7 +52,7 @@ void SceneTutorial::Initialize()
 
     // プレイヤー初期化
     Player::Instance().Initializa();
-    Player::Instance().SetPosition({-15,3.9,-10});
+    Player::Instance().SetPosition({-15,3.9,-3});
 
     // カメラ初期設定
     Graphics& graphics = Graphics::Instance();
@@ -99,6 +98,7 @@ void SceneTutorial::Initialize()
 
     Panel* panel = new Panel();
     panel->SetPosition({ -9,3,7 });
+    panel->SetAngle({ 0,-2.2f,0 });
     itemManager.Register(panel);
     
 

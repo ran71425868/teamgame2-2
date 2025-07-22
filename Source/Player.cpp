@@ -2,10 +2,8 @@
 #include "System/Input.h"
 #include <imgui.h>
 #include "Camera.h"
-#include "EnemyManager.h"
 #include "Collision.h"
 #include "System/Audio.h"
-#include "EnemySlime.h"
 #include <PropManager.h>
 #include "ItemManager.h"
 #include "Light.h"
@@ -58,17 +56,12 @@ void Player::Update(float elapsedTime)
 	//弾丸更新処理
 	projectileManager.Update(elapsedTime);
 
-	//プレイヤーと敵との衝突判定
-	CollisionPlayerVsEnemies();
 
-	// レイキャスト処理 (追加)
-	PerformRaycastToSlime();
 
 	// レイキャスト処理 (clone)
 	PerformRaycastToLight();
 
 	//弾丸と敵の衝突処理
-	CollisionProjectilesVsEnemies();
 
 	//オブジェクト行列を更新
 	ModelUpdateTransform();
@@ -206,217 +199,78 @@ DirectX::XMFLOAT3 Player::Reflect(const DirectX::XMFLOAT3& incident, const Direc
 
 
 //プレイヤーとエネミーの衝突処理
-void Player::CollisionPlayerVsEnemies()
-{
-	EnemyManager& enemyManager = EnemyManager::Instance();
 
-	//全ての敵と総当たりで衝突処理
-	int enemyCount = enemyManager.GetEnemyCount();
-
-	for (int i = 0; i < enemyCount; i++) 
-	{
-		Enemy* enemy = enemyManager.GetEnemy(i);
-
-		//衝突処理
-		DirectX::XMFLOAT3 outPosition;
-		if (Collision::IntersectCylinderVsCylinder(position, radius, height, enemy->GetPosition(), enemy->GetRadius(), enemy->GetHeight(), outPosition))
-		{
-			
-			//敵の真上付近に当たったかを判定
-			//プレイヤーの位置をXMVECTORに変換
-			DirectX::XMVECTOR P = DirectX::XMLoadFloat3(&position);
-
-			//敵の位置をXMVECTORに変換
-			DirectX::XMVECTOR E = DirectX::XMLoadFloat3(&enemy->GetPosition());
-
-			//敵からプレイヤーへのベクトルを計算
-			DirectX::XMVECTOR V = DirectX::XMVectorSubtract(P, E);
-
-			//そのベクトルを正規化（単位ベクトル化）
-			DirectX::XMVECTOR N = DirectX::XMVector3Normalize(V);
-
-			//正規化したベクトルXMFLOAT3に変換
-			DirectX::XMFLOAT3 normal;
-			DirectX::XMStoreFloat3(&normal, N);
-
-			//上から踏んづけた場合は小ジャンプする
-			if (normal.y > 0.8f)
-			{
-				//小ジャンプ
-				Jump(jumpSpeed * 0.5f);
-			}
-			else
-			{
-				//押し出し後の位置設定（上から踏んづけなかった場合の処理）
-				enemy->SetPosition(outPosition);
-
-			}
-
-		}
-	}
-}
 
 //弾丸と敵の衝突処理
-void Player::CollisionProjectilesVsEnemies()
-{
-	EnemyManager& enemyManager = EnemyManager::Instance();
+//void Player::CollisionProjectilesVsEnemies()
+//{
+//	EnemyManager& enemyManager = EnemyManager::Instance();
+//
+//	//全ての弾丸と全ての敵を総当たりで衝突処理
+//	int projectileCount = projectileManager.GetProjectileCount();
+//	int enemyCount = enemyManager.GetEnemyCount();
+//	for (int i = 0; i < projectileCount; ++i)
+//	{
+//		Projectile* projectile = projectileManager.GetProjectile(i);
+//
+//		for (int j = 0; j < enemyCount; ++j)
+//		{
+//			Enemy* enemy = enemyManager.GetEnemy(j);
+//
+//			//衝突処理
+//			DirectX::XMFLOAT3 outPosition;
+//			if (Collision::IntersectSphereVsCylinder(
+//				projectile->GetPosition(),
+//				projectile->GetRadius(),
+//				enemy->GetPosition(),
+//				enemy->GetRadius(),
+//				enemy->GetHeight(),
+//				outPosition))
+//			{
+//				//ダメージを与える
+//				if (enemy->ApplyDamage(1, 0.5f))
+//				{
+//					//吹き飛ばす
+//					{
+//						DirectX::XMFLOAT3 impulse;
+//						const float power = 10.0f;
+//						const DirectX::XMFLOAT3& e = enemy->GetPosition();
+//						const DirectX::XMFLOAT3& p = projectile->GetPosition();
+//						float vx = e.x - p.x;
+//						float vz = e.z - p.z;
+//						float lengthXZ = sqrtf(vx * vx + vz * vz);
+//						vx /= lengthXZ;
+//						vz /= lengthXZ;
+//
+//						impulse.x = vx * power;
+//						impulse.y = power * 0.5f;
+//						impulse.z = vz * power;
+//
+//						enemy->AddImpulse(impulse);
+//					}
+//
+//					//ヒットエフェクト
+//					{
+//						DirectX::XMFLOAT3 e = enemy->GetPosition();
+//						e.y += enemy->GetHeight() * 0.5f;
+//						hitEffect->Play(e);
+//					}
+//
+//					//ヒットSE再生
+//					{
+//						hitSE->Play(false);
+//					}
+//
+//					//弾丸破棄
+//					projectile->Destroy();
+//				}
+//			}
+//		}
+//	}
+//
+//}
 
-	//全ての弾丸と全ての敵を総当たりで衝突処理
-	int projectileCount = projectileManager.GetProjectileCount();
-	int enemyCount = enemyManager.GetEnemyCount();
-	for (int i = 0; i < projectileCount; ++i)
-	{
-		Projectile* projectile = projectileManager.GetProjectile(i);
 
-		for (int j = 0; j < enemyCount; ++j)
-		{
-			Enemy* enemy = enemyManager.GetEnemy(j);
-
-			//衝突処理
-			DirectX::XMFLOAT3 outPosition;
-			if (Collision::IntersectSphereVsCylinder(
-				projectile->GetPosition(),
-				projectile->GetRadius(),
-				enemy->GetPosition(),
-				enemy->GetRadius(),
-				enemy->GetHeight(),
-				outPosition))
-			{
-				//ダメージを与える
-				if (enemy->ApplyDamage(1, 0.5f))
-				{
-					//吹き飛ばす
-					{
-						DirectX::XMFLOAT3 impulse;
-						const float power = 10.0f;
-						const DirectX::XMFLOAT3& e = enemy->GetPosition();
-						const DirectX::XMFLOAT3& p = projectile->GetPosition();
-						float vx = e.x - p.x;
-						float vz = e.z - p.z;
-						float lengthXZ = sqrtf(vx * vx + vz * vz);
-						vx /= lengthXZ;
-						vz /= lengthXZ;
-
-						impulse.x = vx * power;
-						impulse.y = power * 0.5f;
-						impulse.z = vz * power;
-
-						enemy->AddImpulse(impulse);
-					}
-
-					//ヒットエフェクト
-					{
-						DirectX::XMFLOAT3 e = enemy->GetPosition();
-						e.y += enemy->GetHeight() * 0.5f;
-						hitEffect->Play(e);
-					}
-
-					//ヒットSE再生
-					{
-						hitSE->Play(false);
-					}
-
-					//弾丸破棄
-					projectile->Destroy();
-				}
-			}
-		}
-	}
-
-}
-
-
-
-// レイキャスト処理 (追加)
-void Player::PerformRaycastToSlime()
-{
-	using namespace DirectX;
-
-	// レイの始点をプレイヤー位置より少し上にする（例：1.5fだけ上に）
-	XMFLOAT3 rayOrigin = GetPosition();
-	rayOrigin.y += 0.2f;
-	
-	// レイの方向はカメラの前方向を使う
-	XMFLOAT3 rayDirection = Camera::Instance().GetFront();
-
-	// 正規化（念のため）
-	XMVECTOR dirVec = XMLoadFloat3(&rayDirection);
-	dirVec = XMVector3Normalize(dirVec);
-	XMStoreFloat3(&rayDirection, dirVec);
-
-	// 1バウンド目
-	hit1 = false;
-	XMFLOAT3 normal1;
-	int hitEnemyIndex = -1;
-
-	//EnemyとRayCast
-	if (RaycastToSlimes(rayOrigin, rayDirection, rayHitPoint, normal1, hitEnemyIndex))
-	{
-		hit1 = true;
-	}
-	else
-	{
-		hasRayHit = false;
-
-		// ヒットしなかった場合はカメラの前方向に適当な長さだけ進んだ位置を代入
-		float rayLength = 1000.0f;
-		rayHitPoint = {
-			rayOrigin.x + rayDirection.x * rayLength,
-			rayOrigin.y + rayDirection.y * rayLength,
-			rayOrigin.z + rayDirection.z * rayLength
-		};
-	}
-
-	if (hit1)
-	{
-		Mouse& mouseCursor = Input::Instance().GetMouse();
-
-		//playerの位置を保存
-		XMFLOAT3 playerPos = Player::Instance().GetPosition();
-
-		EnemyManager& enemyManager = EnemyManager::Instance();
-
-		Enemy* enemy = enemyManager.GetEnemy(hitEnemyIndex);
-		EnemySlime* enemySlime = dynamic_cast<EnemySlime*>(enemy);
-		XMFLOAT3 slimePos = enemySlime->GetPosition();
-
-		if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
-		{
-			Player::Instance().SetPosition(slimePos);
-			enemySlime->SetPosition(playerPos);
-
-		}
-
-	}
-
-	// 2バウンド目（反射）
-	hit2 = false;
-	hitPoint2;
-
-	if (hit1)
-	{
-		reflectedDir = Reflect(rayDirection, normal1);
-		XMFLOAT3 newOrigin = {
-			rayHitPoint.x + reflectedDir.x * 0.01f,
-			rayHitPoint.y + reflectedDir.y * 0.01f,
-			rayHitPoint.z + reflectedDir.z * 0.01f,
-		};
-
-		XMFLOAT3 dummyNormal;
-		if (RaycastToSlimes(newOrigin, reflectedDir, hitPoint2, dummyNormal, hitEnemyIndex))
-		{
-			hit2 = true;
-		}
-
-	}
-
-	// 保存
-	hasRayHit = hit1;
-	rayHitPoint = hit1 ? rayHitPoint : rayHitPoint;
-
-	hasReflectHit = hit2;
-	reflectedHitPoint = hit2 ? hitPoint2 : hitPoint2;
-}
 
  //レイキャスト処理 (追加)
 void Player::PerformRaycastToLight()
@@ -588,53 +442,7 @@ void Player::PerformRaycastToLight()
 	reflectedHitPoint = hit2 ? hitPoint2 : hitPoint2;
 }
 
-// スライムに対するレイキャストを共通化
-bool Player::RaycastToSlimes(
-	const DirectX::XMFLOAT3& rayOrigin,
-	const DirectX::XMFLOAT3& rayDir,
-	DirectX::XMFLOAT3& outHitPoint,
-	DirectX::XMFLOAT3& outHitNormal,
-	int& enemyHitIndex)
-{
-	using namespace DirectX;
 
-	EnemyManager& enemyManager = EnemyManager::Instance();
-	int enemyCount = enemyManager.GetEnemyCount();
-
-	float closestDistance = FLT_MAX;
-	bool anyHit = false;
-
-	for (int i = 0; i < enemyCount; i++)
-	{
-		Enemy* enemy = enemyManager.GetEnemy(i);
-		EnemySlime* slime = dynamic_cast<EnemySlime*>(enemy);
-		if (!slime) continue;
-
-		XMFLOAT3 slimePos = slime->GetPosition();
-		float radius = slime->GetRadius();
-		float height = slime->GetHeight();
-
-		XMFLOAT3 hitPoint;
-		float hitDistance;
-
-		if (Collision::IntersectRayVsCylinder(
-			rayOrigin, rayDir,
-			slimePos, radius, height,
-			hitPoint, hitDistance))
-		{
-			if (hitDistance < closestDistance)
-			{
-				closestDistance = hitDistance;
-				outHitPoint = hitPoint;
-				outHitNormal = ComputeCylinderNormal(hitPoint, slimePos);
-				anyHit = true;
-				enemyHitIndex = i;
-			}
-		}
-	}
-
-	return anyHit;
-}
 
 //lightに対するレイキャストを共通化
 bool Player::RaycastToLights(
