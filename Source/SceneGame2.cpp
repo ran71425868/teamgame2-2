@@ -1,5 +1,5 @@
 #include "System/Graphics.h"
-#include "SceneGame.h"
+#include "SceneGame2.h"
 #include "SceneResult.h"
 #include "Camera.h"
 #include "Player.h"
@@ -31,7 +31,7 @@ namespace {
     Sprite* pauseBackSprite = nullptr;
 }
 // 初期化
-void SceneGame::Initialize()
+void SceneGame2::Initialize()
 {
 
     // スプライト初期化（画像読み込み）
@@ -45,12 +45,12 @@ void SceneGame::Initialize()
     PropManager::Instance().Register(prop5);
 
     // ステージ初期化
-    stage = new Stage();
+    stage = new Stage2();
 
     // プレイヤー初期化
     Player::Instance().Initializa();
     Player::Instance().SetPosition({ -17,4.0f,0 });
-    
+
     // カメラ初期設定
     Graphics& graphics = Graphics::Instance();
     Camera& camera = Camera::Instance();
@@ -83,8 +83,8 @@ void SceneGame::Initialize()
     itemManager.Register(door);
 
     Panel* panel = new Panel();
-    panel->SetPosition({29,4,-10 });
-    panel->SetAngle({ 0,-1.48,0});
+    panel->SetPosition({ 29,4,-10 });
+    panel->SetAngle({ 0,-1.48,0 });
     itemManager.Register(panel);
 
     Panel* panel2 = new Panel();
@@ -94,7 +94,7 @@ void SceneGame::Initialize()
 }
 
 // 終了化
-void SceneGame::Finalize()
+void SceneGame2::Finalize()
 {
 
     cameraController->Finalize();
@@ -125,7 +125,7 @@ void SceneGame::Finalize()
 }
 
 // 更新処理
-void SceneGame::Update(float elapsedTime)
+void SceneGame2::Update(float elapsedTime)
 {
     GamePad& gamePad = Input::Instance().GetGamePad();
     Input& input = Input::Instance();
@@ -190,14 +190,14 @@ void SceneGame::Update(float elapsedTime)
     ItemManager::Instance().Update(elapsedTime);
     EffectManager::Instance().Update(elapsedTime);
 
-    
+
     if (gamePad.GetButtonDown() & GamePad::BTN_A) {
         SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
     }
 }
 
 // 描画処理
-void SceneGame::Render()
+void SceneGame2::Render()
 {
     Graphics& graphics = Graphics::Instance();
     ID3D11DeviceContext* dc = graphics.GetDeviceContext();
@@ -237,7 +237,7 @@ void SceneGame::Render()
 }
 
 // GUI描画
-void SceneGame::DrawGUI()
+void SceneGame2::DrawGUI()
 {
     Player::Instance().DrawDebugGUI();
 }

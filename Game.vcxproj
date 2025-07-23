@@ -142,6 +142,7 @@
     <ClInclude Include="Source\PropManager.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneGame.h" />
+    <ClInclude Include="Source\SceneGame2.h" />
     <ClInclude Include="Source\SceneLoading.h" />
     <ClInclude Include="Source\SceneManager.h" />
     <ClInclude Include="Source\SceneResult.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="Source\SceneTutorial.h" />
     <ClInclude Include="Source\Stage.h" />
     <ClInclude Include="Source\Stage1.h" />
+    <ClInclude Include="Source\Stage2.h" />
     <ClInclude Include="Source\System\Audio.h" />
     <ClInclude Include="Source\System\AudioResource.h" />
     <ClInclude Include="Source\System\AudioSource.h" />
@@ -202,6 +204,7 @@
     <ClCompile Include="Source\Prop.cpp" />
     <ClCompile Include="Source\PropManager.cpp" />
     <ClCompile Include="Source\SceneGame.cpp" />
+    <ClCompile Include="Source\SceneGame2.cpp" />
     <ClCompile Include="Source\SceneLoading.cpp" />
     <ClCompile Include="Source\SceneManager.cpp" />
     <ClCompile Include="Source\SceneResult.cpp" />
@@ -210,6 +213,7 @@
     <ClCompile Include="Source\SceneTutorial.cpp" />
     <ClCompile Include="Source\Stage.cpp" />
     <ClCompile Include="Source\Stage1.cpp" />
+    <ClCompile Include="Source\Stage2.cpp" />
     <ClCompile Include="Source\System\Audio.cpp" />
     <ClCompile Include="Source\System\AudioResource.cpp" />
     <ClCompile Include="Source\System\AudioSource.cpp" />

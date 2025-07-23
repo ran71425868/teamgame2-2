@@ -2,6 +2,7 @@
 #include "SceneSelect.h"
 #include "System/Input.h"
 #include "SceneGame.h"
+#include "SceneGame2.h"
 #include "SceneTutorial.h"
 #include "SceneManager.h"
 #include "SceneLoading.h"
@@ -35,6 +36,9 @@ void SceneSelect::Update(float elapsedTime)
 	DirectX::XMFLOAT2 stageleft = { 320,360 };
 	DirectX::XMFLOAT2 stageright = { 420,460 };
 
+	DirectX::XMFLOAT2 stage2left = { 420,360 };
+	DirectX::XMFLOAT2 stage2right = { 960,460 };
+
 	DirectX::XMFLOAT2 tutorialleft = { 960,360 };
 	DirectX::XMFLOAT2 tutorialright = { 1060,460 };
 
@@ -44,6 +48,14 @@ void SceneSelect::Update(float elapsedTime)
 		if (mouseCursor.GetButtonDown() & anyButton)
 		{
 			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
+		}
+	}
+
+	if (stage2left.x < mouseCursor.GetPositionX() && stage2right.x > mouseCursor.GetPositionX()&&stage2left.y<mouseCursor.GetPositionY()&&stage2right.y>mouseCursor.GetPositionY())
+	{
+		if (mouseCursor.GetButtonDown() & anyButton)
+		{
+			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame2));
 		}
 	}
 

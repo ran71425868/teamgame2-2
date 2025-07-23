@@ -1,4 +1,5 @@
 #include "Misc.h"
+#include "Mirror.h"
 #include "GpuResourceUtils.h"
 #include "ShapeRenderer.h"
 #include <algorithm>
@@ -57,8 +58,8 @@ void ShapeRenderer::RenderBox(
 	const DirectX::XMFLOAT3& size,
 	const DirectX::XMFLOAT4& color) const
 {
-	DirectX::XMMATRIX S = DirectX::XMMatrixScaling(size.x, size.y, size.z);
-	DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
+	DirectX::XMMATRIX S = DirectX::XMMatrixScaling(size.x+1.5f, size.y+1.5f, size.z+1.5f);
+	DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw(angle.x,angle.y, angle.z);
 	DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(position.x, position.y, position.z);
 	DirectX::XMFLOAT4X4 transform;
 	DirectX::XMStoreFloat4x4(&transform, S * R * T);
