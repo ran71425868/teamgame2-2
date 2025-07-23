@@ -31,6 +31,16 @@ public:
 	// マウス取得
 	Mouse& GetMouse() { return *mouse; }
 
+	// マウスボタンが押されたか
+	bool GetMouseButtonDown(int button) {
+		return mouse->GetButtonDown();
+	}
+
+	// マウス座標を取得
+	POINT GetMousePosition() {
+		return mouse->GetPosition();
+	}
+
 private:
 	std::unique_ptr<GamePad>	gamePad;
 	std::unique_ptr<Mouse>		mouse;

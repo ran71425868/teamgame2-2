@@ -40,6 +40,9 @@ public:
 	//デバッグプリミティブ描画
 	virtual void RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer);
 
+	//デバッグプリミティブ描画
+	virtual void RenderDebugPrimitiveSq(const RenderContext& rc, ShapeRenderer* renderer);
+
 	//地面に接地しているか(true...地面に接地している)
 	bool IsGround() const { return isGround; }
 

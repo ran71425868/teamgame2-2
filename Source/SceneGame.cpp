@@ -17,15 +17,28 @@
 #include "Fan.h"
 #include "Door.h"
 #include "Panel.h"
-/*#include <WICTextureLoader.h>*/ // DirectXTKの画像読み込み
+#include "System/Sprite.h"
+#include <WICTextureLoader.h> // DirectXTKの画像読み込み
 #include <wrl/client.h>
 using namespace DirectX;
 
-
-
+// ローカル変数（スプライトとポーズ状態）
+namespace {
+    bool isPaused = false;
+    Sprite* pauseTitleSprite = nullptr;
+    Sprite* backButtonSprite = nullptr;
+    Sprite* quitButtonSprite = nullptr;
+    Sprite* pauseBackSprite = nullptr;
+}
 // 初期化
 void SceneGame::Initialize()
 {
+
+    // スプライト初期化（画像読み込み）
+    pauseTitleSprite = new Sprite("Data/Sprite/pause gray.png");
+    backButtonSprite = new Sprite("Data/Sprite/pause2.png");
+    quitButtonSprite = new Sprite("Data/Sprite/pause5.png");
+    pauseBackSprite = new Sprite("Data/Sprite/pause back.png");
 
     Prop* prop5 = new Prop();
     prop5->SetPosition({ -15,2,-3 });
@@ -97,6 +110,16 @@ void SceneGame::Finalize()
         stage = nullptr;
     }
 
+    // スプライト削除
+    delete pauseTitleSprite;
+    delete backButtonSprite;
+    delete quitButtonSprite;
+    delete pauseBackSprite;
+    pauseTitleSprite = nullptr;
+    backButtonSprite = nullptr;
+    quitButtonSprite = nullptr;
+    pauseBackSprite = nullptr;
+
     PropManager::Instance().Clear();
     ItemManager::Instance().Clear();
 }
@@ -104,6 +127,53 @@ void SceneGame::Finalize()
 // 更新処理
 void SceneGame::Update(float elapsedTime)
 {
+    GamePad& gamePad = Input::Instance().GetGamePad();
+    Input& input = Input::Instance();
+
+    // Startボタンでポーズ切り替え
+    if (gamePad.GetButtonDown() & GamePad::BTN_UP) {
+        isPaused = !isPaused;
+
+        // ポーズ時に強制的にカーソルを表示
+        CameraController* controller = cameraController;
+        if (controller) {
+            controller->SetCursorVisibility(isPaused);
+        }
+    }
+
+    // ポーズ中のマウス入力処理
+    if (isPaused) {
+        if (input.GetMouseButtonDown(0)) {
+            POINT mousePos = input.GetMousePosition();
+
+            RECT back = { 500, 300, 800, 340 };
+            RECT quit = { 500, 360, 800, 400 };
+
+            if (PtInRect(&back, mousePos)) {
+                isPaused = false;
+
+                // ポーズ解除時にカーソルを非表示
+                CameraController* controller = cameraController;
+                if (controller) {
+                    controller->SetCursorVisibility(false);
+                }
+            }
+            else if (PtInRect(&quit, mousePos)) {
+                isPaused = false;
+
+                // カーソル再表示（必要なら）
+                CameraController* controller = cameraController;
+                if (controller) {
+                    controller->SetCursorVisibility(true);
+                }
+
+                // タイトルへシーン遷移
+                SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
+            }
+        }
+        return; // ポーズ中は以降の処理スキップ
+    }
+
     // カメラターゲット追従
     DirectX::XMFLOAT3 target = Player::Instance().GetPosition();
     target.y += 0.5f;
@@ -120,7 +190,7 @@ void SceneGame::Update(float elapsedTime)
     ItemManager::Instance().Update(elapsedTime);
     EffectManager::Instance().Update(elapsedTime);
 
-    GamePad& gamePad = Input::Instance().GetGamePad();
+    
     if (gamePad.GetButtonDown() & GamePad::BTN_A) {
         SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
     }
@@ -157,6 +227,13 @@ void SceneGame::Render()
         Player::Instance().RenderDebugPrimitive(rc, shapeRenderer);
     }
 
+    // ポーズ中UI描画
+    if (isPaused) {
+        pauseBackSprite->Render(rc, 0, 0, 0, 1280, 720, 0, 0, 1280, 720, 0, 1, 1, 1, 1);
+        pauseTitleSprite->Render(rc, 470, 100, 0, 1280, 720, 0, 0, 1280, 720, 0, 1, 1, 1, 1);
+        backButtonSprite->Render(rc, 500, 300, 0, 1000, 500, 0, 0, 1280, 720, 0, 1, 1, 1, 1);
+        quitButtonSprite->Render(rc, 500, 360, 0, 1000, 500, 0, 0, 1280, 720, 0, 1, 1, 1, 1);
+    }
 }
 
 // GUI描画
