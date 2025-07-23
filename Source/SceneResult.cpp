@@ -9,7 +9,7 @@
 //‰Šú‰»
 void SceneResult::Initialize()
 {
-	sprite = new Sprite("Data/Sprite/kari.png");
+	sprite = new Sprite("Data/Sprite/result.png");
 }
 
 //I—¹‰»

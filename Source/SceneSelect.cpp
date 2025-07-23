@@ -10,7 +10,11 @@
 //èâä˙âª
 void SceneSelect::Initialize()
 {
-	sprite = new Sprite("Data/Sprite/pngimg.com - square_PNG94.png");
+
+	sprite = new Sprite("Data/Sprite/select 1.png");
+	sprite2 = new Sprite("Data/Sprite/select 2.png");
+	sprite3 = new Sprite("Data/Sprite/select 3.png");
+	sprite4 = new Sprite("Data/Sprite/select 4.png");
 
 }
 
@@ -47,7 +51,7 @@ void SceneSelect::Update(float elapsedTime)
 	{
 		if (mouseCursor.GetButtonDown() & anyButton)
 		{
-			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
+			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTutorial));
 		}
 	}
 
@@ -55,7 +59,7 @@ void SceneSelect::Update(float elapsedTime)
 	{
 		if (mouseCursor.GetButtonDown() & anyButton)
 		{
-			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame2));
+			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
 		}
 	}
 
@@ -63,7 +67,7 @@ void SceneSelect::Update(float elapsedTime)
 	{
 		if (mouseCursor.GetButtonDown() & anyButton)
 		{
-			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTutorial));
+			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame2));
 		}
 	}
 	
@@ -87,12 +91,22 @@ void SceneSelect::Render()
 		float screenWidth = static_cast<float>(graphics.GetScreenWidth());
 		float screenHeight = static_cast<float>(graphics.GetScreenHeight());
 		sprite->Render(rc,
-			320, 360, 0, 100, 100,
+			0, 0, 0, 1350, 720,
 			0,
 			1, 1, 1, 1);
 
-		sprite->Render(rc,
-			960, 360, 0, 100, 100,
+		sprite2->Render(rc,
+			320, 360, 0, 400, 300,
+			0,
+			1, 1, 1, 1);
+
+		sprite4->Render(rc,
+			960, 360, 0, 500, 300,
+			0,
+			1, 1, 1, 1);
+
+		sprite3->Render(rc,
+			640, 360, 0, 500, 300,
 			0,
 			1, 1, 1, 1);
 	}
