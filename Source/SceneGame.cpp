@@ -83,11 +83,19 @@ void SceneGame::Initialize()
     itemManager.Register(door);
 
     Panel* panel = new Panel();
+<<<<<<< Updated upstream
     panel->SetPosition({29,4,-10 });
+=======
+    panel->itemType = EItemType::Panel;
+    panel->uniqueId = 1;
+    panel->SetPosition({29,4,-8 });
+>>>>>>> Stashed changes
     panel->SetAngle({ 0,-1.48,0});
     itemManager.Register(panel);
 
     Panel* panel2 = new Panel();
+    panel2->itemType = EItemType::Panel;
+    panel2->uniqueId = 2;
     panel2->SetPosition({ 1,4,-2 });
     panel2->SetAngle({ 0,-90,0 });
     itemManager.Register(panel2);
