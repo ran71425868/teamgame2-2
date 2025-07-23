@@ -76,6 +76,7 @@ private:
 	int jumpCount = 0;
 	int jumpLimit = 2;
 
+	int panelcount = 0;
 
 
 	DirectX::XMFLOAT3 hitPoint2;
@@ -84,6 +85,7 @@ private:
 	bool hit2;
 	bool hit3;
 	bool hitFan;
+	bool hit_panel;
 
 	ProjectileManager projectileManager;//弾丸管理
 
@@ -129,4 +131,12 @@ private:
 		DirectX::XMFLOAT3& outHitPoint,
 		DirectX::XMFLOAT3& outHitNormal,
 		int& lightHitIndex);
+
+	//パネルに対するレイキャスト
+	bool Player::RaycastToPanels(
+		const DirectX::XMFLOAT3& rayOrigin,
+		const DirectX::XMFLOAT3& rayDir,
+		DirectX::XMFLOAT3& outHitPoint,
+		DirectX::XMFLOAT3& outHitNormal,
+		int& panelHitIndex);
 };

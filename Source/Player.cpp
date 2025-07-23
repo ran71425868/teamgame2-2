@@ -9,6 +9,9 @@
 #include "Light.h"
 #include "Mirror.h"
 #include "Door.h"
+#include "SceneManager.h"
+#include "SceneLoading.h"
+#include "SceneResult.h"
 
 
 
@@ -292,8 +295,10 @@ void Player::PerformRaycastToLight()
 	hit1 = false;
 	hit3 = false;
 	hitFan = false;
+	hit_panel = false;
 	XMFLOAT3 normal1;
 	int hitCloneIndex = -1;
+	int hitPanelIndex = -1;
 
 	//ライトとRaycast
 	if (RaycastToLights(rayOrigin, rayDirection, rayHitPoint, normal1, hitCloneIndex))
@@ -315,6 +320,13 @@ void Player::PerformRaycastToLight()
 		hitFan = true;
 		hasRayHit = hitFan;
 		rayHitPoint = hitFan ? rayHitPoint : rayHitPoint;
+	}
+	//パネルとRaycast
+	else if (RaycastToPanels(rayOrigin, rayDirection, rayHitPoint, normal1, hitPanelIndex))
+	{
+		hit_panel = true;
+		hasRayHit = hit_panel;
+		rayHitPoint = hit_panel ? rayHitPoint : rayHitPoint;
 	}
 	//ヒットしない
 	else
@@ -397,6 +409,35 @@ void Player::PerformRaycastToLight()
 				door->SetAngle({ 0,60,0 });
 		}
 #endif
+	}
+	//パネルに対しての処理
+	if (hit_panel)
+	{
+		Mouse& mouseCursor = Input::Instance().GetMouse();
+
+		ItemManager& itemManager = ItemManager::Instance();
+
+		Item* item = itemManager.GetItem(hitPanelIndex);
+		Panel* panel = dynamic_cast<Panel*>(item);
+		
+		/*if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
+		{
+			switch (panelcount)
+			{
+			case 0:
+				panelcount++;
+				break;
+			case 1:
+				if (panelcount  hitPanelIndex)
+				{
+					SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
+				}
+				break;
+			}
+			
+
+		}*/
+
 	}
 
 	
@@ -510,6 +551,7 @@ bool Player::RaycastToLights(
 
 	return anyHit;
 }
+//mirrorに対するレイキャストを共通化
 bool Player::RaycastToMirrors(
 	const DirectX::XMFLOAT3& rayOrigin,
 	const DirectX::XMFLOAT3& rayDir,
@@ -557,6 +599,8 @@ bool Player::RaycastToMirrors(
 
 	return anyHit;
 }
+
+//fanに対するレイキャストを共通化
 bool Player::RaycastToFans(
 	const DirectX::XMFLOAT3& rayOrigin, 
 	const DirectX::XMFLOAT3& rayDir,
@@ -598,6 +642,55 @@ bool Player::RaycastToFans(
 				outHitNormal = ComputeCylinderNormal(hitPoint, fanPos);
 				anyHit = true;
 				lightHitIndex = i;
+			}
+		}
+	}
+
+	return anyHit;
+}
+
+//panelに対するレイキャストを共通化
+bool Player::RaycastToPanels(
+	const DirectX::XMFLOAT3& rayOrigin,
+	const DirectX::XMFLOAT3& rayDir,
+	DirectX::XMFLOAT3& outHitPoint,
+	DirectX::XMFLOAT3& outHitNormal,
+	int& panelHitIndex)
+{
+	using namespace DirectX;
+
+	ItemManager& itemManager = ItemManager::Instance();
+	int itemCount = itemManager.GetItemCount();
+
+	float closestDistance = FLT_MAX;
+	bool anyHit = false;
+
+	for (int i = 0; i < itemCount; i++)
+	{
+		Item* item = itemManager.GetItem(i);
+
+		Panel* panel = dynamic_cast<Panel*>(item);
+		if (!panel) continue;
+
+		XMFLOAT3 panelPos = panel->GetPosition();
+		float panel_radius = panel->GetRadius();
+		float panel_height = panel->GetHeight();
+
+		XMFLOAT3 hitPoint;
+		float hitDistance;
+
+		if (Collision::IntersectRayVsCylinder(
+			rayOrigin, rayDir,
+			panelPos, panel_radius, panel_height,
+			hitPoint, hitDistance))
+		{
+			if (hitDistance < closestDistance)
+			{
+				closestDistance = hitDistance;
+				outHitPoint = hitPoint;
+				outHitNormal = ComputeCylinderNormal(hitPoint, panelPos);
+				anyHit = true;
+				panelHitIndex = i;
 			}
 		}
 	}
