@@ -27,4 +27,7 @@ public:
 
 private:
 	Sprite* sprite = nullptr;
+	Sprite* sprite2 = nullptr;
+	Sprite* sprite3 = nullptr;
+	Sprite* sprite4 = nullptr;
 };
