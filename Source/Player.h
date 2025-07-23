@@ -106,7 +106,12 @@ private:
 		const DirectX::XMFLOAT3& hitPoint,
 		const DirectX::XMFLOAT3& cylinderCenter);
 
-
+	// Boxからの法線
+	DirectX::XMFLOAT3 ComputeBoxNormal(
+		const DirectX::XMFLOAT3& hitPoint,
+		const DirectX::XMFLOAT3& boxCenter,
+		const DirectX::XMFLOAT3& boxSize,
+		const DirectX::XMFLOAT3& rayDirection);
 
 	//ライトに対するレイキャスト
 	bool Player::RaycastToLights(
@@ -117,12 +122,12 @@ private:
 		int& lightHitIndex);
 
 	//ミラーに対するレイキャスト
-	bool Player::RaycastToMirrors(
+	bool RaycastToMirrors(
 		const DirectX::XMFLOAT3& rayOrigin,
 		const DirectX::XMFLOAT3& rayDir,
 		DirectX::XMFLOAT3& outHitPoint,
 		DirectX::XMFLOAT3& outHitNormal,
-		int& lightHitIndex);
+		int& mirrorHitIndex);
 
 	//扇風機に対するレイキャスト
 	bool Player::RaycastToFans(

@@ -43,5 +43,5 @@ void Mirror::Render(const RenderContext& rc, ModelRenderer* renderer)
 void Mirror::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer)
 {
 	//基底クラスのデバッグプリミティブ描画
-	Item::RenderDebugPrimitive(rc, renderer);
+	Item::RenderDebugPrimitiveSq(rc, renderer);
 }

@@ -249,6 +249,12 @@ void Character::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* ren
 	renderer->RenderCylinder(rc, position, radius, height, DirectX::XMFLOAT4(0, 0, 0, 1));
 }
 
+void Character::RenderDebugPrimitiveSq(const RenderContext& rc, ShapeRenderer* renderer)
+{
+	//衝突判定用のデバッグ直方体を描画
+	renderer->RenderBox(rc, position, angle, scale, DirectX::XMFLOAT4(0, 0, 0, 1));
+}
+
 //無敵時間更新
 void Character::UpdateInvincibleTimer(float elapsedTime)
 {

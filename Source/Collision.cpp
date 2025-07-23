@@ -122,6 +122,7 @@ bool Collision::IntersectRayVsCylinder(
     return false;
 }
 
+// レイと直方体の交差判定（交点と距離も出力）
 bool Collision::IntersectRayVsBox(
     const DirectX::XMFLOAT3& rayOrigin,
     const DirectX::XMFLOAT3& rayDirection,

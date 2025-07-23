@@ -299,6 +299,7 @@ void Player::PerformRaycastToLight()
 	XMFLOAT3 normal1;
 	int hitCloneIndex = -1;
 	int hitPanelIndex = -1;
+	int hitMirrorIndex = -1;
 
 	//ライトとRaycast
 	if (RaycastToLights(rayOrigin, rayDirection, rayHitPoint, normal1, hitCloneIndex))
@@ -308,7 +309,7 @@ void Player::PerformRaycastToLight()
 		rayHitPoint = hit1 ? rayHitPoint : rayHitPoint;
 	}
 	//ミラーとRaycast
-	else if (RaycastToMirrors(rayOrigin, rayDirection, rayHitPoint, normal1, hitCloneIndex))
+	else if (RaycastToMirrors(rayOrigin, rayDirection, rayHitPoint, normal1, hitMirrorIndex))
 	{
 		hit3 = true;
 		hasRayHit = hit3;
@@ -371,7 +372,7 @@ void Player::PerformRaycastToLight()
 	{
 		ItemManager& itemManager = ItemManager::Instance();
 
-		Item* item = itemManager.GetItem(hitCloneIndex);
+		Item* item = itemManager.GetItem(hitMirrorIndex);
 		Mirror* mirror = dynamic_cast<Mirror*>(item);
 	}
 	//扇風機に対しての処理
@@ -551,13 +552,14 @@ bool Player::RaycastToLights(
 
 	return anyHit;
 }
+
 //mirrorに対するレイキャストを共通化
 bool Player::RaycastToMirrors(
 	const DirectX::XMFLOAT3& rayOrigin,
 	const DirectX::XMFLOAT3& rayDir,
 	DirectX::XMFLOAT3& outHitPoint,
 	DirectX::XMFLOAT3& outHitNormal,
-	int& lightHitIndex)
+	int& mirrorHitIndex)
 {
 	using namespace DirectX;
 
@@ -575,24 +577,29 @@ bool Player::RaycastToMirrors(
 		if (!mirror) continue;
 
 		XMFLOAT3 mirrorPos = mirror->GetPosition();
-		float mirror_radius = mirror->GetRadius();
-		float mirror_height = mirror->GetHeight();
+		XMFLOAT3 mirrorSize = mirror->GetScale();
+		mirrorSize.x = 1.0f;
+		mirrorSize.y = 1.1f;
+		mirrorPos.y += mirrorSize.y / 2;
+
+		//float mirror_radius = mirror->GetRadius();
+		//float mirror_height = mirror->GetHeight();
 
 		XMFLOAT3 hitPoint;
 		float hitDistance;
 
-		if (Collision::IntersectRayVsCylinder(
+		if (Collision::IntersectRayVsBox(
 			rayOrigin, rayDir,
-			mirrorPos, mirror_radius, mirror_height,
-			hitPoint, hitDistance))
+			mirrorPos,mirrorSize,
+			 hitDistance,hitPoint))
 		{
 			if (hitDistance < closestDistance)
 			{
 				closestDistance = hitDistance;
 				outHitPoint = hitPoint;
-				outHitNormal = ComputeCylinderNormal(hitPoint, mirrorPos);
+				outHitNormal = ComputeBoxNormal(hitPoint, mirrorPos, mirrorSize, rayDir);
 				anyHit = true;
-				lightHitIndex = i;
+				mirrorHitIndex = i;
 			}
 		}
 	}
@@ -715,6 +722,41 @@ DirectX::XMFLOAT3 Player::ComputeCylinderNormal(
 	XMFLOAT3 out;
 	XMStoreFloat3(&out, n);
 	return out;
+}
+
+// Boxからの法線を出す (New function)
+DirectX::XMFLOAT3 Player::ComputeBoxNormal(
+	const DirectX::XMFLOAT3& hitPoint,
+	const DirectX::XMFLOAT3& boxCenter,
+	const DirectX::XMFLOAT3& boxSize,
+	const DirectX::XMFLOAT3& rayDirection)
+{
+	using namespace DirectX;
+
+	XMVECTOR hit = XMLoadFloat3(&hitPoint);
+	XMVECTOR center = XMLoadFloat3(&boxCenter);
+	XMVECTOR halfSize = XMVectorScale(XMLoadFloat3(&boxSize), 0.5f);
+
+	XMVECTOR boxMin = XMVectorSubtract(center, halfSize);
+	XMVECTOR boxMax = XMVectorAdd(center, halfSize);
+
+	XMFLOAT3 normal = { 0.0f, 0.0f, 0.0f };
+
+	// ヒットした点がボックスのどの面に最も近いかをチェックして法線を決定します。
+	// これは簡易的なアプローチであり、複雑なケースや回転したボックスではより洗練された処理が必要になる場合があります。
+	if (fabs(hitPoint.x - XMVectorGetX(boxMin)) < FLT_EPSILON) normal.x = -1.0f;
+	else if (fabs(hitPoint.x - XMVectorGetX(boxMax)) < FLT_EPSILON) normal.x = 1.0f;
+	else if (fabs(hitPoint.y - XMVectorGetY(boxMin)) < FLT_EPSILON) normal.y = -1.0f;
+	else if (fabs(hitPoint.y - XMVectorGetY(boxMax)) < FLT_EPSILON) normal.y = 1.0f;
+	else if (fabs(hitPoint.z - XMVectorGetZ(boxMin)) < FLT_EPSILON) normal.z = -1.0f;
+	else if (fabs(hitPoint.z - XMVectorGetZ(boxMax)) < FLT_EPSILON) normal.z = 1.0f;
+
+
+	// 法線を正規化
+	XMVECTOR nVec = XMVector3Normalize(XMLoadFloat3(&normal));
+	XMStoreFloat3(&normal, nVec);
+
+	return normal;
 }
 
 //描画処理
