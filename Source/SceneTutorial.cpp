@@ -98,6 +98,8 @@ void SceneTutorial::Initialize()
     itemManager.Register(door);
 
     Panel* panel = new Panel();
+    panel->itemType = EItemType::Panel;
+    panel->uniqueId = 0;
     panel->SetPosition({ -9,3,7 });
     panel->SetAngle({ 0,-2.2f,0 });
     itemManager.Register(panel);

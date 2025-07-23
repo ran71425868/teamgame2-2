@@ -5,6 +5,7 @@
 #include <set>
 
 #include "Door.h"
+#include "Panel.h"
 
 //エネミーマネージャー
 class ItemManager
@@ -32,6 +33,16 @@ public:
 			if (item->itemType == EItemType::Door)
 				if (item->uniqueId == uniqueId)
 					return static_cast<Door*>(item);
+		}
+		return nullptr;
+	}
+
+	Panel* GetPanel(int uniqueId) {
+
+		for (auto& item : items) {
+			if (item->itemType == EItemType::Panel)
+				if (item->uniqueId == uniqueId)
+					return static_cast<Panel*>(item);
 		}
 		return nullptr;
 	}
