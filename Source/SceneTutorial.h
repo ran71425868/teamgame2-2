@@ -33,4 +33,7 @@ private:
 	Stage1* stage = nullptr;
 	CameraController* cameraController = nullptr;
 
+	//ƒgƒOƒ‹ˆ——p
+	bool prevPKey = false;
+	bool currentPKey;
 };

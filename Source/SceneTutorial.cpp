@@ -21,9 +21,24 @@
 #include "Panel.h"
 using namespace DirectX;
 
+// ローカル変数（スプライトとポーズ状態）
+namespace {
+    bool isPaused = false;
+    Sprite* pauseTitleSprite = nullptr;
+    Sprite* backButtonSprite = nullptr;
+    Sprite* quitButtonSprite = nullptr;
+    Sprite* pauseBackSprite = nullptr;
+}
+
 // 初期化
 void SceneTutorial::Initialize()
 {
+
+    // スプライト初期化（画像読み込み）
+    pauseTitleSprite = new Sprite("Data/Sprite/pause gray.png");
+    backButtonSprite = new Sprite("Data/Sprite/pause2.png");
+    quitButtonSprite = new Sprite("Data/Sprite/pause5.png");
+    pauseBackSprite = new Sprite("Data/Sprite/pause back.png");
 
     // ステージ初期化
     stage = new Stage1();
@@ -126,11 +141,67 @@ void SceneTutorial::Finalize()
 
     PropManager::Instance().Clear();
 
+    // スプライト削除
+    delete pauseTitleSprite;
+    delete backButtonSprite;
+    delete quitButtonSprite;
+    delete pauseBackSprite;
+    pauseTitleSprite = nullptr;
+    backButtonSprite = nullptr;
+    quitButtonSprite = nullptr;
+    pauseBackSprite = nullptr;
 }
 
 // 更新処理
 void SceneTutorial::Update(float elapsedTime)
 {
+    Input& input = Input::Instance();
+
+    // Pキーでポーズ切り替え
+    currentPKey = GetKeyState('P') & 0x8000;
+    if (currentPKey && !prevPKey) {
+        isPaused = !isPaused;
+
+        // ポーズ時に強制的にカーソルを表示
+        CameraController* controller = cameraController;
+        if (controller) {
+            controller->SetCursorVisibility(isPaused);
+        }
+    }
+    prevPKey = currentPKey;
+    // ポーズ中のマウス入力処理
+    if (isPaused) {
+        if (input.GetMouseButtonDown(0)) {
+            POINT mousePos = input.GetMousePosition();
+
+            RECT back = { 500, 300, 800, 340 };
+            RECT quit = { 500, 360, 800, 400 };
+
+            if (PtInRect(&back, mousePos)) {
+                isPaused = false;
+
+                // ポーズ解除時にカーソルを非表示
+                CameraController* controller = cameraController;
+                if (controller) {
+                    controller->SetCursorVisibility(false);
+                }
+            }
+            else if (PtInRect(&quit, mousePos)) {
+                isPaused = false;
+
+                // カーソル再表示（必要なら）
+                CameraController* controller = cameraController;
+                if (controller) {
+                    controller->SetCursorVisibility(true);
+                }
+
+                // タイトルへシーン遷移
+                SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
+            }
+        }
+        return; // ポーズ中は以降の処理スキップ
+    }
+
     // カメラターゲット追従
     DirectX::XMFLOAT3 target = Player::Instance().GetPosition();
     target.y += 0.5f;
@@ -180,6 +251,7 @@ void SceneTutorial::Render()
         PropManager::Instance().Render(rc, modelRenderer);
         
         Player::Instance().Render(rc, modelRenderer);
+        Player::Instance().RayRender(rc, shapeRenderer);
         ItemManager::Instance().Render(rc, modelRenderer);
         EffectManager::Instance().Render(rc.view, rc.projection);
     }
@@ -190,6 +262,13 @@ void SceneTutorial::Render()
         ItemManager::Instance().RenderDebugPrimitive(rc, shapeRenderer);
     }
 
+    // ポーズ中UI描画
+    if (isPaused) {
+        pauseBackSprite->Render(rc, 0, 0, 0, 1280, 720, 0, 0, 1280, 720, 0, 1, 1, 1, 1);
+        pauseTitleSprite->Render(rc, 470, 100, 0, 1280, 720, 0, 0, 1280, 720, 0, 1, 1, 1, 1);
+        backButtonSprite->Render(rc, 500, 300, 0, 1000, 500, 0, 0, 1280, 720, 0, 1, 1, 1, 1);
+        quitButtonSprite->Render(rc, 500, 360, 0, 1000, 500, 0, 0, 1280, 720, 0, 1, 1, 1, 1);
+    }
 }
 
 // GUI描画
