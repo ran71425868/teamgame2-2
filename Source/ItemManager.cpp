@@ -12,10 +12,6 @@ void ItemManager::Remove(Item* item)
 //更新処理
 void ItemManager::Update(float elapsedTime)
 {
-	for (Item* item : items)
-	{
-		item->Update(elapsedTime);
-	}
 
 	//破棄処理
 	//*enemiesの範囲for文中でerase()すると不具合が発生してしまうため、
@@ -39,6 +35,12 @@ void ItemManager::Update(float elapsedTime)
 	}
 	//破棄リストをクリア
 	removes.clear();
+
+	for (Item* item : items)
+	{
+		item->Update(elapsedTime);
+	}
+
 
 }
 

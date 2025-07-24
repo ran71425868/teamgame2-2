@@ -82,16 +82,16 @@ void SceneGame::Initialize()
     door->SetPosition({ 9,0,-4 });
     itemManager.Register(door);
 
+    //‰œ
     Panel* panel = new Panel();
-    panel->SetPosition({29,4,-10 });
-
+    //panel->SetPosition({29,4,-10 });
     panel->itemType = EItemType::Panel;
     panel->uniqueId = 1;
     panel->SetPosition({29,4,-8 });
-
     panel->SetAngle({ 0,-1.48,0});
     itemManager.Register(panel);
 
+    // ƒhƒA‚Ì‰¡
     Panel* panel2 = new Panel();
     panel2->itemType = EItemType::Panel;
     panel2->uniqueId = 2;
