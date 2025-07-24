@@ -87,12 +87,12 @@ void SceneGame::Initialize()
     //panel->SetPosition({29,4,-10 });
     panel->itemType = EItemType::Panel;
     panel->uniqueId = 1;
-<<<<<<< Updated upstream
+
     panel->SetPosition({29,4,-8 });
-=======
+
     panel->SetPosition({29,4,-11 });
 
->>>>>>> Stashed changes
+
     panel->SetAngle({ 0,-1.48,0});
     itemManager.Register(panel);
 

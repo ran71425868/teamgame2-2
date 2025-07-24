@@ -488,7 +488,7 @@ void Player::PerformRaycastToLight()
 				}
 				itemManager.Remove(panel1);
 			}
-<<<<<<< Updated upstream
+
 				
 		}
 
@@ -496,8 +496,7 @@ void Player::PerformRaycastToLight()
 
 		
 
-=======
->>>>>>> Stashed changes
+
 	}
 
 	
