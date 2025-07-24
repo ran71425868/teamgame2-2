@@ -87,7 +87,12 @@ void SceneGame::Initialize()
     //panel->SetPosition({29,4,-10 });
     panel->itemType = EItemType::Panel;
     panel->uniqueId = 1;
+<<<<<<< Updated upstream
     panel->SetPosition({29,4,-8 });
+=======
+    panel->SetPosition({29,4,-11 });
+
+>>>>>>> Stashed changes
     panel->SetAngle({ 0,-1.48,0});
     itemManager.Register(panel);
 
@@ -138,7 +143,8 @@ void SceneGame::Update(float elapsedTime)
     Input& input = Input::Instance();
 
     // Startボタンでポーズ切り替え
-    if (gamePad.GetButtonDown() & GamePad::BTN_UP) {
+    currentPKey = GetKeyState('P') & 0x8000;
+    if (currentPKey && !prevPKey) {
         isPaused = !isPaused;
 
         // ポーズ時に強制的にカーソルを表示
@@ -147,7 +153,7 @@ void SceneGame::Update(float elapsedTime)
             controller->SetCursorVisibility(isPaused);
         }
     }
-
+    prevPKey = currentPKey;
     // ポーズ中のマウス入力処理
     if (isPaused) {
         if (input.GetMouseButtonDown(0)) {

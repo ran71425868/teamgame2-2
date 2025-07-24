@@ -14,7 +14,11 @@
 #include "SceneLoading.h"
 #include "SceneResult.h"
 
-
+namespace {
+	ClearPanel* clearpanel = nullptr;
+	ClearPanel* clearpanel1 = nullptr;
+	ClearPanel* clearpanel2 = nullptr;
+}
 
 //èâä˙âª
 void Player::Initializa()
@@ -30,6 +34,10 @@ void Player::Initializa()
 
 	//ÉqÉbÉgSEÇÃì«Ç›çûÇ›
 	hitSE = Audio::Instance().LoadAudioSource("Data/Sound/Hit.wav");
+
+	clearpanel = new ClearPanel();
+	clearpanel1 = new ClearPanel();
+	clearpanel2 = new ClearPanel();
 }
 
 //èIóπâª
@@ -434,9 +442,7 @@ void Player::PerformRaycastToLight()
 
 		Item* item = itemManager.GetItem(hitPanelIndex);
 
-		ClearPanel* clearpanel = new ClearPanel();
-		ClearPanel* clearpanel1 = new ClearPanel();
-		ClearPanel* clearpanel2 = new ClearPanel();
+		
 
 		if (mouseBtnDownFlag & Mouse::BTN_LEFT&&panelcount<=0)
 		{
@@ -482,6 +488,7 @@ void Player::PerformRaycastToLight()
 				}
 				itemManager.Remove(panel1);
 			}
+<<<<<<< Updated upstream
 				
 		}
 
@@ -489,6 +496,8 @@ void Player::PerformRaycastToLight()
 
 		
 
+=======
+>>>>>>> Stashed changes
 	}
 
 	
@@ -630,10 +639,10 @@ bool Player::RaycastToMirrors(
 		XMFLOAT3 mirrorSize = mirror->GetScale();
 		mirrorSize.x = 1.0f;
 		mirrorSize.y = 1.1f;
+		mirrorSize.z = 0.01f;
 		mirrorPos.y += mirrorSize.y / 2;
 
-		//float mirror_radius = mirror->GetRadius();
-		//float mirror_height = mirror->GetHeight();
+
 
 		XMFLOAT3 hitPoint;
 		float hitDistance;
