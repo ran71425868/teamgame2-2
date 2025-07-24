@@ -30,7 +30,7 @@ void Player::Initializa()
 	windSE = Audio::Instance().LoadAudioSource("Data/Sound/592c2e49.wav");
 	DoorSE = Audio::Instance().LoadAudioSource("Data/Sound/2-a13ed491.wav");
 	WPSE = Audio::Instance().LoadAudioSource("Data/Sound/3-a13ed491.wav");
-	panelSE = Audio::Instance().LoadAudioSource("Data/Sound/4-a13ed491.wav");
+	panelSE = Audio::Instance().LoadAudioSource("Data/Sound/1-a13ed491.wav");
 
 	for (int i = 0; i < 5; ++i) {
 		clearpanels[i] = new ClearPanel();
@@ -375,6 +375,7 @@ void Player::PerformRaycastToLight()
 		if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
 		{
 			//“ü‚ê‘Ö‚¦
+			BTNSE->Play(false);
 			Player::Instance().SetPosition(lightPos);
 			light->SetPosition(playerPos);
 			WPSE->Play(false);
@@ -412,14 +413,24 @@ void Player::PerformRaycastToLight()
 		if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
 		{
 			ItemManager& itemManager = ItemManager::Instance();
+			BTNSE->Play(false);
 
+			windSE->Play(false);
+			windSE->SetVolume(0.5f);
 			Door* door = itemManager.GetDoor(0);
 			if (door != nullptr)
+			{
+				DoorSE->Play(false);
 				door->SetAngle({ 0,60,0 });
+
+			}
 
 			door = itemManager.GetDoor(1);
 			if (door != nullptr)
+			{
+				DoorSE->Play(false);
 				door->SetAngle({ 0,60,0 });
+			}
 		}
 #endif
 	}
@@ -449,15 +460,57 @@ void Player::PerformRaycastToLight()
 			Panel* panel = itemManager.GetPanel(0);
 			if (panel != nullptr)
 			{
+<<<<<<< Updated upstream
 				clearpanels[0]->SetPosition({ -9,3,7 });
 				clearpanels[0]->SetAngle({ 0,-2.2f,0 });
 				itemManager.Register(clearpanels[0]);
+=======
+				panelSE->Play(false);
+				clearpanel->SetPosition({ -9,3,7 });
+				clearpanel->SetAngle({ 0,-2.2f,0 });
+				itemManager.Register(clearpanel);
+>>>>>>> Stashed changes
 			}
 
 		}
 
+<<<<<<< Updated upstream
 		// stage1‰œ
 			if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount == 0)
+=======
+		//stage1‰œ
+		if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount == 0)
+		{
+			Panel* panel2 = dynamic_cast<Panel*>(item);
+
+			panelcount++;
+
+			BTNSE->Play(false);
+			BTNSE->SetVolume(0.1f);
+			panelSE->Play(false);
+			panelSE->SetVolume(2.0f);
+			clearpanel2->SetPosition(panel2->GetPosition());
+			clearpanel2->SetAngle(panel2->GetAngle());
+			itemManager.Register(clearpanel2);
+			itemManager.Remove(panel2);
+
+			
+
+		}
+		//stage1Žè‘O
+		else if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount == 1)
+		{
+			Panel* panel2 = dynamic_cast<Panel*>(item);
+			BTNSE->Play(false);
+			panelSE->Play(false);
+			panelcount++;
+			clearpanel1->SetPosition(panel2->GetPosition());
+			clearpanel1->SetAngle(panel2->GetAngle());
+			itemManager.Register(clearpanel1);
+			itemManager.Remove(panel2);
+
+			if (panelcount > 1)
+>>>>>>> Stashed changes
 			{
 				Panel* panel2 = dynamic_cast<Panel*>(item);
 
@@ -528,10 +581,21 @@ void Player::PerformRaycastToLight()
 		if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount1 == 0)
 		{
 			Panel* panel2 = dynamic_cast<Panel*>(item);
+<<<<<<< Updated upstream
 			panelcount1++;
 			clearpanels[3]->SetPosition(panel2->GetPosition());
 			clearpanels[3]->SetAngle(panel2->GetAngle());
 			itemManager.Register(clearpanels[3]);
+=======
+			BTNSE->Play(false);
+			BTNSE->SetVolume(0.1f);
+			panelSE->Play(false);
+			panelSE->SetVolume(2.0f);
+			panelcount1++;
+			clearpanel3->SetPosition(panel2->GetPosition());
+			clearpanel3->SetAngle(panel2->GetAngle());
+			itemManager.Register(clearpanel3);
+>>>>>>> Stashed changes
 			itemManager.Remove(panel2);
 
 		}
@@ -540,6 +604,7 @@ void Player::PerformRaycastToLight()
 		else if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount1 == 1)
 		{
 			Panel* panel2 = dynamic_cast<Panel*>(item);
+<<<<<<< Updated upstream
 			panelcount1++;
 			clearpanels[4]->SetPosition(panel2->GetPosition());
 			clearpanels[4]->SetAngle(panel2->GetAngle());
@@ -552,6 +617,22 @@ void Player::PerformRaycastToLight()
 				PanelReset();
 				SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
 			}
+=======
+			BTNSE->Play(false);
+			panelSE->Play(false);
+			panelcount1++;
+			clearpanel4->SetPosition(panel2->GetPosition());
+			clearpanel4->SetAngle(panel2->GetAngle());
+			itemManager.Register(clearpanel4);
+
+			itemManager.Remove(panel2);
+
+			if (panelcount > 1)
+			{
+				SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
+			}
+
+>>>>>>> Stashed changes
 		}
 
 
