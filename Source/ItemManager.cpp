@@ -33,6 +33,7 @@ void ItemManager::Update(float elapsedTime)
 		//’eŠÛ‚Ì”jŠüˆ—
 		delete item;
 	}
+
 	//”jŠüƒŠƒXƒg‚ğƒNƒŠƒA
 	removes.clear();
 
@@ -40,8 +41,6 @@ void ItemManager::Update(float elapsedTime)
 	{
 		item->Update(elapsedTime);
 	}
-
-
 }
 
 //•`‰æˆ—

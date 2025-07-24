@@ -98,7 +98,7 @@ void Player::ModelUpdateTransform()
 	auto prev_angle = angle;
 	scale = { 1, 1, 1 };
 	angle = { prev_angle.x, 0, prev_angle.z };
-	position = {0, 3, -3};
+	position = {0, 10, -4};
 	UpdateTransform();
 	local_transform = transform;
 
@@ -215,10 +215,6 @@ DirectX::XMFLOAT3 Player::Reflect(const DirectX::XMFLOAT3& incident, const Direc
 	return reflected;
 }
 
-
-//プレイヤーとエネミーの衝突処理
-
-
 //弾丸と敵の衝突処理
 //void Player::CollisionProjectilesVsEnemies()
 //{
@@ -288,14 +284,14 @@ DirectX::XMFLOAT3 Player::Reflect(const DirectX::XMFLOAT3& incident, const Direc
 //
 //}
 
- //レイキャスト処理 (追加)
+//レイキャスト処理 (追加)
 void Player::PerformRaycastToLight()
 {
 	using namespace DirectX;
 
 	// レイの始点をプレイヤー位置より少し上にする（例：1.5fだけ上に）
 	XMFLOAT3 rayOrigin = GetPosition();
-	rayOrigin.y += 0.3f;
+	rayOrigin.y += 0.2f;
 
 	// レイの方向はカメラの前方向を使う
 	XMFLOAT3 rayDirection = Camera::Instance().GetFront();
@@ -465,7 +461,6 @@ void Player::PerformRaycastToLight()
 				clearpanels[0]->SetAngle({ 0,-2.2f,0 });
 				itemManager.Register(clearpanels[0]);
 
-
 			}
 
 		}
@@ -481,9 +476,9 @@ void Player::PerformRaycastToLight()
 			BTNSE->SetVolume(0.1f);
 			panelSE->Play(false);
 			panelSE->SetVolume(2.0f);
-			clearpanels[1]->SetPosition(panel2->GetPosition());
-			clearpanels[1]->SetAngle(panel2->GetAngle());
-			itemManager.Register(clearpanels[1]);
+			clearpanels[2]->SetPosition(panel2->GetPosition());
+			clearpanels[2]->SetAngle(panel2->GetAngle());
+			itemManager.Register(clearpanels[2]);
 			itemManager.Remove(panel2);
 		}
 		//stage1手前
@@ -493,23 +488,15 @@ void Player::PerformRaycastToLight()
 			BTNSE->Play(false);
 			panelSE->Play(false);
 			panelcount++;
-			clearpanels[2]->SetPosition(panel2->GetPosition());
-			clearpanels[2]->SetAngle(panel2->GetAngle());
-			itemManager.Register(clearpanels[2]);
+			clearpanels[1]->SetPosition(panel2->GetPosition());
+			clearpanels[1]->SetAngle(panel2->GetAngle());
+			itemManager.Register(clearpanels[1]);
 			itemManager.Remove(panel2);
 
 			if (panelcount > 1)
-
 			{
-				Panel* panel2 = dynamic_cast<Panel*>(item);
-
-				panelcount++;
-
-				clearpanels[2]->SetPosition(panel2->GetPosition());
-				clearpanels[2]->SetAngle(panel2->GetAngle());
-				itemManager.Register(clearpanels[2]);
-				itemManager.Remove(panel2);
-
+				PanelReset();
+				SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
 			}
 			//stage1奥
 			//if (mouseBtnDownFlag && Mouse::BTN_LEFT&&panelcount==0)
@@ -547,49 +534,50 @@ void Player::PerformRaycastToLight()
 			//		
 			//}
 
+		}
 			//stage2奥
-			if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount1 == 0)
-			{
-				Panel* panel2 = dynamic_cast<Panel*>(item);
+		if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount1 == 0)
+		{
+			Panel* panel2 = dynamic_cast<Panel*>(item);
 
-				BTNSE->Play(false);
-				BTNSE->SetVolume(0.1f);
-				panelSE->Play(false);
-				panelSE->SetVolume(2.0f);
-				panelcount1++;
-				clearpanels[3]->SetPosition(panel2->GetPosition());
-				clearpanels[3]->SetAngle(panel2->GetAngle());
-				itemManager.Register(clearpanels[3]);
+			BTNSE->Play(false);
+			BTNSE->SetVolume(0.1f);
+			panelSE->Play(false);
+			panelSE->SetVolume(2.0f);
+			panelcount1++;
+			clearpanels[3]->SetPosition(panel2->GetPosition());
+			clearpanels[3]->SetAngle(panel2->GetAngle());
+			itemManager.Register(clearpanels[3]);
 
-				panelcount1++;
+			panelcount1++;
 
-				itemManager.Remove(panel2);
+			itemManager.Remove(panel2);
 
-			}
+		}
 
 			//stage2手前
-			else if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount1 == 1)
+		else if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount1 == 1)
+		{
+			Panel* panel2 = dynamic_cast<Panel*>(item);
+
+			BTNSE->Play(false);
+			panelSE->Play(false);
+			panelcount1++;
+			clearpanels[4]->SetPosition(panel2->GetPosition());
+			clearpanels[4]->SetAngle(panel2->GetAngle());
+			itemManager.Register(clearpanels[4]);
+
+			itemManager.Remove(panel2);
+
+			if (panelcount1 > 1)
 			{
-				Panel* panel2 = dynamic_cast<Panel*>(item);
-
-				BTNSE->Play(false);
-				panelSE->Play(false);
-				panelcount1++;
-				clearpanels[4]->SetPosition(panel2->GetPosition());
-				clearpanels[4]->SetAngle(panel2->GetAngle());
-				itemManager.Register(clearpanels[4]);
-
-				itemManager.Remove(panel2);
-
-				if (panelcount1 > 1)
-				{
-					PanelReset();
-					SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
-				}
-
+				PanelReset();
+				SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
 			}
 
 		}
+
+	}
 
 		// 2バウンド目（反射）
 		hit2 = false;
@@ -649,10 +637,7 @@ void Player::PerformRaycastToLight()
 
 		hasReflectHit = hit2;
 		reflectedHitPoint = hit2 ? hitPoint2 : hitPoint2;
-	}
 }
-
-
 
 //lightに対するレイキャストを共通化
 bool Player::RaycastToLights(
@@ -927,7 +912,7 @@ void Player::RayRender(const RenderContext& rc, ShapeRenderer* renderer)
 		using namespace DirectX;
 
 		XMFLOAT3 rayOrigin = GetPosition();
-		rayOrigin.y += 0.3f;
+		rayOrigin.y += 0.2f;
 
 		XMFLOAT3 rayDirection = Camera::Instance().GetFront();
 		XMVECTOR dirVec = XMLoadFloat3(&rayDirection);

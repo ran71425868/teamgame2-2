@@ -154,6 +154,7 @@ void SceneTutorial::Finalize()
     quitButtonSprite = nullptr;
     pauseBackSprite = nullptr;
     setumeiSprite = nullptr;
+
 }
 
 // XVˆ—
