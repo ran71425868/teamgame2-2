@@ -32,6 +32,21 @@ CEREAL_CLASS_VERSION(ModelResource::Keyframe, 1)
 CEREAL_CLASS_VERSION(ModelResource::Animation, 1)
 CEREAL_CLASS_VERSION(ModelResource, 1)
 
+// デストラクタ
+ModelResource::~ModelResource()
+{
+	// マテリアルデータの解放 (shaderResourceView の解放を追加)
+	for (auto& material : materials) // m_materials ではなく materials ですね
+	{
+		// ID3D11ShaderResourceView の解放
+		if (material.shaderResourceView)
+		{
+			material.shaderResourceView->Release();
+			material.shaderResourceView = nullptr; // nullptr にする習慣をつける
+		}
+	}
+}
+
 // シリアライズ
 namespace DirectX
 {
