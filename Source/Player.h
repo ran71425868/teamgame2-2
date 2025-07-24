@@ -6,6 +6,7 @@
 #include "Effect.h"
 #include "System/AudioSource.h"
 #include <DirectXMath.h>
+#include "ClearPanel.h"
 
 //ƒvƒŒƒC‚â[
 class Player : public Character

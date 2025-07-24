@@ -9,7 +9,6 @@
 #include "Light.h"
 #include "Mirror.h"
 #include "Door.h"
-#include "ClearPanel.h"
 #include "SceneManager.h"
 #include "SceneLoading.h"
 #include "SceneResult.h"
