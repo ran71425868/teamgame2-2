@@ -87,6 +87,9 @@ private:
 	bool hitFan;
 	bool hit_panel;
 
+
+	bool prevMouseBtnState = false;
+
 	ProjectileManager projectileManager;//íeä€ä«óù
 
 	Effect* hitEffect = nullptr;

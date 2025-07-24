@@ -17,6 +17,7 @@
 #include "Fan.h"
 #include "Door.h"
 #include "Panel.h"
+#include "Tana.h"
 #include "System/Sprite.h"
 #include <WICTextureLoader.h> // DirectXTK‚Ì‰æ‘œ“Ç‚İ‚İ
 #include <wrl/client.h>
