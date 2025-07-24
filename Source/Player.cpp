@@ -37,7 +37,11 @@ void Player::Initializa()
 	hitEffect = new Effect("Data/Effect/Hit.efk");
 
 	//ƒqƒbƒgSE‚Ì“Ç‚Ýž‚Ý
-	hitSE = Audio::Instance().LoadAudioSource("Data/Sound/Hit.wav");
+	BTNSE = Audio::Instance().LoadAudioSource("Data/Sound/4-a13ed491.wav");
+	windSE = Audio::Instance().LoadAudioSource("Data/Sound/592c2e49.wav");
+	DoorSE = Audio::Instance().LoadAudioSource("Data/Sound/2-a13ed491.wav");
+	WPSE = Audio::Instance().LoadAudioSource("Data/Sound/3-a13ed491.wav");
+	panelSE = Audio::Instance().LoadAudioSource("Data/Sound/4-a13ed491.wav");
 
 	clearpanel = new ClearPanel();
 	clearpanel1 = new ClearPanel();
@@ -49,7 +53,11 @@ void Player::Initializa()
 //I—¹‰»
 void Player::Finalize() 
 {
-	delete hitSE;
+	delete BTNSE;
+	delete windSE;
+	delete DoorSE;
+	delete WPSE;
+	delete panelSE;
 
 	delete model;
 
@@ -383,6 +391,7 @@ void Player::PerformRaycastToLight()
 			//“ü‚ê‘Ö‚¦
 			Player::Instance().SetPosition(lightPos);
 			light->SetPosition(playerPos);
+			WPSE->Play(false);
 
 		}
 

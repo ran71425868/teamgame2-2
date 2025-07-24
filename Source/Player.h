@@ -98,7 +98,11 @@ private:
 
 	Effect* hitEffect = nullptr;
 
-	AudioSource* hitSE = nullptr;
+	AudioSource* BTNSE = nullptr;
+	AudioSource* WPSE = nullptr;
+	AudioSource* DoorSE = nullptr;
+	AudioSource* panelSE = nullptr;
+	AudioSource* windSE = nullptr;
 
 	// レイキャスト結果を保持するメンバ変数 (追加)
 	bool hasRayHit = false;
