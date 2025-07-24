@@ -287,9 +287,9 @@ void SceneGame2::Render()
     }
 
     // デバッグ描画
-    {
+    /*{
         Player::Instance().RenderDebugPrimitive(rc, shapeRenderer);
-    }
+    }*/
 
     // ポーズ中UI描画
     if (isPaused) {
@@ -303,5 +303,5 @@ void SceneGame2::Render()
 // GUI描画
 void SceneGame2::DrawGUI()
 {
-    Player::Instance().DrawDebugGUI();
+    /*Player::Instance().DrawDebugGUI();*/
 }

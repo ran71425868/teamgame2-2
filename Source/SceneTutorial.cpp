@@ -28,6 +28,7 @@ namespace {
     Sprite* backButtonSprite = nullptr;
     Sprite* quitButtonSprite = nullptr;
     Sprite* pauseBackSprite = nullptr;
+    Sprite* setumeiSprite = nullptr;
 }
 
 // 初期化
@@ -39,6 +40,7 @@ void SceneTutorial::Initialize()
     backButtonSprite = new Sprite("Data/Sprite/pause2.png");
     quitButtonSprite = new Sprite("Data/Sprite/pause5.png");
     pauseBackSprite = new Sprite("Data/Sprite/pause back.png");
+    setumeiSprite = new Sprite("Data/Sprite/setumei.png");
 
     // ステージ初期化
     stage = new Stage1();
@@ -54,7 +56,7 @@ void SceneTutorial::Initialize()
     PropManager::Instance().Register(prop2);
 
     Prop* prop3 = new Prop();
-    prop3->SetPosition({ 0,1,-2 });
+    prop3->SetPosition({ 6,1,2 });
     PropManager::Instance().Register(prop3);
 
     Prop* prop4 = new Prop();
@@ -146,10 +148,12 @@ void SceneTutorial::Finalize()
     delete backButtonSprite;
     delete quitButtonSprite;
     delete pauseBackSprite;
+    delete setumeiSprite;
     pauseTitleSprite = nullptr;
     backButtonSprite = nullptr;
     quitButtonSprite = nullptr;
     pauseBackSprite = nullptr;
+    setumeiSprite = nullptr;
 }
 
 // 更新処理
@@ -257,9 +261,14 @@ void SceneTutorial::Render()
     }
 
     // デバッグ描画
-    {
+   /* {
         Player::Instance().RenderDebugPrimitive(rc, shapeRenderer);
         ItemManager::Instance().RenderDebugPrimitive(rc, shapeRenderer);
+    }*/
+
+    // UI描画
+    {
+        setumeiSprite->Render(rc, 0, 0, 0, 400, 400, 0, 0, 400, 400, 0, 1, 1, 1, 1);
     }
 
     // ポーズ中UI描画
@@ -274,5 +283,5 @@ void SceneTutorial::Render()
 // GUI描画
 void SceneTutorial::DrawGUI()
 {
-    Player::Instance().DrawDebugGUI();
+    /*Player::Instance().DrawDebugGUI();*/
 }

@@ -19,6 +19,8 @@ namespace {
 	ClearPanel* clearpanel = nullptr;
 	ClearPanel* clearpanel1 = nullptr;
 	ClearPanel* clearpanel2 = nullptr;
+	ClearPanel* clearpanel3 = nullptr;
+	ClearPanel* clearpanel4 = nullptr;
 }
 
 
@@ -40,6 +42,8 @@ void Player::Initializa()
 	clearpanel = new ClearPanel();
 	clearpanel1 = new ClearPanel();
 	clearpanel2 = new ClearPanel();
+	clearpanel3 = new ClearPanel();
+	clearpanel4 = new ClearPanel();
 }
 
 //終了化
@@ -52,6 +56,12 @@ void Player::Finalize()
 	delete model1;
 
 	delete hitEffect;
+
+	delete clearpanel;
+	delete clearpanel1;
+	delete clearpanel2;
+	delete clearpanel3;
+	delete clearpanel4;
 
 	panelcount = 0;
 	panelcount1 = 0;
@@ -212,6 +222,78 @@ DirectX::XMFLOAT3 Player::Reflect(const DirectX::XMFLOAT3& incident, const Direc
 }
 
 
+//プレイヤーとエネミーの衝突処理
+
+
+//弾丸と敵の衝突処理
+//void Player::CollisionProjectilesVsEnemies()
+//{
+//	EnemyManager& enemyManager = EnemyManager::Instance();
+//
+//	//全ての弾丸と全ての敵を総当たりで衝突処理
+//	int projectileCount = projectileManager.GetProjectileCount();
+//	int enemyCount = enemyManager.GetEnemyCount();
+//	for (int i = 0; i < projectileCount; ++i)
+//	{
+//		Projectile* projectile = projectileManager.GetProjectile(i);
+//
+//		for (int j = 0; j < enemyCount; ++j)
+//		{
+//			Enemy* enemy = enemyManager.GetEnemy(j);
+//
+//			//衝突処理
+//			DirectX::XMFLOAT3 outPosition;
+//			if (Collision::IntersectSphereVsCylinder(
+//				projectile->GetPosition(),
+//				projectile->GetRadius(),
+//				enemy->GetPosition(),
+//				enemy->GetRadius(),
+//				enemy->GetHeight(),
+//				outPosition))
+//			{
+//				//ダメージを与える
+//				if (enemy->ApplyDamage(1, 0.5f))
+//				{
+//					//吹き飛ばす
+//					{
+//						DirectX::XMFLOAT3 impulse;
+//						const float power = 10.0f;
+//						const DirectX::XMFLOAT3& e = enemy->GetPosition();
+//						const DirectX::XMFLOAT3& p = projectile->GetPosition();
+//						float vx = e.x - p.x;
+//						float vz = e.z - p.z;
+//						float lengthXZ = sqrtf(vx * vx + vz * vz);
+//						vx /= lengthXZ;
+//						vz /= lengthXZ;
+//
+//						impulse.x = vx * power;
+//						impulse.y = power * 0.5f;
+//						impulse.z = vz * power;
+//
+//						enemy->AddImpulse(impulse);
+//					}
+//
+//					//ヒットエフェクト
+//					{
+//						DirectX::XMFLOAT3 e = enemy->GetPosition();
+//						e.y += enemy->GetHeight() * 0.5f;
+//						hitEffect->Play(e);
+//					}
+//
+//					//ヒットSE再生
+//					{
+//						hitSE->Play(false);
+//					}
+//
+//					//弾丸破棄
+//					projectile->Destroy();
+//				}
+//			}
+//		}
+//	}
+//
+//}
+
  //レイキャスト処理 (追加)
 void Player::PerformRaycastToLight()
 {
@@ -219,7 +301,7 @@ void Player::PerformRaycastToLight()
 
 	// レイの始点をプレイヤー位置より少し上にする（例：1.5fだけ上に）
 	XMFLOAT3 rayOrigin = GetPosition();
-	rayOrigin.y += 0.2f;
+	rayOrigin.y += 0.3f;
 
 	// レイの方向はカメラの前方向を使う
 	XMFLOAT3 rayDirection = Camera::Instance().GetFront();
@@ -391,7 +473,6 @@ void Player::PerformRaycastToLight()
 			itemManager.Register(clearpanel2);
 			itemManager.Remove(panel2);
 
-
 		}
 		//stage1手前
 		else if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount == 1)
@@ -410,6 +491,74 @@ void Player::PerformRaycastToLight()
 			}
 
 		}
+
+		//stage1奥
+		//if (mouseBtnDownFlag && Mouse::BTN_LEFT&&panelcount==0)
+		//{
+		//	
+		//	Panel* panel = itemManager.GetPanel(2);
+		//	if (panel != nullptr)
+		//	{
+		//		panelcount++;
+		//		clearpanel2->SetPosition({ 1,4,-2 });
+		//		clearpanel2->SetAngle({ 0,-90,0 });
+		//		itemManager.Register(clearpanel2);
+		//		itemManager.Remove(panel);
+		//		
+		//	}
+		//}
+		////stage1手前
+		//else if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount == 1)
+		//{
+		//	Panel* panel1 = itemManager.GetPanel(1);
+		//	if (panel1 != nullptr)
+		//	{
+		//		panelcount++;
+		//		clearpanel1->SetPosition({ 29,4,-8 });
+		//		clearpanel1->SetAngle({ 0,-1.48,0 });
+		//		itemManager.Register(clearpanel1);
+		//		itemManager.Remove(panel1);
+		//		
+		//		if (panelcount > 1)
+		//		{
+		//			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
+		//		}
+		//		
+		//	}
+		//		
+		//}
+
+		//stage2奥
+		//if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount1 == 0)
+		//{
+		//	Panel* panel2 = dynamic_cast<Panel*>(item);
+		//	panelcount1++;
+		//	clearpanel3->SetPosition(panel2->GetPosition());
+		//	clearpanel3->SetAngle(panel2->GetAngle());
+		//	itemManager.Register(clearpanel3);
+		//	itemManager.Remove(panel2);
+
+		//}
+
+		////stage2手前
+		//else if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount1 == 1)
+		//{
+		//	Panel* panel2 = dynamic_cast<Panel*>(item);
+		//	panelcount1++;
+		//	clearpanel1->SetPosition(panel2->GetPosition());
+		//	clearpanel1->SetAngle(panel2->GetAngle());
+		//	itemManager.Register(clearpanel1);
+
+		//	itemManager.Remove(panel2);
+
+		//	if (panelcount > 1)
+		//	{
+		//		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
+		//	}
+
+		//}
+
+
 	}
 	
 	// 2バウンド目（反射）
@@ -747,7 +896,7 @@ void Player::RayRender(const RenderContext& rc, ShapeRenderer* renderer)
 		using namespace DirectX;
 
 		XMFLOAT3 rayOrigin = GetPosition();
-		rayOrigin.y += 0.2f;
+		rayOrigin.y += 0.3f;
 
 		XMFLOAT3 rayDirection = Camera::Instance().GetFront();
 		XMVECTOR dirVec = XMLoadFloat3(&rayDirection);
@@ -786,6 +935,11 @@ void Player::RayRender(const RenderContext& rc, ShapeRenderer* renderer)
 	}
 
 	// レイが当たった場所にデバッグ円を描画 (追加)
+	if (hasRayHit)
+	{
+		// 衝突点に赤い円を描画
+		renderer->RenderSphere(rc, rayHitPoint, 0.2f, { 1.0f, 0.0f, 0.0f, 1.0f }); // 赤い円、半径0.2f
+	}
 	if (hasReflectHit)
 	{
 		// 衝突点に緑い円を描画
