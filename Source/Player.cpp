@@ -460,24 +460,16 @@ void Player::PerformRaycastToLight()
 			Panel* panel = itemManager.GetPanel(0);
 			if (panel != nullptr)
 			{
-<<<<<<< Updated upstream
+				panelSE->Play(false);
 				clearpanels[0]->SetPosition({ -9,3,7 });
 				clearpanels[0]->SetAngle({ 0,-2.2f,0 });
 				itemManager.Register(clearpanels[0]);
-=======
-				panelSE->Play(false);
-				clearpanel->SetPosition({ -9,3,7 });
-				clearpanel->SetAngle({ 0,-2.2f,0 });
-				itemManager.Register(clearpanel);
->>>>>>> Stashed changes
+
+
 			}
 
 		}
 
-<<<<<<< Updated upstream
-		// stage1奥
-			if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount == 0)
-=======
 		//stage1奥
 		if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount == 0)
 		{
@@ -489,13 +481,10 @@ void Player::PerformRaycastToLight()
 			BTNSE->SetVolume(0.1f);
 			panelSE->Play(false);
 			panelSE->SetVolume(2.0f);
-			clearpanel2->SetPosition(panel2->GetPosition());
-			clearpanel2->SetAngle(panel2->GetAngle());
-			itemManager.Register(clearpanel2);
+			clearpanels[1]->SetPosition(panel2->GetPosition());
+			clearpanels[1]->SetAngle(panel2->GetAngle());
+			itemManager.Register(clearpanels[1]);
 			itemManager.Remove(panel2);
-
-			
-
 		}
 		//stage1手前
 		else if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount == 1)
@@ -504,13 +493,13 @@ void Player::PerformRaycastToLight()
 			BTNSE->Play(false);
 			panelSE->Play(false);
 			panelcount++;
-			clearpanel1->SetPosition(panel2->GetPosition());
-			clearpanel1->SetAngle(panel2->GetAngle());
-			itemManager.Register(clearpanel1);
+			clearpanels[2]->SetPosition(panel2->GetPosition());
+			clearpanels[2]->SetAngle(panel2->GetAngle());
+			itemManager.Register(clearpanels[2]);
 			itemManager.Remove(panel2);
 
 			if (panelcount > 1)
->>>>>>> Stashed changes
+
 			{
 				Panel* panel2 = dynamic_cast<Panel*>(item);
 
@@ -522,18 +511,77 @@ void Player::PerformRaycastToLight()
 				itemManager.Remove(panel2);
 
 			}
-		//stage1手前
-			else if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount == 1)
+			//stage1奥
+			//if (mouseBtnDownFlag && Mouse::BTN_LEFT&&panelcount==0)
+			//{
+			//	
+			//	Panel* panel = itemManager.GetPanel(2);
+			//	if (panel != nullptr)
+			//	{
+			//		panelcount++;
+			//		clearpanel2->SetPosition({ 1,4,-2 });
+			//		clearpanel2->SetAngle({ 0,-90,0 });
+			//		itemManager.Register(clearpanel2);
+			//		itemManager.Remove(panel);
+			//		
+			//	}
+			//}
+			////stage1手前
+			//else if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount == 1)
+			//{
+			//	Panel* panel1 = itemManager.GetPanel(1);
+			//	if (panel1 != nullptr)
+			//	{
+			//		panelcount++;
+			//		clearpanel1->SetPosition({ 29,4,-8 });
+			//		clearpanel1->SetAngle({ 0,-1.48,0 });
+			//		itemManager.Register(clearpanel1);
+			//		itemManager.Remove(panel1);
+			//		
+			//		if (panelcount > 1)
+			//		{
+			//			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
+			//		}
+			//		
+			//	}
+			//		
+			//}
+
+			//stage2奥
+			if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount1 == 0)
 			{
 				Panel* panel2 = dynamic_cast<Panel*>(item);
 
-				panelcount++;
-				clearpanels[1]->SetPosition(panel2->GetPosition());
-				clearpanels[1]->SetAngle(panel2->GetAngle());
-				itemManager.Register(clearpanels[1]);
+				BTNSE->Play(false);
+				BTNSE->SetVolume(0.1f);
+				panelSE->Play(false);
+				panelSE->SetVolume(2.0f);
+				panelcount1++;
+				clearpanels[3]->SetPosition(panel2->GetPosition());
+				clearpanels[3]->SetAngle(panel2->GetAngle());
+				itemManager.Register(clearpanels[3]);
+
+				panelcount1++;
+
 				itemManager.Remove(panel2);
 
-				if (panelcount > 1)
+			}
+
+			//stage2手前
+			else if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount1 == 1)
+			{
+				Panel* panel2 = dynamic_cast<Panel*>(item);
+
+				BTNSE->Play(false);
+				panelSE->Play(false);
+				panelcount1++;
+				clearpanels[4]->SetPosition(panel2->GetPosition());
+				clearpanels[4]->SetAngle(panel2->GetAngle());
+				itemManager.Register(clearpanels[4]);
+
+				itemManager.Remove(panel2);
+
+				if (panelcount1 > 1)
 				{
 					PanelReset();
 					SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
@@ -541,161 +589,67 @@ void Player::PerformRaycastToLight()
 
 			}
 
-		//stage1奥
-		//if (mouseBtnDownFlag && Mouse::BTN_LEFT&&panelcount==0)
-		//{
-		//	
-		//	Panel* panel = itemManager.GetPanel(2);
-		//	if (panel != nullptr)
-		//	{
-		//		panelcount++;
-		//		clearpanel2->SetPosition({ 1,4,-2 });
-		//		clearpanel2->SetAngle({ 0,-90,0 });
-		//		itemManager.Register(clearpanel2);
-		//		itemManager.Remove(panel);
-		//		
-		//	}
-		//}
-		////stage1手前
-		//else if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount == 1)
-		//{
-		//	Panel* panel1 = itemManager.GetPanel(1);
-		//	if (panel1 != nullptr)
-		//	{
-		//		panelcount++;
-		//		clearpanel1->SetPosition({ 29,4,-8 });
-		//		clearpanel1->SetAngle({ 0,-1.48,0 });
-		//		itemManager.Register(clearpanel1);
-		//		itemManager.Remove(panel1);
-		//		
-		//		if (panelcount > 1)
-		//		{
-		//			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
-		//		}
-		//		
-		//	}
-		//		
-		//}
-
-		//stage2奥
-		if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount1 == 0)
-		{
-			Panel* panel2 = dynamic_cast<Panel*>(item);
-<<<<<<< Updated upstream
-			panelcount1++;
-			clearpanels[3]->SetPosition(panel2->GetPosition());
-			clearpanels[3]->SetAngle(panel2->GetAngle());
-			itemManager.Register(clearpanels[3]);
-=======
-			BTNSE->Play(false);
-			BTNSE->SetVolume(0.1f);
-			panelSE->Play(false);
-			panelSE->SetVolume(2.0f);
-			panelcount1++;
-			clearpanel3->SetPosition(panel2->GetPosition());
-			clearpanel3->SetAngle(panel2->GetAngle());
-			itemManager.Register(clearpanel3);
->>>>>>> Stashed changes
-			itemManager.Remove(panel2);
-
 		}
 
-		//stage2手前
-		else if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount1 == 1)
+		// 2バウンド目（反射）
+		hit2 = false;
+		hitPoint2;
+
+		//ライトに対しての処理
+		if (hit1)
 		{
-			Panel* panel2 = dynamic_cast<Panel*>(item);
-<<<<<<< Updated upstream
-			panelcount1++;
-			clearpanels[4]->SetPosition(panel2->GetPosition());
-			clearpanels[4]->SetAngle(panel2->GetAngle());
-			itemManager.Register(clearpanels[4]);
+			reflectedDir = Reflect(rayDirection, normal1);
+			XMFLOAT3 newOrigin = {
+				rayHitPoint.x + reflectedDir.x * 0.01f,
+				rayHitPoint.y + reflectedDir.y * 0.01f,
+				rayHitPoint.z + reflectedDir.z * 0.01f,
+			};
 
-			itemManager.Remove(panel2);
-
-			if (panelcount1 > 1)
+			XMFLOAT3 dummyNormal;
+			if (RaycastToLights(newOrigin, reflectedDir, hitPoint2, dummyNormal, hitCloneIndex))
 			{
-				PanelReset();
-				SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
-			}
-=======
-			BTNSE->Play(false);
-			panelSE->Play(false);
-			panelcount1++;
-			clearpanel4->SetPosition(panel2->GetPosition());
-			clearpanel4->SetAngle(panel2->GetAngle());
-			itemManager.Register(clearpanel4);
-
-			itemManager.Remove(panel2);
-
-			if (panelcount > 1)
-			{
-				SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
-			}
-
->>>>>>> Stashed changes
-		}
-
-
-	}
-	
-	// 2バウンド目（反射）
-	hit2 = false;
-	hitPoint2;
-
-	//ライトに対しての処理
-	if (hit1)
-	{
-		reflectedDir = Reflect(rayDirection, normal1);
-		XMFLOAT3 newOrigin = {
-			rayHitPoint.x + reflectedDir.x * 0.01f,
-			rayHitPoint.y + reflectedDir.y * 0.01f,
-			rayHitPoint.z + reflectedDir.z * 0.01f,
-		};
-
-		XMFLOAT3 dummyNormal;
-		if (RaycastToLights(newOrigin, reflectedDir, hitPoint2, dummyNormal, hitCloneIndex))
-		{
-			hit2 = true;
-		}
-	}
-	//ミラーに対しての処理
-	else if (hit3)
-	{
-		reflectedDir = Reflect(rayDirection, normal1);
-		XMFLOAT3 newOrigin = {
-			rayHitPoint.x + reflectedDir.x * 0.01f,
-			rayHitPoint.y + reflectedDir.y * 0.01f,
-			rayHitPoint.z + reflectedDir.z * 0.01f,
-		};
-
-		XMFLOAT3 dummyNormal;
-		if (RaycastToLights(newOrigin, reflectedDir, hitPoint2, dummyNormal, hitCloneIndex))
-		{
-			hit2 = true;
-			Mouse& mouseCursor = Input::Instance().GetMouse();
-
-			//playerの位置を保存
-			XMFLOAT3 playerPos = Player::Instance().GetPosition();
-
-			ItemManager& itemManager = ItemManager::Instance();
-
-			Item* item = itemManager.GetItem(hitCloneIndex);
-			Light* light = dynamic_cast<Light*>(item);
-			//lightの位置を保存
-			XMFLOAT3 lightPos = light->GetPosition();
-
-			if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
-			{
-				//入れ替え
-				Player::Instance().SetPosition(lightPos);
-				light->SetPosition(playerPos);
-
+				hit2 = true;
 			}
 		}
-	}
+		//ミラーに対しての処理
+		else if (hit3)
+		{
+			reflectedDir = Reflect(rayDirection, normal1);
+			XMFLOAT3 newOrigin = {
+				rayHitPoint.x + reflectedDir.x * 0.01f,
+				rayHitPoint.y + reflectedDir.y * 0.01f,
+				rayHitPoint.z + reflectedDir.z * 0.01f,
+			};
 
-	hasReflectHit = hit2;
-	reflectedHitPoint = hit2 ? hitPoint2 : hitPoint2;
+			XMFLOAT3 dummyNormal;
+			if (RaycastToLights(newOrigin, reflectedDir, hitPoint2, dummyNormal, hitCloneIndex))
+			{
+				hit2 = true;
+				Mouse& mouseCursor = Input::Instance().GetMouse();
+
+				//playerの位置を保存
+				XMFLOAT3 playerPos = Player::Instance().GetPosition();
+
+				ItemManager& itemManager = ItemManager::Instance();
+
+				Item* item = itemManager.GetItem(hitCloneIndex);
+				Light* light = dynamic_cast<Light*>(item);
+				//lightの位置を保存
+				XMFLOAT3 lightPos = light->GetPosition();
+
+				if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
+				{
+					//入れ替え
+					Player::Instance().SetPosition(lightPos);
+					light->SetPosition(playerPos);
+
+				}
+			}
+		}
+
+		hasReflectHit = hit2;
+		reflectedHitPoint = hit2 ? hitPoint2 : hitPoint2;
+	}
 }
 
 
