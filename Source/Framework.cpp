@@ -1,7 +1,6 @@
 #include <memory>
 #include <sstream>
 #include <imgui.h>
-
 #include "Framework.h"
 #include "System/Input.h"
 #include "System/Graphics.h"
