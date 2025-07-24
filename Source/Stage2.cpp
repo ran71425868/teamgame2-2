@@ -5,7 +5,7 @@ Stage2::Stage2()
 {
 	//ステージモデルを読み込み
 
-	model = new Model("Data/Model/Stage/Stage3.mdl");
+	model = new Model("Data/Model/Stage/Stage2.mdl");
 }
 
 Stage2::~Stage2()

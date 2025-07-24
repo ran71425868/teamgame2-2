@@ -210,6 +210,9 @@
     <ClInclude Include="Source\Tana.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Table.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui-docking\imgui.cpp">
@@ -381,6 +384,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Tana.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Table.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

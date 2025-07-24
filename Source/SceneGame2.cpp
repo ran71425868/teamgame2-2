@@ -14,6 +14,7 @@
 #include "ItemManager.h"
 #include "Light.h"
 #include "Mirror.h"
+#include "Table.h"
 #include "Fan.h"
 #include "Door.h"
 #include "Panel.h"
@@ -42,15 +43,21 @@ void SceneGame2::Initialize()
     pauseBackSprite = new Sprite("Data/Sprite/pause back.png");
 
     Prop* prop5 = new Prop();
-    prop5->SetPosition({ -15,2,-3 });
+    prop5->SetPosition({ -10,2,20});
     PropManager::Instance().Register(prop5);
+    Prop* prop = new Prop();
+    prop->SetPosition({ -10, 0.5, -1 });
+    prop->SetScale({ 0.25, 0.25, 0.25 });
+    PropManager::Instance().Register(prop);
 
     // ステージ初期化
     stage = new Stage2();
 
     // プレイヤー初期化
     Player::Instance().Initializa();
-    Player::Instance().SetPosition({ -17,4.0f,0 });
+    Player::Instance().SetPosition({ -10,4,20 });
+    //Player::Instance().SetPosition({ 25,4,-8 });
+    
 
     // カメラ初期設定
     Graphics& graphics = Graphics::Instance();
@@ -72,8 +79,35 @@ void SceneGame2::Initialize()
     ItemManager& itemManager = ItemManager::Instance();
 
 
+    Light* light = new Light();
+    light->SetPosition(DirectX::XMFLOAT3(25, 4.5f, 5));
+    itemManager.Register(light);
+    Light* light1 = new Light();
+    light1->SetPosition(DirectX::XMFLOAT3(-10, 0.5, -7));
+    itemManager.Register(light1);
+    Light* light2 = new Light();
+    light2->SetPosition(DirectX::XMFLOAT3(2, 0.3, -1));
+    itemManager.Register(light2);
+
+    Tana* tana = new Tana();
+    tana->SetPosition(DirectX::XMFLOAT3(5, 0, -1));
+    tana->SetAngle({ 0,-1.48,0 });
+    itemManager.Register(tana);
+    Tana* tana1 = new Tana();
+    tana1->SetPosition(DirectX::XMFLOAT3(0, 0, -1));
+    tana1->SetAngle({ 0,-1.48,0 });
+    itemManager.Register(tana1);
+    Tana* tana2 = new Tana();
+    tana2->SetPosition(DirectX::XMFLOAT3(-5, 0, -1));
+    tana2->SetAngle({ 0,-1.48,0 });
+    itemManager.Register(tana2);
+    Tana* tana3 = new Tana();
+    tana3->SetPosition(DirectX::XMFLOAT3(-10, 0, -1));
+    tana3->SetAngle({ 0,-1.48,0 });
+    itemManager.Register(tana3);
+
     Fan* fan = new Fan();
-    fan->SetPosition({ 0,0,-7 });
+    fan->SetPosition({ -1,0,-5 });
     fan->SetAngle({ 0,-80,0 });
     itemManager.Register(fan);
 
@@ -83,15 +117,30 @@ void SceneGame2::Initialize()
     door->SetPosition({ 9,0,-4 });
     itemManager.Register(door);
 
-    Panel* panel = new Panel();
-    panel->SetPosition({ 29,4,-10 });
-    panel->SetAngle({ 0,-1.48,0 });
-    itemManager.Register(panel);
+    
+
+    Panel* panel1 = new Panel();
+    //panel->SetPosition({29,4,-10 });
+    panel1->itemType = EItemType::Panel;
+    panel1->uniqueId = 1;
+    panel1->SetPosition({ 29,4,-8 });
+    panel1->SetAngle({ 0,-1.48,0 });
+    itemManager.Register(panel1);
 
     Panel* panel2 = new Panel();
-    panel2->SetPosition({ 1,4,-2 });
-    panel2->SetAngle({ 0,-90,0 });
+    panel2->SetPosition({ -8,1,20 });
+    panel2->SetAngle({ 0,1.0f,0 });
     itemManager.Register(panel2);
+
+    Table* table = new Table();
+    table->SetPosition({ 5,1,20 });
+    itemManager.Register(table);
+
+
+    Mirror* mirror1 = new Mirror();
+    mirror1->SetPosition({ -3, 0, -10 });
+    mirror1->SetAngle({ 0,-2,0 });
+    itemManager.Register(mirror1);
 }
 
 // 終了化
@@ -190,7 +239,7 @@ void SceneGame2::Update(float elapsedTime)
     Player::Instance().Update(elapsedTime);
     ItemManager::Instance().Update(elapsedTime);
     EffectManager::Instance().Update(elapsedTime);
-
+    PropManager::Instance().Update(elapsedTime);
 
     if (gamePad.GetButtonDown() & GamePad::BTN_A) {
         SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
@@ -218,6 +267,7 @@ void SceneGame2::Render()
     // 3D描画
     {
         stage->Render(rc, modelRenderer);
+        PropManager::Instance().Render(rc, modelRenderer);
         Player::Instance().Render(rc, modelRenderer);
         ItemManager::Instance().Render(rc, modelRenderer);
         EffectManager::Instance().Render(rc.view, rc.projection);
