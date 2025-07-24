@@ -139,9 +139,10 @@ void SceneGame2::Initialize()
     Panel* panel2 = new Panel(); 
     panel2->itemType = EItemType::Panel;
     panel2->uniqueId = 4;
-    panel2->SetPosition({ 1,4,-2 });
-    panel2->SetAngle({ 0,-90,0 });
-
+    //panel2->SetPosition({ 1,4,-2 });
+    //panel2->SetAngle({ 0,-90,0 });
+    panel2->SetPosition({ -8,1,20 });
+    panel2->SetAngle({ 0,1.0f,0 });
     itemManager.Register(panel2);
 
     Table* table = new Table();
@@ -183,7 +184,6 @@ void SceneGame2::Finalize()
     pauseBackSprite = nullptr;
 
     PropManager::Instance().Clear();
-    ItemManager::Instance().Clear();
 }
 
 // XVˆ—
@@ -281,6 +281,7 @@ void SceneGame2::Render()
         stage->Render(rc, modelRenderer);
         PropManager::Instance().Render(rc, modelRenderer);
         Player::Instance().Render(rc, modelRenderer);
+        Player::Instance().RayRender(rc, shapeRenderer);
         ItemManager::Instance().Render(rc, modelRenderer);
         EffectManager::Instance().Render(rc.view, rc.projection);
     }

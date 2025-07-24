@@ -28,6 +28,7 @@ namespace {
     bool isPaused = false;
     Sprite* pauseTitleSprite = nullptr;
     Sprite* backButtonSprite = nullptr;
+    Sprite* backSelectSprite = nullptr;
     Sprite* quitButtonSprite = nullptr;
     Sprite* pauseBackSprite = nullptr;
 }
@@ -38,6 +39,7 @@ void SceneGame::Initialize()
     // スプライト初期化（画像読み込み）
     pauseTitleSprite = new Sprite("Data/Sprite/pause gray.png");
     backButtonSprite = new Sprite("Data/Sprite/pause2.png");
+    backSelectSprite = new Sprite("Data/Sprite/pause3.png");
     quitButtonSprite = new Sprite("Data/Sprite/pause5.png");
     pauseBackSprite = new Sprite("Data/Sprite/pause back.png");
 
@@ -129,13 +131,15 @@ void SceneGame::Finalize()
     delete backButtonSprite;
     delete quitButtonSprite;
     delete pauseBackSprite;
+    delete backSelectSprite;
     pauseTitleSprite = nullptr;
     backButtonSprite = nullptr;
     quitButtonSprite = nullptr;
     pauseBackSprite = nullptr;
+    backSelectSprite = nullptr;
 
     PropManager::Instance().Clear();
-    ItemManager::Instance().Clear();
+
 }
 
 // 更新処理
@@ -144,7 +148,7 @@ void SceneGame::Update(float elapsedTime)
     GamePad& gamePad = Input::Instance().GetGamePad();
     Input& input = Input::Instance();
 
-    // Startボタンでポーズ切り替え
+    // Pキーでポーズ切り替え
     currentPKey = GetKeyState('P') & 0x8000;
     if (currentPKey && !prevPKey) {
         isPaused = !isPaused;
@@ -161,8 +165,9 @@ void SceneGame::Update(float elapsedTime)
         if (input.GetMouseButtonDown(0)) {
             POINT mousePos = input.GetMousePosition();
 
-            RECT back = { 500, 300, 800, 340 };
-            RECT quit = { 500, 360, 800, 400 };
+            RECT back =   { 500, 300, 800, 340 };
+            RECT select = { 500, 420, 800, 440 };
+            RECT quit =   { 500, 540, 800, 560 };
 
             if (PtInRect(&back, mousePos)) {
                 isPaused = false;
@@ -172,6 +177,18 @@ void SceneGame::Update(float elapsedTime)
                 if (controller) {
                     controller->SetCursorVisibility(false);
                 }
+            }
+            else if (PtInRect(&select, mousePos)) {
+                isPaused = false;
+
+                // カーソル再表示（必要なら）
+                CameraController* controller = cameraController;
+                if (controller) {
+                    controller->SetCursorVisibility(true);
+                }
+
+                // タイトルへシーン遷移
+                SceneManager::Instance().ChangeScene(new SceneLoading(new SceneSelect));
             }
             else if (PtInRect(&quit, mousePos)) {
                 isPaused = false;
@@ -233,6 +250,7 @@ void SceneGame::Render()
     {
         stage->Render(rc, modelRenderer);
         Player::Instance().Render(rc, modelRenderer);
+        Player::Instance().RayRender(rc, shapeRenderer);
         ItemManager::Instance().Render(rc, modelRenderer);
         EffectManager::Instance().Render(rc.view, rc.projection);
     }
@@ -247,7 +265,8 @@ void SceneGame::Render()
         pauseBackSprite->Render(rc, 0, 0, 0, 1280, 720, 0, 0, 1280, 720, 0, 1, 1, 1, 1);
         pauseTitleSprite->Render(rc, 470, 100, 0, 1280, 720, 0, 0, 1280, 720, 0, 1, 1, 1, 1);
         backButtonSprite->Render(rc, 500, 300, 0, 1000, 500, 0, 0, 1280, 720, 0, 1, 1, 1, 1);
-        quitButtonSprite->Render(rc, 500, 360, 0, 1000, 500, 0, 0, 1280, 720, 0, 1, 1, 1, 1);
+        backSelectSprite->Render(rc, 500, 420, 0, 800, 400, 0, 0, 1280, 720, 0, 1, 1, 1, 1);
+        quitButtonSprite->Render(rc, 500, 540, 0, 1000, 500, 0, 0, 1280, 720, 0, 1, 1, 1, 1);
     }
 }
 
