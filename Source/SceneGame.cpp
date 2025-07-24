@@ -17,6 +17,7 @@
 #include "Fan.h"
 #include "Door.h"
 #include "Panel.h"
+#include "ClearPanel.h"
 #include "System/Sprite.h"
 #include <WICTextureLoader.h> // DirectXTK‚Ì‰æ‘œ“Ç‚İ‚İ
 #include <wrl/client.h>
@@ -103,6 +104,7 @@ void SceneGame::Initialize()
     panel2->SetPosition({ 1,4,-2 });
     panel2->SetAngle({ 0,-90,0 });
     itemManager.Register(panel2);
+
 }
 
 // I—¹‰»

@@ -69,6 +69,7 @@ private:
 private:
 	Model* model = nullptr;
 	Model* model1 = nullptr;
+
 	float moveSpeed = 5.0f;
 	float turnSpeed = DirectX::XMConvertToRadians(720);
 	float jumpSpeed = 12.0f;
@@ -77,7 +78,7 @@ private:
 	int jumpLimit = 2;
 
 	int panelcount = 0;
-
+	int panelcount1 = 0;
 
 	DirectX::XMFLOAT3 hitPoint2;
 	DirectX::XMFLOAT3 reflectedDir;
