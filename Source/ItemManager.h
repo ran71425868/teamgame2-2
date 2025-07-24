@@ -60,9 +60,6 @@ public:
 	//エネミー登録
 	void Register(Item* item);
 
-	//エネミー全削除
-	void Clear();
-
 	//デバッグプリミティブ描画
 	void RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer);
 

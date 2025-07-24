@@ -59,17 +59,6 @@ void ItemManager::Register(Item* item)
 	items.emplace_back(item);
 }
 
-
-//弾丸全削除
-void ItemManager::Clear()
-{
-	for (Item* item : items)
-	{
-		delete item;
-	}
-	items.clear();
-}
-
 //デバッグプリミティブ描画
 void ItemManager::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer)
 {

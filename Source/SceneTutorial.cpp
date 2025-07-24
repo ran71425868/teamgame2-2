@@ -125,7 +125,6 @@ void SceneTutorial::Finalize()
     }
 
     PropManager::Instance().Clear();
-    ItemManager::Instance().Clear();
 
 }
 
