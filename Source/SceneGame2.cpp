@@ -281,6 +281,7 @@ void SceneGame2::Render()
         stage->Render(rc, modelRenderer);
         PropManager::Instance().Render(rc, modelRenderer);
         Player::Instance().Render(rc, modelRenderer);
+        Player::Instance().RayRender(rc, shapeRenderer);
         ItemManager::Instance().Render(rc, modelRenderer);
         EffectManager::Instance().Render(rc.view, rc.projection);
     }

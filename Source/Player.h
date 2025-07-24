@@ -37,6 +37,9 @@ public:
 	//描画処理
 	void Render(const RenderContext& rc, ModelRenderer* renderer);
 
+	//レイの描画処理
+	void RayRender(const RenderContext& rc, ShapeRenderer* renderer);
+
 	//デバッグプリミティブ描画
 	void RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer)override;
 

@@ -212,78 +212,6 @@ DirectX::XMFLOAT3 Player::Reflect(const DirectX::XMFLOAT3& incident, const Direc
 }
 
 
-//プレイヤーとエネミーの衝突処理
-
-
-//弾丸と敵の衝突処理
-//void Player::CollisionProjectilesVsEnemies()
-//{
-//	EnemyManager& enemyManager = EnemyManager::Instance();
-//
-//	//全ての弾丸と全ての敵を総当たりで衝突処理
-//	int projectileCount = projectileManager.GetProjectileCount();
-//	int enemyCount = enemyManager.GetEnemyCount();
-//	for (int i = 0; i < projectileCount; ++i)
-//	{
-//		Projectile* projectile = projectileManager.GetProjectile(i);
-//
-//		for (int j = 0; j < enemyCount; ++j)
-//		{
-//			Enemy* enemy = enemyManager.GetEnemy(j);
-//
-//			//衝突処理
-//			DirectX::XMFLOAT3 outPosition;
-//			if (Collision::IntersectSphereVsCylinder(
-//				projectile->GetPosition(),
-//				projectile->GetRadius(),
-//				enemy->GetPosition(),
-//				enemy->GetRadius(),
-//				enemy->GetHeight(),
-//				outPosition))
-//			{
-//				//ダメージを与える
-//				if (enemy->ApplyDamage(1, 0.5f))
-//				{
-//					//吹き飛ばす
-//					{
-//						DirectX::XMFLOAT3 impulse;
-//						const float power = 10.0f;
-//						const DirectX::XMFLOAT3& e = enemy->GetPosition();
-//						const DirectX::XMFLOAT3& p = projectile->GetPosition();
-//						float vx = e.x - p.x;
-//						float vz = e.z - p.z;
-//						float lengthXZ = sqrtf(vx * vx + vz * vz);
-//						vx /= lengthXZ;
-//						vz /= lengthXZ;
-//
-//						impulse.x = vx * power;
-//						impulse.y = power * 0.5f;
-//						impulse.z = vz * power;
-//
-//						enemy->AddImpulse(impulse);
-//					}
-//
-//					//ヒットエフェクト
-//					{
-//						DirectX::XMFLOAT3 e = enemy->GetPosition();
-//						e.y += enemy->GetHeight() * 0.5f;
-//						hitEffect->Play(e);
-//					}
-//
-//					//ヒットSE再生
-//					{
-//						hitSE->Play(false);
-//					}
-//
-//					//弾丸破棄
-//					projectile->Destroy();
-//				}
-//			}
-//		}
-//	}
-//
-//}
-
  //レイキャスト処理 (追加)
 void Player::PerformRaycastToLight()
 {
@@ -408,9 +336,6 @@ void Player::PerformRaycastToLight()
 		{
 			ItemManager& itemManager = ItemManager::Instance();
 
-			//Item* item = itemManager.GetItem(hitCloneIndex);
-			//Door* door = dynamic_cast<Door*>(item);
-
 			Door* door = itemManager.GetDoor(0);
 			if (door != nullptr)
 				door->SetAngle({ 0,60,0 });
@@ -485,74 +410,6 @@ void Player::PerformRaycastToLight()
 			}
 
 		}
-
-		//stage1奥
-		//if (mouseBtnDownFlag && Mouse::BTN_LEFT&&panelcount==0)
-		//{
-		//	
-		//	Panel* panel = itemManager.GetPanel(2);
-		//	if (panel != nullptr)
-		//	{
-		//		panelcount++;
-		//		clearpanel2->SetPosition({ 1,4,-2 });
-		//		clearpanel2->SetAngle({ 0,-90,0 });
-		//		itemManager.Register(clearpanel2);
-		//		itemManager.Remove(panel);
-		//		
-		//	}
-		//}
-		////stage1手前
-		//else if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount == 1)
-		//{
-		//	Panel* panel1 = itemManager.GetPanel(1);
-		//	if (panel1 != nullptr)
-		//	{
-		//		panelcount++;
-		//		clearpanel1->SetPosition({ 29,4,-8 });
-		//		clearpanel1->SetAngle({ 0,-1.48,0 });
-		//		itemManager.Register(clearpanel1);
-		//		itemManager.Remove(panel1);
-		//		
-		//		if (panelcount > 1)
-		//		{
-		//			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
-		//		}
-		//		
-		//	}
-		//		
-		//}
-
-		//stage2奥
-		//if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount1 == 0)
-		//{
-		//	Panel* panel2 = dynamic_cast<Panel*>(item);
-		//	panelcount1++;
-		//	clearpanel3->SetPosition(panel2->GetPosition());
-		//	clearpanel3->SetAngle(panel2->GetAngle());
-		//	itemManager.Register(clearpanel3);
-		//	itemManager.Remove(panel2);
-
-		//}
-
-		////stage2手前
-		//else if (mouseBtnDownFlag && Mouse::BTN_LEFT && panelcount1 == 1)
-		//{
-		//	Panel* panel2 = dynamic_cast<Panel*>(item);
-		//	panelcount1++;
-		//	clearpanel1->SetPosition(panel2->GetPosition());
-		//	clearpanel1->SetAngle(panel2->GetAngle());
-		//	itemManager.Register(clearpanel1);
-
-		//	itemManager.Remove(panel2);
-
-		//	if (panelcount > 1)
-		//	{
-		//		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
-		//	}
-
-		//}
-
-
 	}
 	
 	// 2バウンド目（反射）
@@ -882,15 +739,9 @@ void Player::Render(const RenderContext& rc, ModelRenderer* renderer)
 	projectileManager.Render(rc, renderer);
 }
 
-//デバッグプリミティブ描画
-void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer)
+//レイの描画処理
+void Player::RayRender(const RenderContext& rc, ShapeRenderer* renderer)
 {
-	//基底クラスの関数呼び出し
-	Character::RenderDebugPrimitive(rc, renderer);
-
-	//弾丸デバッグプリミティブ描画
-	projectileManager.RenderDebugPrimitive(rc, renderer);
-
 	// レイキャストの視覚化
 	{
 		using namespace DirectX;
@@ -913,30 +764,13 @@ void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* render
 		// プレイヤーからの1本目（白）
 		renderer->RenderLine(rc, rayOrigin, rayHitPoint, { 1.0f, 1.0f, 1.0f, 1.0f });
 
-		if (hit1)
-		{
-			// 反射レイ(2本目)（青など）
-			if (hasReflectHit)
-			{
-				renderer->RenderLine(rc, rayHitPoint, reflectedHitPoint, { 1.0f, 1.0f, 1.0f, 1.0f });
-			}
-			else
-			{
-				XMFLOAT3 reflectEnd = {
-					rayHitPoint.x + reflectedDir.x * 20.0f,
-					rayHitPoint.y + reflectedDir.y * 20.0f,
-					rayHitPoint.z + reflectedDir.z * 20.0f
-				};
-				renderer->RenderLine(rc, rayHitPoint, reflectEnd, { 1.0f, 1.0f, 1.0f, 1.0f });
-
-			}
-		}
+		
 		if (hit3)
 		{
 			// 反射レイ(2本目)（青など）
 			if (hasReflectHit)
 			{
-				renderer->RenderLine(rc, rayHitPoint, reflectedHitPoint, { 1.0f, 1.0f, 1.0f, 1.0f });
+				renderer->RenderLine(rc, rayHitPoint, reflectedHitPoint, { 1.0f, 1.0f, 0.0f, 1.0f });
 			}
 			else
 			{
@@ -952,16 +786,23 @@ void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* render
 	}
 
 	// レイが当たった場所にデバッグ円を描画 (追加)
-	if (hasRayHit)
-	{
-		// 衝突点に赤い円を描画
-		renderer->RenderSphere(rc, rayHitPoint, 0.2f, {1.0f, 0.0f, 0.0f, 1.0f}); // 赤い円、半径0.2f
-	}
 	if (hasReflectHit)
 	{
 		// 衝突点に緑い円を描画
 		renderer->RenderSphere(rc, reflectedHitPoint, 0.2f, { 1.0f, 1.0f, 0.0f, 1.0f });
 	}
+}
+
+//デバッグプリミティブ描画
+void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer)
+{
+	//基底クラスの関数呼び出し
+	Character::RenderDebugPrimitive(rc, renderer);
+
+	//弾丸デバッグプリミティブ描画
+	projectileManager.RenderDebugPrimitive(rc, renderer);
+
+	
 }
 
 //デバッグ用GUI描画
