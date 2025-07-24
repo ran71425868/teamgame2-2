@@ -140,7 +140,6 @@ void SceneTutorial::Finalize()
     }
 
     PropManager::Instance().Clear();
-    ItemManager::Instance().Clear();
 
     // スプライト削除
     delete pauseTitleSprite;

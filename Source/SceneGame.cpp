@@ -139,7 +139,7 @@ void SceneGame::Finalize()
     backSelectSprite = nullptr;
 
     PropManager::Instance().Clear();
-    ItemManager::Instance().Clear();
+
 }
 
 // XVˆ—
