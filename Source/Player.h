@@ -49,6 +49,10 @@ public:
 	//プレイヤーの角度にセット
 	void SetAngle(const DirectX::XMFLOAT3 angle) { this->angle = angle; };
 
+	// リセット用関数
+	void PanelReset();
+
+
 private:
 	//スティック入力値から移動ベクトルを取得
 	DirectX::XMFLOAT3 GetMoveVec() const;
@@ -91,6 +95,7 @@ private:
 	bool hitFan;
 	bool hit_panel;
 
+	ClearPanel* clearpanels[5];
 
 	bool prevMouseBtnState = false;
 

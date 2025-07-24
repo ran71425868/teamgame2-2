@@ -26,7 +26,7 @@ void SceneSelect::Finalize()
 		delete sprite;
 		sprite = nullptr;
 	}
-	if (sprite2 != nullptr)
+	/*if (sprite2 != nullptr)
 	{
 		delete sprite2;
 		sprite2 = nullptr;
@@ -40,7 +40,7 @@ void SceneSelect::Finalize()
 	{
 		delete sprite4;
 		sprite4 = nullptr;
-	}
+	}*/
 }
 
 //XVˆ—
