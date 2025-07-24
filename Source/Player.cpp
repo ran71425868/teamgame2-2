@@ -14,15 +14,14 @@
 #include "SceneLoading.h"
 #include "SceneResult.h"
 
-<<<<<<< Updated upstream
+
 namespace {
 	ClearPanel* clearpanel = nullptr;
 	ClearPanel* clearpanel1 = nullptr;
 	ClearPanel* clearpanel2 = nullptr;
 }
 
-=======
->>>>>>> Stashed changes
+
 //‰Šú‰»
 void Player::Initializa()
 {
@@ -441,18 +440,8 @@ void Player::PerformRaycastToLight()
 
 		Item* item = itemManager.GetItem(hitPanelIndex);
 
-<<<<<<< Updated upstream
-		
 
-		if (mouseBtnDownFlag & Mouse::BTN_LEFT&&panelcount<=0)
-=======
-		ClearPanel* clearpanel = new ClearPanel();
-		ClearPanel* clearpanel1 = new ClearPanel();
-		ClearPanel* clearpanel2 = new ClearPanel();
-		//ClearPanel* clearpanel3 = new ClearPanel();
-		
 		if (mouseBtnDownFlag & Mouse::BTN_LEFT && panelcount <= 0)
->>>>>>> Stashed changes
 		{
 
 			Panel* panel = itemManager.GetPanel(0);
@@ -494,11 +483,7 @@ void Player::PerformRaycastToLight()
 			{
 				SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
 			}
-<<<<<<< Updated upstream
 
-				
-=======
->>>>>>> Stashed changes
 		}
 
 		//stage1‰œ
