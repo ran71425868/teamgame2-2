@@ -10,6 +10,7 @@ enum class EItemType{
 	Mirror,
 	Fan,
 	Door,
+	Panel,
 };
 
 //エネミー

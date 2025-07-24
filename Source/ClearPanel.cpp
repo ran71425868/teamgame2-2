@@ -6,7 +6,7 @@ ClearPanel::ClearPanel()
 {
 	model = new Model("Data/Model/gimmick/Kagami1.mdl");
 
-	scale.x = scale.y = scale.z = 0.5f;
+	scale.x = scale.y = scale.z = 0.1f;
 	position.x = 10.0f;
 	position.y = 0.0f;
 	position.z = 10.0f;

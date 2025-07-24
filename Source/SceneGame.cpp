@@ -84,10 +84,17 @@ void SceneGame::Initialize()
 
     Panel* panel = new Panel();
     panel->SetPosition({29,4,-10 });
+
+    panel->itemType = EItemType::Panel;
+    panel->uniqueId = 1;
+    panel->SetPosition({29,4,-8 });
+
     panel->SetAngle({ 0,-1.48,0});
     itemManager.Register(panel);
 
     Panel* panel2 = new Panel();
+    panel2->itemType = EItemType::Panel;
+    panel2->uniqueId = 2;
     panel2->SetPosition({ 1,4,-2 });
     panel2->SetAngle({ 0,-90,0 });
     itemManager.Register(panel2);
