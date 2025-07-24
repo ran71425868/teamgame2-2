@@ -81,6 +81,7 @@ void SceneTutorial::Initialize()
     
     Mirror* mirror = new Mirror();
     mirror->SetPosition({0,2.9,5});
+    mirror->SetAngle({ 0,2,0 });
     itemManager.Register(mirror);
     
     Fan* fan = new Fan();
@@ -97,6 +98,8 @@ void SceneTutorial::Initialize()
     itemManager.Register(door);
 
     Panel* panel = new Panel();
+    panel->itemType = EItemType::Panel;
+    panel->uniqueId = 0;
     panel->SetPosition({ -9,3,7 });
     panel->SetAngle({ 0,-2.2f,0 });
     itemManager.Register(panel);

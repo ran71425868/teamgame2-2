@@ -8,7 +8,7 @@
 //‰Šú‰»
 void SceneTitle::Initialize()
 {
-	sprite = new Sprite("Data/Sprite/Title.png");
+	sprite = new Sprite("Data/Sprite/taitoru.png");
 }
 
 //I—¹‰»

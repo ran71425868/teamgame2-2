@@ -1,4 +1,5 @@
 #include "Character.h"
+#include "Mirror.h"
 
 //行列更新処理
 void Character::UpdateTransform()
@@ -252,7 +253,7 @@ void Character::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* ren
 void Character::RenderDebugPrimitiveSq(const RenderContext& rc, ShapeRenderer* renderer)
 {
 	//衝突判定用のデバッグ直方体を描画
-	renderer->RenderBox(rc, position, angle, scale, DirectX::XMFLOAT4(0, 0, 0, 1));
+	renderer->RenderBox(rc, position,angle, scale, DirectX::XMFLOAT4(0, 0, 0, 1));
 }
 
 //無敵時間更新

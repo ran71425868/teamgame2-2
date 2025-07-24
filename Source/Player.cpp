@@ -9,6 +9,7 @@
 #include "Light.h"
 #include "Mirror.h"
 #include "Door.h"
+#include "ClearPanel.h"
 #include "SceneManager.h"
 #include "SceneLoading.h"
 #include "SceneResult.h"
@@ -419,25 +420,59 @@ void Player::PerformRaycastToLight()
 		ItemManager& itemManager = ItemManager::Instance();
 
 		Item* item = itemManager.GetItem(hitPanelIndex);
-		Panel* panel = dynamic_cast<Panel*>(item);
-		
-		/*if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT)
-		{
-			switch (panelcount)
-			{
-			case 0:
-				panelcount++;
-				break;
-			case 1:
-				if (panelcount  hitPanelIndex)
-				{
-					SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
-				}
-				break;
-			}
-			
 
-		}*/
+		ClearPanel* clearpanel = new ClearPanel();
+		ClearPanel* clearpanel1 = new ClearPanel();
+		ClearPanel* clearpanel2 = new ClearPanel();
+
+		if (mouseCursor.GetButtonDown() & Mouse::BTN_LEFT&&panelcount<=0)
+		{
+			ItemManager& itemManager = ItemManager::Instance();
+
+			Panel* panel = itemManager.GetPanel(0);
+			if (panel != nullptr)
+			{
+				panelcount++;
+				clearpanel->SetPosition({ -9,3,7 });
+				clearpanel->SetAngle({ 0,-2.2f,0 });
+				itemManager.Register(clearpanel);
+			}
+
+		}
+
+		if (mouseCursor.GetButtonDown() && Mouse::BTN_LEFT&&panelcount==0)
+		{
+			Panel* panel = itemManager.GetPanel(1);
+			if (panel != nullptr)
+			{
+				panelcount++;
+				clearpanel2->SetPosition({ 1,4,-2 });
+				clearpanel2->SetAngle({ 0,-90,0 });
+				itemManager.Register(clearpanel2);
+			}
+		}
+		
+			if (mouseCursor.GetButtonDown() && Mouse::BTN_LEFT&&panelcount==1)
+			{
+				Panel* panel1 = itemManager.GetPanel(2);
+				if (panel1 != nullptr)
+				{
+					panelcount++;
+					clearpanel1->SetPosition({ 29,4,-8 });
+					clearpanel1->SetAngle({ 0,-1.48,0 });
+					itemManager.Register(clearpanel1);
+
+					if (panelcount > 1)
+					{
+						SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
+					}
+				}
+				
+			}
+
+		
+
+		
 
 	}
 
