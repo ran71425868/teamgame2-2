@@ -135,7 +135,7 @@ void SceneGame::Finalize()
     pauseBackSprite = nullptr;
 
     PropManager::Instance().Clear();
-    ItemManager::Instance().Clear();
+
 }
 
 // XVˆ—
