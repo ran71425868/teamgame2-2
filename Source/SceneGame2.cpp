@@ -37,7 +37,7 @@ void SceneGame2::Initialize()
 {
 
     // スプライト初期化（画像読み込み）
-    pauseTitleSprite = new Sprite("Data/Sprite/pause gray.png");
+    pauseTitleSprite = new Sprite("Data/Sprite/pause_gray.png");
     backButtonSprite = new Sprite("Data/Sprite/pause2.png");
     quitButtonSprite = new Sprite("Data/Sprite/pause5.png");
     pauseBackSprite = new Sprite("Data/Sprite/pause back.png");
