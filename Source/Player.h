@@ -116,6 +116,12 @@ private:
 		const DirectX::XMFLOAT3& boxSize,
 		const DirectX::XMFLOAT3& rayDirection);
 
+	DirectX::XMFLOAT3 ComputeOBBNormal(
+		const DirectX::XMFLOAT3& hitPoint,
+		const DirectX::XMMATRIX& worldMatrix,
+		const DirectX::XMFLOAT3& boxSize,
+		const DirectX::XMFLOAT3& rayDir);
+
 	//ライトに対するレイキャスト
 	bool Player::RaycastToLights(
 		const DirectX::XMFLOAT3& rayOrigin,

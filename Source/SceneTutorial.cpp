@@ -75,13 +75,13 @@ void SceneTutorial::Initialize()
     ItemManager& itemManager = ItemManager::Instance();
     
     Light* light = new Light();
-    light->SetPosition(DirectX::XMFLOAT3(0, 2.9, -2));
+    light->SetPosition(DirectX::XMFLOAT3(6, 2.9, 2));
     itemManager.Register(light);
     
     
     Mirror* mirror = new Mirror();
     mirror->SetPosition({0,2.9,5});
-    mirror->SetAngle({ 0,2,0 });
+    mirror->SetAngle({ 0,0,0 });
     itemManager.Register(mirror);
     
     Fan* fan = new Fan();

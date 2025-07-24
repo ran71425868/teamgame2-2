@@ -32,4 +32,8 @@ private:
 	//Player* player = nullptr;
 	CameraController* cameraController = nullptr;
 
+
+	//ƒgƒOƒ‹ˆ——p
+	bool prevPKey = false;
+	bool currentPKey;
 };

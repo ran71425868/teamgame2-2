@@ -4,9 +4,9 @@
 //コンストラクタ
 ClearPanel::ClearPanel()
 {
-	model = new Model("Data/Model/gimmick/Kagami1.mdl");
+	model = new Model("Data/Model/gimmick/ClearPanel.mdl");
 
-	scale.x = scale.y = scale.z = 0.1f;
+	scale.x = scale.y = scale.z = 0.5f;
 	position.x = 10.0f;
 	position.y = 0.0f;
 	position.z = 10.0f;

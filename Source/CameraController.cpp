@@ -14,10 +14,10 @@ void CameraController::Update(float elapsedTime)
 	case 1:
 		// 'P' キー トグル処理（エッジ検出）
 		currentPKey = GetKeyState('P') & 0x8000;
-		if (currentPKey && !prevPKey) {
+		/*if (currentPKey && !prevPKey) {
 			show_cursor = !show_cursor;
 			SetCursorVisibility(show_cursor);
-		}
+		}*/
 		prevPKey = currentPKey;
 
 		if (!show_cursor) {
