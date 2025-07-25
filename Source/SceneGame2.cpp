@@ -85,7 +85,7 @@ void SceneGame2::Initialize()
     light->SetPosition(DirectX::XMFLOAT3(25, 4.5f, 5));
     itemManager.Register(light);
     Light* light1 = new Light();
-    light1->SetPosition(DirectX::XMFLOAT3(-10, 0.5, -7));
+    light1->SetPosition(DirectX::XMFLOAT3(-7, 0.5, -7));
     itemManager.Register(light1);
     Light* light2 = new Light();
     light2->SetPosition(DirectX::XMFLOAT3(2, 0.3, -1));
@@ -153,7 +153,7 @@ void SceneGame2::Initialize()
 
 
     Mirror* mirror1 = new Mirror();
-    mirror1->SetPosition({ -3, 0, -10 });
+    mirror1->SetPosition({ -4, 0, -15.5 });
     mirror1->SetAngle({ 0,-2,0 });
     itemManager.Register(mirror1);
 }
