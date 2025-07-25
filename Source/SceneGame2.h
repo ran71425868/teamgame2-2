@@ -2,6 +2,7 @@
 
 #include "Stage2.h"
 //#include "Player.h"
+
 #include "CameraController.h"
 #include "Scene.h"
 
@@ -29,6 +30,7 @@ public:
 
 private:
 	Stage2* stage = nullptr;
+	AudioSource* BGM = nullptr;
 	//Player* player = nullptr;
 	CameraController* cameraController = nullptr;
 

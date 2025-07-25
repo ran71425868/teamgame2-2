@@ -43,6 +43,8 @@ void SceneGame::Initialize()
     quitButtonSprite = new Sprite("Data/Sprite/pause5.png");
     pauseBackSprite = new Sprite("Data/Sprite/pause back.png");
 
+    BGM = Audio::Instance().LoadAudioSource("Data/Sound/1-48987504.wav");
+
     Prop* prop5 = new Prop();
     prop5->SetPosition({ -15,2,-3 });
     PropManager::Instance().Register(prop5);
@@ -139,12 +141,14 @@ void SceneGame::Finalize()
     backSelectSprite = nullptr;
 
     PropManager::Instance().Clear();
+    BGM->Stop();
 
 }
 
 // XVˆ—
 void SceneGame::Update(float elapsedTime)
 {
+    BGM->Play(false);
     GamePad& gamePad = Input::Instance().GetGamePad();
     Input& input = Input::Instance();
 

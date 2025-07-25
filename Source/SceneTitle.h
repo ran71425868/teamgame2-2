@@ -27,4 +27,5 @@ public:
 
 private:
 	Sprite* sprite = nullptr;
+	AudioSource* BGM = nullptr;
 };

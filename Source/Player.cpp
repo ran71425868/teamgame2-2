@@ -372,9 +372,11 @@ void Player::PerformRaycastToLight()
 		{
 			//“ü‚ê‘Ö‚¦
 			BTNSE->Play(false);
+			BTNSE->SetVolume(0.2f);
 			Player::Instance().SetPosition(lightPos);
 			light->SetPosition(playerPos);
 			WPSE->Play(false);
+			WPSE->SetVolume(0.5f);
 
 		}
 
@@ -410,9 +412,10 @@ void Player::PerformRaycastToLight()
 		{
 			ItemManager& itemManager = ItemManager::Instance();
 			BTNSE->Play(false);
+			BTNSE->SetVolume(0.2f);
 
 			windSE->Play(false);
-			windSE->SetVolume(0.5f);
+			windSE->SetVolume(0.2f);
 			Door* door = itemManager.GetDoor(0);
 			if (door != nullptr)
 			{
@@ -486,7 +489,9 @@ void Player::PerformRaycastToLight()
 		{
 			Panel* panel2 = dynamic_cast<Panel*>(item);
 			BTNSE->Play(false);
+			BTNSE->SetVolume(0.1f);
 			panelSE->Play(false);
+			panelSE->SetVolume(2.0f);
 			panelcount++;
 			clearpanels[1]->SetPosition(panel2->GetPosition());
 			clearpanels[1]->SetAngle(panel2->GetAngle());
@@ -561,7 +566,9 @@ void Player::PerformRaycastToLight()
 			Panel* panel2 = dynamic_cast<Panel*>(item);
 
 			BTNSE->Play(false);
+			BTNSE->SetVolume(0.1f);
 			panelSE->Play(false);
+			panelSE->SetVolume(2.0f);
 			panelcount1++;
 			clearpanels[4]->SetPosition(panel2->GetPosition());
 			clearpanels[4]->SetAngle(panel2->GetAngle());

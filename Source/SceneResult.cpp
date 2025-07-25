@@ -5,11 +5,13 @@
 #include "System/Input.h"
 #include "SceneManager.h"
 #include "SceneLoading.h"
+#include <System/Audio.h>
 
 //初期化
 void SceneResult::Initialize()
 {
 	sprite = new Sprite("Data/Sprite/result.png");
+	BGM = Audio::Instance().LoadAudioSource("Data/Sound/2-48987504.wav");
 }
 
 //終了化
@@ -20,12 +22,14 @@ void SceneResult::Finalize()
 		delete sprite;
 		sprite = nullptr;
 	}
+	BGM->Stop();
 }
 
 //更新処理
 void SceneResult::Update(float elapsedTime)
 {
-	
+	BGM->Play(false);
+	BGM->SetVolume(0.1f);
 	//なにかボタンを押したらゲームシーンへ切り替え
 	Mouse& mouseCursor = Input::Instance().GetMouse();
 

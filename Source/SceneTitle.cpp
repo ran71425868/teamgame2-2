@@ -9,6 +9,7 @@
 void SceneTitle::Initialize()
 {
 	sprite = new Sprite("Data/Sprite/taitoru.png");
+	BGM = Audio::Instance().LoadAudioSource("Data/Sound/34b5249a.wav");
 }
 
 //I—¹‰»
@@ -19,11 +20,14 @@ void SceneTitle::Finalize()
 		delete sprite;
 		sprite = nullptr;
 	}
+	BGM->Stop();
 }
 
 //XVˆ—
 void SceneTitle::Update(float elapsedTime)
 {
+	BGM->Play(false);
+	BGM->SetVolume(0.5f);
 	Mouse& mouseCursor = Input::Instance().GetMouse();
 
 	const MouseButton anyButton =

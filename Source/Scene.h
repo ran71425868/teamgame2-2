@@ -1,4 +1,6 @@
 #pragma once
+#include <System/Audio.h>
+#include "System/AudioSource.h"
 
 //ÉVÅ[Éì
 class Scene

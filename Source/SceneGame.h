@@ -29,6 +29,7 @@ public:
 
 private:
 	Stage* stage = nullptr;
+	AudioSource* BGM = nullptr;
 	//Player* player = nullptr;
 	CameraController* cameraController = nullptr;
 

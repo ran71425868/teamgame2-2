@@ -1,6 +1,7 @@
 #pragma once
 
 #include "System/Sprite.h"
+
 #include "Scene.h"
 
 //タイトルシーン
@@ -26,5 +27,6 @@ public:
 	void DrawGUI() override;
 
 private:
+	AudioSource* BGM = nullptr;
 	Sprite* sprite = nullptr;
 };
