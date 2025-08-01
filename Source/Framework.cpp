@@ -115,19 +115,23 @@ void Framework::CalculateFrameStats()
 	frames++;
 
 	// Compute averages over one second period.
-	if ((timer.TimeStamp() - time_tlapsed) >= 1.0f)
-	{
-		float fps = static_cast<float>(frames); // fps = frameCnt / 1
-		float mspf = 1000.0f / fps;
-		std::ostringstream outs;
-		outs.precision(6);
-		outs << "FPS : " << fps << " / " << "Frame Time : " << mspf << " (ms)";
-		SetWindowTextA(hWnd, outs.str().c_str());
+	//if ((timer.TimeStamp() - time_tlapsed) >= 1.0f)
+	//{
+	//	float fps = static_cast<float>(frames); // fps = frameCnt / 1
+	//	float mspf = 1000.0f / fps;
+	//	std::ostringstream outs;
+	//	outs.precision(6);
+	//	outs << "FPS : " << fps << " / " << "Frame Time : " << mspf << " (ms)";
+	//	SetWindowTextA(hWnd, outs.str().c_str());
 
-		// Reset for next average.
-		frames = 0;
-		time_tlapsed += 1.0f;
-	}
+	//	// Reset for next average.
+	//	frames = 0;
+	//	time_tlapsed += 1.0f;
+	//}
+	std::ostringstream outs;
+	outs.precision(6);
+	outs << "ConectLight ";
+	SetWindowTextA(hWnd, outs.str().c_str());
 }
 
 // アプリケーションループ
